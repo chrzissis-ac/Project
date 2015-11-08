@@ -19,8 +19,6 @@ ComplexPoly.o: ./functions/ComplexPoly.c
 SimplePoly.o: ./functions/SimplePoly.c
 	$(GCCC) ./functions/SimplePoly.c
 
-auto einai to minima!
-
 Sylvester.o: ./functions/Sylvester.c
 	$(GCCC) ./functions/Sylvester.c
 
