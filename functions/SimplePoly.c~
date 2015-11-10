@@ -181,12 +181,17 @@ void multiply1polyonym(Polyonym * trgt, Polyonym * polyonym1,int m){
 		i++;
 	}
 	if(trgt->matrix!=NULL){
+		printf("here1!\n");
 		free(trgt->matrix);
-		trgt->matrix=NULL;
+		trgt->matrix=NULL;		
+		printf("here2!\n");
 		trgt->matrix=malloc(sizeof(double)*(target.d+1));
 		if(trgt->matrix==NULL){perror("relocation mult malloc!");exit(0);}
+		printf("here3!\n");
 		memcpy(trgt->matrix,target.matrix,sizeof(double)*(target.d+1));
+		printf("here4!\n");
 		free(target.matrix);
+		printf("here5!\n");
 	}
 	else{trgt->matrix=target.matrix;}
 	return;

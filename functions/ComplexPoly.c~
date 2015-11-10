@@ -45,13 +45,6 @@ void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy){
 	(*poly)=polyonym;
 }
 
-void createpolyonym2(char * function, Polyonym2 ** poly, int d){
-	int dx=0, dy=0;
-	gradeparser(function, d, &dx, &dy);
-	createpolyonym(function, poly, dx, dy);
-
-}
-
 // deletepoly2() frees the memory that was allocated for 'poly'
 void deletepoly2(Polyonym2 * poly){
 	int i=0;

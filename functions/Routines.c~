@@ -41,7 +41,7 @@ while(a<2){
 	strcpy(temp,"");
 
 	if(a==1){
-		d=d2;
+		d=d2
 		dx=rand()%(d+1);
 		dy=d-dx;
 	}

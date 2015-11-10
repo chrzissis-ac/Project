@@ -13,9 +13,9 @@ void main(int argc,char ** argv){
 	int in=0;
 	char temp[300];
 	char * function1=NULL;
-	int dx1=0,dy1=0;
+	int d1=0, dx1=0, dy1=0;
 	char * function2=NULL;
-	int dx2=0,dy2=0;
+	int d2=0, dx2=0, dy2=0;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
@@ -38,12 +38,12 @@ void main(int argc,char ** argv){
 	}
 	else if(argc>1){printf("Wrong arguments!\n");}
 
-	input(file,&dx1,&dy1,&function1);
-	input(file,&dx2,&dy2,&function2);
+	input(file,&d1,&function1);
+	input(file,&d2,&function2);
 
-	createpolyonym(function1,&polyonym1,dx1,dy1);
-	createpolyonym(function2,&polyonym2,dx2,dy2);
-	createsylvester(&sylvester, polyonym1, polyonym2);
+	createpolyonym2(function1,&polyonym1,d1);
+	createpolyonym2(function2,&polyonym2,d2);
+	createsylvester(&sylvester, polyonym2, polyonym1);
 	createProdMatr(sylvester, &prodMatr);
 
 	do{
