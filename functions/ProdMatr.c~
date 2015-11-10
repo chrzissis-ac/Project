@@ -133,7 +133,32 @@ void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * 
 }
 
 void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2){
-
-
+	int i=0,j=0,m=0;
+	(*target)=NULL;
+	(*target)=malloc(sizeof(ProductMatrices));
+	if((*target)==NULL){perror("prod matrices multiplication malloc");exit(0);}
+	(*target)->dim=matrix1->dim;
+	(*target)->hidden=matrix1->hidden;
+	(*target)->degree=matrix1->degree;
+	(*target)->matrix=NULL;
+	(*target)->matrix=malloc(sizeof(double**)*((*target)->degree+1));
+	if ((*target)->matrix==NULL) {perror("Product Matrices multiplication malloc!");exit(0);}
+	for (i=0 ; i<=(*target)->degree ; i++) {
+		(*target)->matrix[i]=NULL;
+		(*target)->matrix[i]=malloc(sizeof(double*)*(*target)->dim);
+		if ((*target)->matrix[i]==NULL) {perror("Product Matrices multiplication 1D malloc!");exit(0);}
+		for (j=0 ; j<(*target)->dim ; j++) {
+			(*target)->matrix[i][j]=NULL;
+			(*target)->matrix[i][j]=malloc(sizeof(double)*(*target)->dim);
+			if ((*target)->matrix[i][j]==NULL) {perror("Product multiplication 2D malloc!");exit(0);}
+		}
+	}
+	for (m=0 ; m<=(*target)->degree ; m++) {
+		for (i=0 ; i<(*target)->dim ; i++) {
+			for (j=0 ; j<(*target)->dim ; j++) {
+				(*target)->matrix[m][i][j]=(matrix1->matrix[m][i][j])+(matrix2->matrix[m][i][j]);
+			}
+		}
+	}
 
 }

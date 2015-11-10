@@ -138,8 +138,8 @@ void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMa
 	(*target)=malloc(sizeof(ProductMatrices));
 	if((*target)==NULL){perror("prod matrices multiplication malloc");exit(0);}
 	(*target)->dim=matrix1->dim;
-	(*target)->hidden=matrix1->var;
-	(*target)->degree=matrix1->d;
+	(*target)->hidden=matrix1->hidden;
+	(*target)->degree=matrix1->degree;
 	(*target)->matrix=NULL;
 	(*target)->matrix=malloc(sizeof(double**)*((*target)->degree+1));
 	if ((*target)->matrix==NULL) {perror("Product Matrices multiplication malloc!");exit(0);}

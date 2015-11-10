@@ -5,8 +5,12 @@ RMVF= rm -f
 EXEC1= prog
 OBJS1= Sylvester.o SimplePoly.o ComplexPoly.o Routines.o Vector.o ProdMatr.o main.o
 
-all: final1
+all: cl final1
 	$(RMVF) $(OBJS1)
+
+cl:
+	clear;clear;
+
 final1: $(OBJS1)
 	$(GCCO) $(EXEC1) $(OBJS1)
 
@@ -30,5 +34,6 @@ Vector.o: ./functions/Vector.c
 
 main.o: ./main/main.c
 	$(GCCC) ./main/main.c
+
 clean:
 	$(RMVF) $(OBJS1) $(EXEC1) 
