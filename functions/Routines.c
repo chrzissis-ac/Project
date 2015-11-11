@@ -24,7 +24,6 @@ char choosehidden_bydeg(int dx1, int dy1,int dx2, int dy2){
 void generatefunctions(int d1,int d2, FILE * file){
 	int dx,dy,d;
 	d=d1*(d1>=d2)+d2*(d2>d1);
-	srand(time(NULL));
 	dx=rand()%(d1+1);
 	dy=d1-dx;
 	int i=0,j=0,a=0,degx=0,degy=0;
@@ -59,7 +58,7 @@ while(a<2){
 					strcat(temp,"+");
 				}
 				else{strcat(temp,"-");}
-				while((synt=(rand()%250))<=0);
+				while((synt=(rand()%30))<=0);
 				if(synt!=1){
 					strcpy(temp2,"");
 					sprintf(temp2,"%d",synt);

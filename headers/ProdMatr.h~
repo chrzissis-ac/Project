@@ -8,7 +8,7 @@ void destroyProdMatr (ProductMatrices * prodMat);
 
 void printProdMatr(ProductMatrices * prodMat, int in);
 
-void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g);
+void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * matrix, int g);
 
 void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2);
 

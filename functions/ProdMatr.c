@@ -3,6 +3,7 @@
 
 #include "../headers/ProdMatr.h"
 #include "../headers/Sylvester.h"
+#include "../headers/SimplePoly.h"
 
 typedef int * Poly;
 struct Polyonym{
@@ -102,12 +103,12 @@ void destroyProdMatr (ProductMatrices * prodMat){
 	return;
 }
 
-void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * matrix, int g){
+void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
 	int i=0,j=0,m=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
 	if((*target)==NULL){perror("prod matrices multiplication malloc");exit(0);}
-	(*target)->dim=matrix->dim;
+	(*target)->dim=prodMat->dim;
 	(*target)->hidden=poly->var;
 	(*target)->degree=poly->d;
 	(*target)->matrix=NULL;
@@ -126,7 +127,8 @@ void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * 
 	for (m=0 ; m<=(*target)->degree ; m++) {
 		for (i=0 ; i<(*target)->dim ; i++) {
 			for (j=0 ; j<(*target)->dim ; j++) {
-				(*target)->matrix[m][i][j]=(matrix->matrix[g][i][j])*(poly->matrix[m]);
+				(*target)->matrix[m][i][j]=(prodMat->matrix[g][i][j])*get1NumByDegree(poly, m);
+				//printf("pollaplasiasmos: %d= %d*%d // m=%d,i=%d,j=%d\n",(*target)->matrix[m][i][j],prodMat->matrix[g][i][j],get1NumByDegree(poly,m),m,i,j);
 			}
 		}
 	}
@@ -136,21 +138,21 @@ void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMa
 	int i=0,j=0,m=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
-	if((*target)==NULL){perror("prod matrices multiplication malloc");exit(0);}
+	if((*target)==NULL){perror("prod matrices add malloc");exit(0);}
 	(*target)->dim=matrix1->dim;
 	(*target)->hidden=matrix1->hidden;
 	(*target)->degree=matrix1->degree;
 	(*target)->matrix=NULL;
 	(*target)->matrix=malloc(sizeof(double**)*((*target)->degree+1));
-	if ((*target)->matrix==NULL) {perror("Product Matrices multiplication malloc!");exit(0);}
+	if ((*target)->matrix==NULL) {perror("Product Matrices add malloc!");exit(0);}
 	for (i=0 ; i<=(*target)->degree ; i++) {
 		(*target)->matrix[i]=NULL;
 		(*target)->matrix[i]=malloc(sizeof(double*)*(*target)->dim);
-		if ((*target)->matrix[i]==NULL) {perror("Product Matrices multiplication 1D malloc!");exit(0);}
+		if ((*target)->matrix[i]==NULL) {perror("Product Matrices add 1D malloc!");exit(0);}
 		for (j=0 ; j<(*target)->dim ; j++) {
 			(*target)->matrix[i][j]=NULL;
 			(*target)->matrix[i][j]=malloc(sizeof(double)*(*target)->dim);
-			if ((*target)->matrix[i][j]==NULL) {perror("Product multiplication 2D malloc!");exit(0);}
+			if ((*target)->matrix[i][j]==NULL) {perror("Product add 2D malloc!");exit(0);}
 		}
 	}
 	for (m=0 ; m<=(*target)->degree ; m++) {
@@ -160,5 +162,119 @@ void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMa
 			}
 		}
 	}
-
 }
+
+void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
+	if(prodMat->degree==0){
+		printf("The grade of Mi is zero (0)\n");
+		return;
+	}
+	int t1=rand()%30 +1;
+	int t2=rand()%30 +1;
+	int t3=rand()%30 +1;
+	int t4=rand()%30 +1;	
+	printf("t1=%d , t2=%d, t3=%d, t4=%d\n",t1,t2,t3,t4);
+	int i=0, a=0,b=0,j=0;
+	ProductMatrices * target[prodMat->degree+1];
+	ProductMatrices * tempprod=NULL;
+	Polyonym * temp=NULL;
+	Polyonym * fin=NULL;
+	Polyonym * poly1=NULL;
+	Polyonym * poly2=NULL;
+	poly1=malloc(sizeof(Polyonym));
+	if(poly1==NULL){perror("malloc poly1 newprod");exit(0);}
+	poly2=malloc(sizeof(Polyonym));
+	if(poly2==NULL){perror("malloc poly2 newprod");exit(0);}
+	poly1->d=1;
+	poly2->d=1;
+	poly1->var='z';
+	poly2->var='z';
+	poly1->matrix=NULL;
+	poly1->matrix=malloc(sizeof(double)*2);
+	if(poly1->matrix==NULL){perror("new prod polyonym malloc matrix1");exit(0);}
+	poly2->matrix=NULL;
+	poly2->matrix=malloc(sizeof(double)*2);
+	if(poly2->matrix==NULL){perror("new prod polyonym malloc matrix2");exit(0);}
+
+	change1polyonym(poly1,0,t2);
+	change1polyonym(poly1,1,t1);
+	change1polyonym(poly2,0,t4);
+	change1polyonym(poly2,1,t3);
+
+printf("Polyonym 1 is:\n");
+print1polyonym(poly1);
+printf("\n");
+printf("Polyonym 2 is:\n");
+print1polyonym(poly2);
+printf("\n");
+	
+
+	i=0;
+	while(i<=prodMat->degree){
+		//printf("i=%d\n",i);
+		create1polyonym_one(&temp,'z');
+		//print1polyonym(temp);
+		a=0;b=0;
+		while(a<i){
+			if(a!=0){
+				delete1polyonym(temp);
+				temp=fin;
+			}
+			mult_polyonym1polyonym(&fin, temp, poly2);
+			a++;
+		}
+		while(b<prodMat->degree-i){
+			if(b+a!=0){
+				delete1polyonym(temp);
+				temp=fin;
+			}
+			mult_polyonym1polyonym(&fin, temp, poly1);
+			b++;
+		}
+		delete1polyonym(temp);
+		print1polyonym(fin);
+		printf(" is the polyonym for matrix M-%d ==> ",i);
+		if(a>0){
+			printf("(");
+			print1polyonym(poly2);
+			printf(")^%d ",a);
+		}
+		if(b>0){
+			printf("(");
+			print1polyonym(poly1);
+			printf(")^%d",b);
+		}
+		printf("\n");
+		multProdMatr(&(target[i]), fin, prodMat, i);
+		delete1polyonym(fin);
+		i++;
+	}
+
+	addProdMatr(finl, target[0], target[1]);
+	i=2;
+	while(i<=prodMat->degree){
+		if(tempprod!=NULL){destroyProdMatr(tempprod);}
+		tempprod=*finl;
+		addProdMatr(finl, tempprod, target[i]);
+		i++;
+	}
+
+	if(tempprod!=NULL){destroyProdMatr(tempprod);}
+	delete1polyonym(poly1);
+	delete1polyonym(poly2);
+	i=0;
+	while(i<=prodMat->degree){
+		destroyProdMatr(target[i]);
+		i++;
+	}
+}
+
+
+
+
+
+
+
+
+
+

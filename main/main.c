@@ -9,6 +9,7 @@
 
 
 void main(int argc,char ** argv){
+	srand(time(NULL));
 	char v;
 	int in=0;
 	char temp[300];
@@ -21,6 +22,7 @@ void main(int argc,char ** argv){
 	Sylvester * sylvester=NULL;
 	Sylvester * sylvester2=NULL;
 	ProductMatrices * prodMatr=NULL;
+	ProductMatrices * new=NULL;
 	Vector * vector=NULL;
 	Vector * fin=NULL;
 	FILE * file=stdin;
@@ -46,6 +48,8 @@ void main(int argc,char ** argv){
 	createsylvester(&sylvester, polyonym2, polyonym1);
 	createProdMatr(sylvester, &prodMatr);
 
+	create_newProd(&new, prodMatr);
+
 	do{
 		menushow(&in);
 		if(in==-1){printsylvester(sylvester);}
@@ -63,6 +67,7 @@ void main(int argc,char ** argv){
 	free(function1);
 	free(function2);
 	destroyProdMatr(prodMatr);
+//	destroyProdMatr(new);
 	fclose(file);
 	destroysylvester(&sylvester);
 }

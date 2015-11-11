@@ -55,6 +55,20 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 	}
 }
 
+void create1polyonym_one(Polyonym ** polyonym,char v){
+	Polyonym * temp=(*polyonym);
+	*polyonym=NULL;
+	temp=malloc(sizeof(Polyonym));
+	if(temp==NULL){perror("malloc temp poly one");exit(0);}
+	temp->matrix=NULL;
+	temp->matrix=malloc(sizeof(double));
+	if(temp->matrix==NULL){perror("malloc temp poly matrix one");exit(0);}
+	temp->matrix[0]=1;
+	temp->d=0;
+	temp->var=v;
+	(*polyonym)=temp;
+
+}
 // delete1matrix() frees the memory that was allocated for matrix of 'poly'
 void delete1matrix(Polyonym * poly){
 	free(poly->matrix);
@@ -205,7 +219,9 @@ void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * po
 	if(  (polyonym1->d==0 && polyonym1->matrix[0]==0) || (polyonym2->d==0 && polyonym2->matrix[0]==0) ){
 		(*trgt)->d=0;
 	}
+
 	(*trgt)->matrix=NULL;
+
 	(*trgt)->matrix=malloc(sizeof(double)*((*trgt)->d+1));
 	if((*trgt)->matrix==NULL){perror("mult trgt matrix malloc!");exit(0);}
 	while(i<=(*trgt)->d){
@@ -223,9 +239,9 @@ void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * po
 		i++;
 	}
 	free(temp.matrix);
-	printf("epimeristiki: \n");
-	print1polyonym((*trgt));
-	printf("\n");
+//	printf("epimeristiki: \n");
+//	print1polyonym((*trgt));
+//	printf("\n");
 
 }
 

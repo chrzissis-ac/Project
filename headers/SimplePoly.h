@@ -10,6 +10,8 @@ void add1polyonyms(Polyonym * trgt, Polyonym * polyonym1, Polyonym * polyonym2);
 
 void multiply1polyonym(Polyonym * trgt, Polyonym * polyonym1,int m);
 
+void create1polyonym_one(Polyonym ** polyonym,char v);
+
 void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * polyonym2);
 
 void delete1matrix(Polyonym * poly);

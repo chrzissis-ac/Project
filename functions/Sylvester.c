@@ -67,7 +67,7 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 	(*sylvester)->dim=dim;
 	printf("Dimension is: %d\n", (*sylvester)->dim);
 	if (hidden=='x') {
-		if (degP1x>degP2x ) {
+		if (degP1x>=degP2x && degP2y!=0 ) {
 			(*sylvester)->degree=degP1x;
 		}
 		else {
@@ -75,7 +75,7 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 		}
 	}
 	else {
-		if (degP1y>degP2y ) {
+		if (degP1y>=degP2y && degP2x!=0 ) {
 			(*sylvester)->degree=degP1y;
 		}
 		else {
@@ -210,9 +210,9 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 		}
 		m--;
 	}
-	Polyonym * trgt=NULL;
+/*	Polyonym * trgt=NULL;
 	mult_polyonym1polyonym(&trgt, &((*sylvester)->matrix[0][1]),&((*sylvester)->matrix[0][3]));
-	delete1polyonym(trgt);
+	delete1polyonym(trgt);*/
 	deletepoly2(ZeroPoly);
 	return;
 }

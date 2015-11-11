@@ -55,6 +55,20 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 	}
 }
 
+void create1polyonym_one(Polyonym ** polyonym,char v){
+	Polyonym * temp=(*polyonym);
+	*polyonym=NULL;
+	temp=malloc(sizeof(Polyonym));
+	if(temp==NULL){perror("malloc temp poly one");exit(0);}
+	temp->matrix=NULL;
+	temp->matrix=malloc(sizeof(double));
+	if(temp->matrix==NULL){perror("malloc temp poly matrix one");exit(0);}
+	temp->matrix[0]=1;
+	temp->d=0;
+	temp->var=v;
+	(*polyonym)=temp;
+
+}
 // delete1matrix() frees the memory that was allocated for matrix of 'poly'
 void delete1matrix(Polyonym * poly){
 	free(poly->matrix);
@@ -74,11 +88,12 @@ void change1polyonym(Polyonym * poly,int grade,int in){
 // print1polyonym() prints the single-variable polyonym 'poly'
 void print1polyonym(Polyonym * poly){
 	int i=0,set=0;
+	printf("d=%d\t",poly->d);
 	while(i<=poly->d){
 		if(poly->matrix[i]!=0){
 			set=1;
 			if(poly->matrix[i]>0){printf("+");}
-			if(poly->matrix[i]!=1 ||(poly->matrix[i]==1 && i==0)){printf("%d",(int)(poly->matrix[i]));}
+			if(poly->matrix[i]!=1 ||(poly->matrix[i]==1 && i==0)){printf("%d(i=%d)",(int)(poly->matrix[i]),i);}
 			if(i!=0){
 				printf("%c",poly->var);
 				if(i!=1){printf("^%d",i);}
@@ -181,17 +196,12 @@ void multiply1polyonym(Polyonym * trgt, Polyonym * polyonym1,int m){
 		i++;
 	}
 	if(trgt->matrix!=NULL){
-		printf("here1!\n");
 		free(trgt->matrix);
-		trgt->matrix=NULL;		
-		printf("here2!\n");
+		trgt->matrix=NULL;
 		trgt->matrix=malloc(sizeof(double)*(target.d+1));
 		if(trgt->matrix==NULL){perror("relocation mult malloc!");exit(0);}
-		printf("here3!\n");
 		memcpy(trgt->matrix,target.matrix,sizeof(double)*(target.d+1));
-		printf("here4!\n");
 		free(target.matrix);
-		printf("here5!\n");
 	}
 	else{trgt->matrix=target.matrix;}
 	return;
@@ -210,7 +220,9 @@ void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * po
 	if(  (polyonym1->d==0 && polyonym1->matrix[0]==0) || (polyonym2->d==0 && polyonym2->matrix[0]==0) ){
 		(*trgt)->d=0;
 	}
+
 	(*trgt)->matrix=NULL;
+
 	(*trgt)->matrix=malloc(sizeof(double)*((*trgt)->d+1));
 	if((*trgt)->matrix==NULL){perror("mult trgt matrix malloc!");exit(0);}
 	while(i<=(*trgt)->d){
@@ -228,9 +240,9 @@ void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * po
 		i++;
 	}
 	free(temp.matrix);
-	printf("epimeristiki: \n");
-	print1polyonym((*trgt));
-	printf("\n");
+//	printf("epimeristiki: \n");
+//	print1polyonym((*trgt));
+//	printf("\n");
 
 }
 
