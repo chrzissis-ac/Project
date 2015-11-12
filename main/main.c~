@@ -74,9 +74,7 @@ void main(int argc,char ** argv){
 	free(function1);
 	free(function2);
 	destroyProdMatr(prodMatr);
-	printf("\n-------------------------------\n");
 	if(new!=NULL){destroyProdMatr(new);}
-	printf("\n-------------------------------\n");
 	fclose(file);
 	destroysylvester(&sylvester);
 }
