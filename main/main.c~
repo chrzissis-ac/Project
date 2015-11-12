@@ -7,7 +7,7 @@
 #include "../headers/ProdMatr.h"
 #include "../headers/Vector.h"
 
-//git try
+
 
 void main(int argc,char ** argv){
 	srand(time(NULL));

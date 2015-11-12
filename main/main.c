@@ -8,7 +8,6 @@
 #include "../headers/Vector.h"
 
 
-
 void main(int argc,char ** argv){
 	srand(time(NULL));
 	char v;
