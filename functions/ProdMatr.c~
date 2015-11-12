@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <lapacke.h>
 
 #include "../headers/ProdMatr.h"
 #include "../headers/Sylvester.h"
 #include "../headers/SimplePoly.h"
+#include "../headers/Routines.h"
 
-typedef int * Poly;
+typedef double * Poly;
 struct Polyonym{
 	Poly matrix;
 	char var;
@@ -20,10 +22,11 @@ struct Sylvester{
 };
 
 struct ProductMatrices{
-	int *** matrix;
+	double *** matrix;
 	int dim;
 	char hidden;
 	int degree;
+	double k;
 };
 
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
@@ -64,7 +67,30 @@ void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat) {
 }
 
 // printProdMatr() prints the matrix['in'] of 'prodMat'
-void printProdMatr (ProductMatrices * prodMat, int in) {
+void printProdMatr(ProductMatrices * prodMat, int in) {
+	if(in>prodMat->degree || in<0){
+		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
+		return;
+	}
+	printf("Product matrix of grade %d is:\n\n",in);
+	int degree, dim, i, j, k;
+	i=in;
+	degree=prodMat->degree;
+	dim=prodMat->dim;
+		for (j=0 ; j<dim ; j++) {
+			for (k=0 ; k<dim ; k++) {
+				printf("%f", (prodMat->matrix[i][j][k]));
+				printf("|\t");
+			}
+			printf("\n");
+		}
+		printf("\n");
+	printf("With dimension %dx%d.\n",prodMat->dim,prodMat->dim);
+	return;
+}
+
+// printProdMatr_int() prints the matrix['in'] of 'prodMat' as integers
+void printProdMatr_int (ProductMatrices * prodMat, int in) {
 	if(in>prodMat->degree || in<0){
 		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
 		return;
@@ -93,7 +119,6 @@ void destroyProdMatr (ProductMatrices * prodMat){
 	dim=prodMat->dim;
 	for (i=0 ; i<=degree ; i++) {
 		for (j=0 ; j<dim ; j++) {
-			printf("i=%d,j=%d, degree=%d, dim=%d\n",i,j,degree,dim);
 			free(prodMat->matrix[i][j]);
 		}
 		free(prodMat->matrix[i]);
@@ -102,6 +127,56 @@ void destroyProdMatr (ProductMatrices * prodMat){
 	free(prodMat->matrix);
 	free(prodMat);
 	return;
+}
+
+int calculate_K(ProductMatrices * prodMat){
+	double * matrix=NULL;
+	double * sva=NULL;
+	double * stat=NULL;
+	double * v=NULL;
+	int i=0;
+	int ldv=prodMat->dim;
+	double maxs=0,mins=0,info=0;
+	sva=LAPACKE_malloc(sizeof(double)*(prodMat->dim));
+	if(sva==NULL){perror("LAPACKE malloc sva to calc K failed");exit(0);}
+	stat=LAPACKE_malloc(sizeof(double)*(prodMat->dim)*2);
+	if(stat==NULL){perror("LAPACKE malloc stat to calc K failed");exit(0);}
+
+	from2Dto1D_double( prodMat->matrix[prodMat->degree], &matrix, prodMat->dim, prodMat->dim);
+	
+	info=LAPACKE_dgesvj(LAPACK_ROW_MAJOR, 'G','N', 'N', prodMat->dim, prodMat->dim, matrix, prodMat->dim, sva, 0, v, ldv, stat);
+
+	maxs=sva[0];
+	mins=sva[0];
+	i=1;
+	while(i<prodMat->dim){
+		if(maxs<sva[i]){maxs=sva[i];}
+		if(mins>sva[i]){mins=sva[i];}
+		i++;
+	}	
+/*
+	i=0;
+	while(i<prodMat->dim){
+		printf("Singular value No-%d = %f\n",i+1,sva[i]);
+		i++;
+	}
+*/
+	printf("Max Singular value is %f\n",maxs);
+	printf("Min Singular value is %f\n",mins);
+	if(mins==0 || mins < 0.000001 ){
+		printf("K is infinity\n");
+		free(matrix);
+		LAPACKE_free(sva);
+		LAPACKE_free(stat);
+		LAPACKE_free(v);
+		return -1;
+	}
+	prodMat->k=maxs/mins;
+	printf("k is %f\n",prodMat->k);
+	free(matrix);
+	LAPACKE_free(sva);
+	LAPACKE_free(stat);
+	LAPACKE_free(v);
 }
 
 void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
@@ -202,10 +277,10 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 	change1polyonym(poly2,0,t4);
 	change1polyonym(poly2,1,t3);
 
-printf("Polyonym 1 is:\n");
+printf("Polyonym 1 is: ");
 print1polyonym(poly1);
 printf("\n");
-printf("Polyonym 2 is:\n");
+printf("Polyonym 2 is: ");
 print1polyonym(poly2);
 printf("\n");
 	
@@ -233,8 +308,8 @@ printf("\n");
 			b++;
 		}
 		delete1polyonym(temp);
-		print1polyonym(fin);
-		printf(" is the polyonym for matrix M-%d ==> ",i);
+	//	print1polyonym(fin);
+	//	printf(" is the polyonym for matrix M-%d ==> ",i);
 		if(a>0){
 			printf("(");
 			print1polyonym(poly2);

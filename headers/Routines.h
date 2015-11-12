@@ -7,3 +7,5 @@ void generatefunctions(int d1,int d2, FILE * file);
 void input(FILE * file,int * d,char ** function);
 
 void menushow(int * input);
+
+void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy);

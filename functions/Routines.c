@@ -122,18 +122,32 @@ void menushow(int * input){
 	fgets(temp,300,stdin);
 	if(strcmp(temp,"S\n")==0 || strcmp(temp,"S")==0 || strcmp(temp,"s\n")==0 || strcmp(temp,"s")==0){
 		*input=-1;
-		printf("The Sylvester Matrix is:\n\n");
 	}
 	else if(strcmp(temp,"T\n")==0 || strcmp(temp,"T")==0 || strcmp(temp,"t\n")==0 || strcmp(temp,"t")==0){
 		*input=-2;
-		printf("Terminating\n");
 	}
 	else if(strcmp(temp,"V\n")==0 || strcmp(temp,"V")==0 || strcmp(temp,"v\n")==0 || strcmp(temp,"v")==0){
 		*input=-3;
 	}
 	else if( (atoi(temp)==0 &&  strcmp(temp,"0\n")!=0)   ){
 		*input=-4;
-		printf("Wrong input! Please read the instructions and try again!\n");
 	}
 	else{*input=atoi(temp);}
+}
+
+
+void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
+	int i=0,j=0;
+	(*target)=NULL;
+	(*target)=malloc(sizeof(double)*dimx*dimy);
+	if((*target)==NULL){perror("malloc 2Dto1D conversion");exit(0);}
+	while(i<dimx){
+		j=0;
+		while(j<dimy){
+			(*target)[i*dimy+j]=source[i][j];
+			j++;
+		}
+		i++;
+	}
+
 }

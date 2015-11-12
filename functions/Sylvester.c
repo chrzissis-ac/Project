@@ -65,7 +65,7 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 	}
 	(*sylvester)->hidden=hidden;
 	(*sylvester)->dim=dim;
-	printf("Dimension is: %d\n", (*sylvester)->dim);
+	printf("Sylvester dimension is: %d and the ", (*sylvester)->dim);
 	if (hidden=='x') {
 		if (degP1x>=degP2x && degP2y!=0 ) {
 			(*sylvester)->degree=degP1x;
@@ -82,7 +82,7 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 			(*sylvester)->degree=degP2y;
 		}
 	}
-	printf("Hidden variable is %c\n",hidden);
+	printf("hidden variable is %c\n",hidden);
 	(*sylvester)->matrix=NULL;
 	(*sylvester)->matrix=malloc(sizeof(Polyonym *)*dim);
 	if ((*sylvester)->matrix==NULL) {perror("Sylvester matrix malloc!");exit(0);}
@@ -244,6 +244,7 @@ void copysylvester(Sylvester ** target, Sylvester * source){
 void printsylvester (Sylvester * sylvester) {
 	int dim, i, j;
 	dim=sylvester->dim;
+	printf("The Sylvester Matrix is:\n\n");
 	for (i=0 ; i<dim ; i++) {
 		for (j=0 ; j<dim ; j++) {
 			print1polyonym(&(sylvester->matrix[i][j]));

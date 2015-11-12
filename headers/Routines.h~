@@ -2,8 +2,10 @@ char choosevar_bydeg(int dx1, int dy1,int dx2, int dy2);
 
 char choosehidden_bydeg(int dx1, int dy1,int dx2, int dy2);
 
-void generatefunctions(int dx,int dy, FILE * file);
+void generatefunctions(int d1,int d2, FILE * file);
 
-void input(FILE * file,int * dx,int * dy,char ** function);
+void input(FILE * file,int * d,char ** function);
 
 void menushow(int * input);
+
+void from2Dto1D (int ** source, int ** target, int dimx, int dimy);

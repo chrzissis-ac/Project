@@ -35,5 +35,5 @@ Vector.o: ./functions/Vector.c
 main.o: ./main/main.c
 	$(GCCC) ./main/main.c
 
-clean:
+clean: cl
 	$(RMVF) $(OBJS1) $(EXEC1) 

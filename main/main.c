@@ -17,6 +17,7 @@ void main(int argc,char ** argv){
 	int d1=0, dx1=0, dy1=0;
 	char * function2=NULL;
 	int d2=0, dx2=0, dy2=0;
+	double k=0;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
@@ -48,16 +49,22 @@ void main(int argc,char ** argv){
 	createsylvester(&sylvester, polyonym2, polyonym1);
 	createProdMatr(sylvester, &prodMatr);
 
+	calculate_K(prodMatr);
+
 	create_newProd(&new, prodMatr);
 
 	do{
 		menushow(&in);
+		//system("clear");
 		if(in==-1){printsylvester(sylvester);}
 		else if(in==-3){
 			createInputVector(&vector);
 			Svmult(sylvester, vector, &fin);
 		}
-		else if(in>=0){printProdMatr(prodMatr,in);}
+		else if(in==-4){
+			printf("Wrong input! Please read the instructions and try again!\n");
+		}
+		else if(in>=0){printProdMatr_int(prodMatr,in);}
 	}while(in!=-2);
 	
 
@@ -67,7 +74,7 @@ void main(int argc,char ** argv){
 	free(function1);
 	free(function2);
 	destroyProdMatr(prodMatr);
-//	destroyProdMatr(new);
+	if(new!=NULL){destroyProdMatr(new);}
 	fclose(file);
 	destroysylvester(&sylvester);
 }
