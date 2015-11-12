@@ -151,3 +151,24 @@ void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
 	}
 
 }
+
+void from1Dto2D_double(double * source, double *** target, int dimx, int dimy){
+	int i=0,j=0;
+	(*target)=NULL;
+	(*target)=malloc(sizeof(double)*dimx);
+	if((*target)==NULL){perror("malloc 1Dto2D conversion 1D");exit(0);}
+	for (i=0 ; i<dimy ; i++) {
+		(*target)[i]=NULL;
+		(*target)[i]=malloc(sizeof(double)*dimy);
+		if ((*target)[i]==NULL) {perror("malloc 1Dto2D conversion 2D");exit(0);}
+	}
+	i=0;
+	while(i<dimx){
+		j=0;
+		while(j<dimy){
+			(*target)[i][j]=source[i*dimy+j];
+			j++;
+		}
+		i++;
+	}
+}
