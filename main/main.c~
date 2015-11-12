@@ -7,6 +7,7 @@
 #include "../headers/ProdMatr.h"
 #include "../headers/Vector.h"
 
+//git try
 
 void main(int argc,char ** argv){
 	srand(time(NULL));
@@ -74,9 +75,7 @@ void main(int argc,char ** argv){
 	free(function1);
 	free(function2);
 	destroyProdMatr(prodMatr);
-	printf("\n-------------------------------\n");
 	if(new!=NULL){destroyProdMatr(new);}
-	printf("\n-------------------------------\n");
 	fclose(file);
 	destroysylvester(&sylvester);
 }
