@@ -6,8 +6,13 @@
 #include "../headers/Sylvester.h"
 #include "../headers/ProdMatr.h"
 #include "../headers/Vector.h"
-//tryout
+<<<<<<< HEAD
+//tryin
 
+=======
+//tryout
+//blabla
+>>>>>>> c6ba60d30871a574a258126d707d06086cce9faf
 void main(int argc,char ** argv){
 	srand(time(NULL));
 	char v;
