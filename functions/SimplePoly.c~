@@ -1,0 +1,249 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../headers/SimplePoly.h"
+
+typedef double * Poly;
+struct Polyonym{
+	Poly matrix;
+	char var;
+	int d;
+};
+
+//----------------------------------------------------------Polyonyma of 1 variable management-----------------------------------------------
+
+// create1polyonym() creates a single-variable polyonym ('polyonym') from a double-variable polyonym ('polyonym2') from position 'point' with variable 'v' 
+void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int point){
+	int i=0,j=0,set=0;
+
+	if(v=='x'){
+		j=point;
+		set=0;
+		while(i<=getDegree2(polyonym2, 'y')){
+			if(get_polymatrix2(polyonym2,j,i)!=0){set=i;}
+			i++;
+		}
+		polyonym->d=set;
+		polyonym->matrix=NULL;
+		polyonym->matrix=malloc(sizeof(double)*(set+1));
+		if(polyonym->matrix==NULL){perror("Single Polyonym matrix malloc!");free(polyonym);exit(0);}
+		i=0;
+		while(i<=set){
+			(polyonym->matrix)[i]=get_polymatrix2(polyonym2,j,i);
+			i++;
+		}
+		polyonym->var='y';
+	}
+	else if(v=='y'){
+		i=point;
+		set=0;
+		while(j<=getDegree2(polyonym2, 'x')){
+			if(get_polymatrix2(polyonym2,j,i)!=0){set=j;}
+			j++;
+		}
+		polyonym->d=set;
+		polyonym->matrix=NULL;
+		polyonym->matrix=malloc(sizeof(double)*(set+1));
+		if(polyonym->matrix==NULL){perror("Single Polyonym matrix malloc!");free(polyonym);exit(0);}
+		j=0;
+		while(j<=set){
+			(polyonym->matrix)[j]=get_polymatrix2(polyonym2,j,i);
+			j++;
+		}
+		polyonym->var='x';
+	}
+}
+
+void create1polyonym_one(Polyonym ** polyonym,char v){
+	Polyonym * temp=(*polyonym);
+	*polyonym=NULL;
+	temp=malloc(sizeof(Polyonym));
+	if(temp==NULL){perror("malloc temp poly one");exit(0);}
+	temp->matrix=NULL;
+	temp->matrix=malloc(sizeof(double));
+	if(temp->matrix==NULL){perror("malloc temp poly matrix one");exit(0);}
+	temp->matrix[0]=1;
+	temp->d=0;
+	temp->var=v;
+	(*polyonym)=temp;
+
+}
+// delete1matrix() frees the memory that was allocated for matrix of 'poly'
+void delete1matrix(Polyonym * poly){
+	free(poly->matrix);
+}
+
+// delete1polyonym() frees the memory that was allocated for 'poly'
+void delete1polyonym(Polyonym * poly){
+	free(poly->matrix);
+	free(poly);
+}
+
+// change1polyonym() changes the value of matrix['grade'] of 'poly' with 'in'
+void change1polyonym(Polyonym * poly,int grade,int in){
+	poly->matrix[grade]=in;
+}
+
+// print1polyonym() prints the single-variable polyonym 'poly'
+void print1polyonym(Polyonym * poly){
+	int i=0,set=0;
+	printf("d=%d\t",poly->d);
+	while(i<=poly->d){
+		if(poly->matrix[i]!=0){
+			set=1;
+			if(poly->matrix[i]>0){printf("+");}
+			if(poly->matrix[i]!=1 ||(poly->matrix[i]==1 && i==0)){printf("%d(i=%d)",(int)(poly->matrix[i]),i);}
+			if(i!=0){
+				printf("%c",poly->var);
+				if(i!=1){printf("^%d",i);}
+			}
+		}
+		i++;
+		
+	}
+	if(set==0){printf("0");}
+}
+
+// get1Degree() return the degree of 'poly'
+int get1Degree(Polyonym * poly){
+	return poly->d;
+}
+
+// get1var() returns the variable of 'poly'
+char get1var(Polyonym * poly){
+	return poly->var;
+}
+
+// get1NumByDegree() returns the coefficient of y^'targetDeg' of 'poly'
+int get1NumByDegree(Polyonym * poly, int targetDeg) {
+	if (targetDeg>poly->d) {
+		return 0;
+	}
+	return poly->matrix[targetDeg];
+}
+
+// copy1polyonym() copies a Polyonym struct ('source') to another Polyonym struct ('target')
+void copy1polyonym(Polyonym * target,Polyonym * source){
+	target->d=source->d;
+	target->var=source->var;
+	target->matrix=NULL;
+	target->matrix=malloc(sizeof(double)*(target->d+1));
+	memcpy(target->matrix,source->matrix,sizeof(double)*(target->d+1));
+}
+
+// add1polyonyms() adds the chosen polyonym between 'polyonym1' and 'polyonym2' to 'trgt'
+void add1polyonyms(Polyonym * trgt, Polyonym * polyonym1, Polyonym * polyonym2){
+	int i=0;
+	Polyonym poly1,poly2,target;
+	memcpy(&poly1,polyonym1,sizeof(Polyonym));
+	memcpy(&poly2,polyonym2,sizeof(Polyonym));
+	memcpy(&target,trgt,sizeof(Polyonym));
+	Polyonym * temp;
+	Polyonym * chosen;	
+	if(poly1.var!=poly2.var){
+		printf("Different variable to add!\n");
+		return;
+	}
+	trgt->var=poly1.var;
+	if(poly1.d>=poly2.d){
+		target.d=poly1.d;
+		chosen=&poly1;
+		temp=&poly2;
+	}
+	else{
+		target.d=poly2.d;
+		chosen=&poly2;
+		temp=&poly1;
+	}
+	target.matrix=NULL;
+	target.matrix=malloc(sizeof(double)*(target.d+1));
+	if(target.matrix==NULL){perror("Polyonym add malloc!");exit(0);}
+	while(i<=target.d){
+		if(i<=temp->d){target.matrix[i]=temp->matrix[i];}
+		else{target.matrix[i]=0;}
+		target.matrix[i]=target.matrix[i]+chosen->matrix[i];
+		i++;
+	}
+	trgt->d=target.d;
+	if(trgt->matrix!=NULL){
+		free(trgt->matrix);
+		trgt->matrix=NULL;		
+		trgt->matrix=malloc(sizeof(double)*(target.d+1));
+		if(trgt->matrix==NULL){perror("relocation add malloc!");exit(0);}
+		memcpy(trgt->matrix,target.matrix,sizeof(double)*(target.d+1));
+		free(target.matrix);
+	}
+	else{trgt->matrix=target.matrix;}
+	return;
+}
+
+// multiply1polyonym()  multiplies a single-variable polyonym 'trgt' with value 'm'
+void multiply1polyonym(Polyonym * trgt, Polyonym * polyonym1,int m){
+	int i=0;
+	Polyonym poly,target;
+	trgt->var=polyonym1->var;
+	if(m==0){trgt->d=0;}
+	else{trgt->d=polyonym1->d;}
+	memcpy(&poly,polyonym1,sizeof(Polyonym));
+	memcpy(&target,trgt,sizeof(Polyonym));
+	target.matrix=NULL;
+	target.matrix=malloc(sizeof(double)*(target.d+1));
+	if(target.matrix==NULL){perror("Polyonym add malloc!");exit(0);}
+	memcpy(target.matrix,poly.matrix,sizeof(double)*(target.d+1));
+	while(i<=target.d){
+		target.matrix[i]=target.matrix[i]*m;
+		i++;
+	}
+	if(trgt->matrix!=NULL){
+		free(trgt->matrix);
+		trgt->matrix=NULL;
+		trgt->matrix=malloc(sizeof(double)*(target.d+1));
+		if(trgt->matrix==NULL){perror("relocation mult malloc!");exit(0);}
+		memcpy(trgt->matrix,target.matrix,sizeof(double)*(target.d+1));
+		free(target.matrix);
+	}
+	else{trgt->matrix=target.matrix;}
+	return;
+}
+
+
+void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * polyonym2){
+	int i=0,j=0;
+	Polyonym temp;
+	temp.matrix=NULL;
+	(*trgt)=NULL;
+	(*trgt)=malloc(sizeof(Polyonym));
+	if((*trgt)==NULL){perror("mult trgt malloc!");exit(0);}
+	(*trgt)->var=polyonym1->var;
+	(*trgt)->d = polyonym1->d + polyonym2->d;
+	if(  (polyonym1->d==0 && polyonym1->matrix[0]==0) || (polyonym2->d==0 && polyonym2->matrix[0]==0) ){
+		(*trgt)->d=0;
+	}
+
+	(*trgt)->matrix=NULL;
+
+	(*trgt)->matrix=malloc(sizeof(double)*((*trgt)->d+1));
+	if((*trgt)->matrix==NULL){perror("mult trgt matrix malloc!");exit(0);}
+	while(i<=(*trgt)->d){
+		(*trgt)->matrix[i]=0;
+		i++;
+	}
+	i=0;
+	while(i<=polyonym1->d){
+		multiply1polyonym(&temp, polyonym2,polyonym1->matrix[i]);
+		j=0;
+		while(j<=temp.d){
+			(*trgt)->matrix[j+i]=(*trgt)->matrix[j+i] + temp.matrix[j];
+			j++;
+		}
+		i++;
+	}
+	free(temp.matrix);
+//	printf("epimeristiki: \n");
+//	print1polyonym((*trgt));
+//	printf("\n");
+
+}
+
+
