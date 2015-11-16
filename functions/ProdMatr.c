@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <lapacke.h>
+#include <lapacke.h>
 
 #include "../headers/ProdMatr.h"
 #include "../headers/Sylvester.h"
@@ -62,7 +62,7 @@ void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat) {
 			}
 		}
 	}
-
+	calculate_K(*prodMat);
 	return;
 }
 
@@ -137,23 +137,23 @@ int calculate_K(ProductMatrices * prodMat){
 	int i=0;
 	int ldv=prodMat->dim;
 	double maxs=0,mins=0,info=0;
-//	sva=LAPACKE_malloc(sizeof(double)*(prodMat->dim));
-//	if(sva==NULL){perror("LAPACKE malloc sva to calc K failed");exit(0);}
-//	stat=LAPACKE_malloc(sizeof(double)*(prodMat->dim)*2);
-//	if(stat==NULL){perror("LAPACKE malloc stat to calc K failed");exit(0);}
+	sva=LAPACKE_malloc(sizeof(double)*(prodMat->dim));
+	if(sva==NULL){perror("LAPACKE malloc sva to calc K failed");exit(0);}
+	stat=LAPACKE_malloc(sizeof(double)*(prodMat->dim)*2);
+	if(stat==NULL){perror("LAPACKE malloc stat to calc K failed");exit(0);}
 
-//	from2Dto1D_double( prodMat->matrix[prodMat->degree], &matrix, prodMat->dim, prodMat->dim);
+	from2Dto1D_double( prodMat->matrix[prodMat->degree], &matrix, prodMat->dim, prodMat->dim);
 	
-//	info=LAPACKE_dgesvj(LAPACK_ROW_MAJOR, 'G','N', 'N', prodMat->dim, prodMat->dim, matrix, prodMat->dim, sva, 0, v, ldv, stat);
+	info=LAPACKE_dgesvj(LAPACK_ROW_MAJOR, 'G','N', 'N', prodMat->dim, prodMat->dim, matrix, prodMat->dim, sva, 0, v, ldv, stat);
 
-//	maxs=sva[0];
-//	mins=sva[0];
-//	i=1;
-//	while(i<prodMat->dim){
-//		if(maxs<sva[i]){maxs=sva[i];}
-//		if(mins>sva[i]){mins=sva[i];}
-//		i++;
-//	}
+	maxs=sva[0];
+	mins=sva[0];
+	i=1;
+	while(i<prodMat->dim){
+		if(maxs<sva[i]){maxs=sva[i];}
+		if(mins>sva[i]){mins=sva[i];}
+		i++;
+	}
 /*
 	i=0;
 	while(i<prodMat->dim){
@@ -161,22 +161,20 @@ int calculate_K(ProductMatrices * prodMat){
 		i++;
 	}
 */
-//	printf("Max Singular value is %f\n",maxs);
-//	printf("Min Singular value is %f\n",mins);
-//	if(mins==0 || mins < 0.000001 ){
-//		printf("K is infinity\n");
-//		free(matrix);
-//		LAPACKE_free(sva);
-//		LAPACKE_free(stat);
-//		LAPACKE_free(v);
-//		return -1;
-//	}
-//	prodMat->k=maxs/mins;
-//	printf("k is %f\n",prodMat->k);
-//	free(matrix);
-//	LAPACKE_free(sva);
-//	LAPACKE_free(stat);
-//	LAPACKE_free(v);
+	printf("Max Singular value is %f\n",maxs);
+	printf("Min Singular value is %f\n",mins);
+	if(mins==0 || mins < 0.000001 ){
+		prodMat->k=-1;
+		printf("K is infinity\n");
+	}
+	else{
+		prodMat->k=maxs/mins;
+		printf("k is %f\n",prodMat->k);
+	}
+	free(matrix);
+	LAPACKE_free(sva);
+	LAPACKE_free(stat);
+	LAPACKE_free(v);
 }
 
 void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
@@ -343,4 +341,5 @@ printf("\n");
 		destroyProdMatr(target[i]);
 		i++;
 	}
+	calculate_K(*finl);
 }

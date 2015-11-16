@@ -62,7 +62,7 @@ void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat) {
 			}
 		}
 	}
-
+	calculate_K(*prodMatr);
 	return;
 }
 
@@ -153,7 +153,7 @@ int calculate_K(ProductMatrices * prodMat){
 		if(maxs<sva[i]){maxs=sva[i];}
 		if(mins>sva[i]){mins=sva[i];}
 		i++;
-	}	
+	}
 /*
 	i=0;
 	while(i<prodMat->dim){
@@ -164,15 +164,13 @@ int calculate_K(ProductMatrices * prodMat){
 	printf("Max Singular value is %f\n",maxs);
 	printf("Min Singular value is %f\n",mins);
 	if(mins==0 || mins < 0.000001 ){
+		prodMat->k=-1;
 		printf("K is infinity\n");
-		free(matrix);
-		LAPACKE_free(sva);
-		LAPACKE_free(stat);
-		LAPACKE_free(v);
-		return -1;
 	}
-	prodMat->k=maxs/mins;
-	printf("k is %f\n",prodMat->k);
+	else{
+		prodMat->k=maxs/mins;
+		printf("k is %f\n",prodMat->k);
+	}
 	free(matrix);
 	LAPACKE_free(sva);
 	LAPACKE_free(stat);
@@ -308,8 +306,8 @@ printf("\n");
 			b++;
 		}
 		delete1polyonym(temp);
-	//	print1polyonym(fin);
-	//	printf(" is the polyonym for matrix M-%d ==> ",i);
+	/*	print1polyonym(fin);
+		printf(" is the polyonym for matrix M-%d ==> ",i);
 		if(a>0){
 			printf("(");
 			print1polyonym(poly2);
@@ -320,7 +318,7 @@ printf("\n");
 			print1polyonym(poly1);
 			printf(")^%d",b);
 		}
-		printf("\n");
+		printf("\n");*/
 		multProdMatr(&(target[i]), fin, prodMat, i);
 		delete1polyonym(fin);
 		i++;
@@ -343,14 +341,5 @@ printf("\n");
 		destroyProdMatr(target[i]);
 		i++;
 	}
+	calculate_K(*finl);
 }
-
-
-
-
-
-
-
-
-
-

@@ -12,7 +12,7 @@ cl:
 	clear;clear;
 
 final1: $(OBJS1)
-	$(GCCO) $(EXEC1) $(OBJS1)
+	$(GCCO) $(EXEC1) $(OBJS1) -llapacke
 
 Routines.o: ./functions/Routines.c
 	$(GCCC) ./functions/Routines.c

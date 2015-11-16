@@ -54,8 +54,6 @@ void main(int argc,char ** argv){
 //	printCompanionMatrix(compMatr);
 //	deleteCompanionMatrix(&compMatr);
 
-	calculate_K(prodMatr);
-
 	create_newProd(&new, prodMatr);
 
 	do{
