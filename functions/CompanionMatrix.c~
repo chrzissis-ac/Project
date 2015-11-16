@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "../headers/ProdMatr.h"
+#include "../headers/CompanionMatrix.h"
+
+struct ProductMatrices{
+	double *** matrix;
+	int dim;
+	char hidden;
+	int degree;
+	double k;
+};
+
+struct CompanionMatrix{
+	double ** matrix;
+	int dim;
+};
+
+void createCompanionMatrix(ProductMatrices * prodMatr, CompanionMatrix ** compMatr) {
+	int dim, subDim, compDim, i, j, k, l;
+	printf("Creating companion matrix!\n");
+	(*compMatr)=NULL;
+	(*compMatr)=malloc(sizeof(struct CompanionMatrix));
+	if ((*compMatr)==NULL) {perror("CompanionMatrix struct malloc!");exit(0);}
+	subDim=(prodMatr->degree)+1;
+	dim=prodMatr->dim;
+	compDim=dim*subDim;
+	(*compMatr)->dim=compDim;
+	(*compMatr)->matrix=NULL;
+	(*compMatr)->matrix=malloc(sizeof(double*)*compDim);
+	if ((*compMatr)->matrix==NULL) {perror("CompanionMatrix matrix malloc!");exit(0);}
+	printf("Dimension of product matrices is: %d, ", dim);
+	printf("so dimension of companion matrix is: %d\n", compDim);
+	for (i=0 ; i<compDim ; i++) {
+		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
+		if ((*compMatr)->matrix[i]==NULL) {perror("CompanionMatrix matrix cell malloc!");exit(0);}
+	}
+	for (i=0 ; i<subDim ; i++) {
+		for (j=0 ; j<subDim ; j++) {
+			if (i==subDim-1){
+				for (k=0 ; k<dim ; k++) {
+					for (l=0 ; l<dim ; l++) {
+						(*compMatr)->matrix[i*dim+k][j*dim+l]=prodMatr->matrix[j][k][l];
+						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
+						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
+					}
+				}
+			}
+			else if (i==j-1) {
+				for (k=0 ; k<dim ; k++) {
+					for (l=0 ; l<dim ; l++) {
+						if (k==l) {
+							(*compMatr)->matrix[i*dim+k][j*dim+l]=1.0;
+						}
+						else {
+							(*compMatr)->matrix[i*dim+k][j*dim+l]=0.0;
+						}
+						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
+						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
+					}
+				}
+			}
+			else {
+				for (k=0 ; k<dim ; k++) {
+					for (l=0 ; l<dim ; l++) {
+						(*compMatr)->matrix[i*dim+k][j*dim+l]=0.0;
+						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
+						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
+					}
+				}
+			}
+		}
+	}
+	return;
+}
+
+void printCompanionMatrix(CompanionMatrix * compMatr) {
+	int i, j, dim;
+	printf("Printing companion matrix!\n");
+	dim=compMatr->dim;
+	for (i=0 ; i<dim ; i++) {
+		for (j=0 ; j<dim ; j++) {
+			printf ("%.2f", compMatr->matrix[i][j]);
+			printf("|\t");
+		}
+		printf("\n");
+	}
+	printf("\n");
+	return;
+}
+
+
+
+void deleteCompanionMatrix (CompanionMatrix ** compMatr) {
+	int i, j, dim;
+	printf("Deleting companion matrix!\n");
+	dim=(*compMatr)->dim;
+	for (i=0 ; i<dim ; i++) {
+		free((*compMatr)->matrix[i]);
+	}
+	free((*compMatr)->matrix);
+	free(*compMatr);
+	return;
+}

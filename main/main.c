@@ -6,7 +6,7 @@
 #include "../headers/Sylvester.h"
 #include "../headers/ProdMatr.h"
 #include "../headers/Vector.h"
-
+#include "../headers/CompanionMatrix.h"
 
 void main(int argc,char ** argv){
 	srand(time(NULL));
@@ -48,6 +48,11 @@ void main(int argc,char ** argv){
 	createpolyonym2(function2,&polyonym2,d2);
 	createsylvester(&sylvester, polyonym2, polyonym1);
 	createProdMatr(sylvester, &prodMatr);
+
+//	CompanionMatrix * compMatr = NULL;
+//	createCompanionMatrix(prodMatr, &compMatr);
+//	printCompanionMatrix(compMatr);
+//	deleteCompanionMatrix(&compMatr);
 
 	calculate_K(prodMatr);
 

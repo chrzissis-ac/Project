@@ -1,0 +1,9 @@
+#include "../headers/ProdMatr.h"
+
+typedef struct CompanionMatrix CompanionMatrix;
+
+void createCompanionMatrix(ProductMatrices * prodMatr, CompanionMatrix ** compMatr);
+
+void printCompanionMatrix(CompanionMatrix * compMatr);
+
+void deleteCompanionMatrix(CompanionMatrix ** compMatr);
