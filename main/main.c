@@ -85,6 +85,10 @@ void main(int argc,char ** argv){
 			if(point==prodMatr){point=new;}
 			else{point=prodMatr;}
 		}
+		else if(in==-6){
+			if(problemisGen==1){printCMatrix(cMatr);}
+			else{printCompanionMatrix(compMatr);}
+		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
 		}

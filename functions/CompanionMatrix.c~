@@ -28,6 +28,7 @@ int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix
 	int K, i;
 	double limit;
 	limit=1.0;
+	if(prodMat->degree==0){return -1;}
 	for (i=0 ; i<V ; i++) {
 		limit=limit/10;
 	}
@@ -201,7 +202,7 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 		if ((*compMatr)->matrix[i]==NULL) {perror("CMatrix matrix cell malloc!");exit(0);}
 	}
 	printf("Dimension of product matrices is: %d, ", dim);
-	printf("so dimension of companion matrix is: %d\n", compDim);
+	printf("so dimension of C matrix is: %d\n", compDim);
 	for (i=0 ; i<subDim ; i++) {
 		for (j=0 ; j<subDim ; j++) {
 			if (i==subDim && j==subDim){
@@ -267,7 +268,7 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 
 void printCMatrix(CMatrix * compMatr) {
 	int i, j, dim;
-	printf("Printing companion matrix!\n");
+	printf("Printing C matrices!\n");
 	dim=compMatr->dim;
 	for (i=0 ; i<dim ; i++) {
 		for (j=0 ; j<dim ; j++) {
@@ -290,7 +291,7 @@ void printCMatrix(CMatrix * compMatr) {
 
 void deleteCMatrix(CMatrix ** compMatr) {
 	int i, j, dim;
-	printf("Deleting companion matrix!\n");
+//	printf("Deleting companion matrix!\n");
 	dim=(*compMatr)->dim;
 	for (i=0 ; i<dim ; i++) {
 		free((*compMatr)->matrixY[i]);

@@ -33,6 +33,7 @@ int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix
 		limit=limit/10;
 	}
 	if (prodMat->k == -1) {
+		createCMatrix(prodMat, cMatr);
 		printf("We have infinite k!\n");
 		return 1;
 	}
@@ -268,7 +269,7 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 
 void printCMatrix(CMatrix * compMatr) {
 	int i, j, dim;
-//	printf("Printing companion matrix!\n");
+	printf("Printing C matrices!\n");
 	dim=compMatr->dim;
 	for (i=0 ; i<dim ; i++) {
 		for (j=0 ; j<dim ; j++) {

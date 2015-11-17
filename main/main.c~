@@ -62,6 +62,7 @@ void main(int argc,char ** argv){
 	else if(problemisGen==1){printf("\n----------\nProblem is Generalized!\n----------\n");}
 	
 	if(problemisGen==-1){
+		printsylvester(sylvester);
 		deletepoly2(polyonym1);
 		deletepoly2(polyonym2);
 		free(function1);
@@ -83,6 +84,10 @@ void main(int argc,char ** argv){
 		else if(in==-5){
 			if(point==prodMatr){point=new;}
 			else{point=prodMatr;}
+		}
+		else if(in==-5){
+			if(problemisGen==1){printCMatrix(cMatr);}
+			else{printCompanionMatrix(compMatr);}
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");

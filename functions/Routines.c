@@ -118,8 +118,9 @@ void menushow(int * input){
 	printf("1-\"S\" to print Sylvester Matrix!\n");
 	printf("2-Any number \"#\" to print the corresponding Sylvester Matrix to the given Grade\n");
 	printf("3-\"V\" for Vector multiplication\n");
-	printf("4-\"C\" In case there is a change of variable, start printing the new matrix for each given No\n");
-	printf("5-\"T\" to terminate\n");
+	printf("4-\"O\" In case there is a change of variable, start printing the other matrix for each given No\n");
+	printf("5-\"C\" Print Companion matrix or Generalized Eigenproblem Matrices\n");
+	printf("6-\"T\" to terminate\n");
 	fgets(temp,300,stdin);
 	if(strcmp(temp,"S\n")==0 || strcmp(temp,"S")==0 || strcmp(temp,"s\n")==0 || strcmp(temp,"s")==0){
 		*input=-1;
@@ -130,8 +131,11 @@ void menushow(int * input){
 	else if(strcmp(temp,"V\n")==0 || strcmp(temp,"V")==0 || strcmp(temp,"v\n")==0 || strcmp(temp,"v")==0){
 		*input=-3;
 	}
-	else if(strcmp(temp,"C\n")==0 || strcmp(temp,"C")==0 || strcmp(temp,"c\n")==0 || strcmp(temp,"c")==0){
+	else if(strcmp(temp,"O\n")==0 || strcmp(temp,"O")==0 || strcmp(temp,"o\n")==0 || strcmp(temp,"o")==0){
 		*input=-5;
+	}
+	else if(strcmp(temp,"C\n")==0 || strcmp(temp,"C")==0 || strcmp(temp,"c\n")==0 || strcmp(temp,"c")==0){
+		*input=-6;
 	}
 	else if( (atoi(temp)==0 &&  strcmp(temp,"0\n")!=0)   ){
 		*input=-4;
