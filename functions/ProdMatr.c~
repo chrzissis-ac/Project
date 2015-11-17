@@ -162,15 +162,15 @@ int calculate_K(ProductMatrices * prodMat){
 		i++;
 	}
 */
-	printf("Max Singular value is %f\n",maxs);
-	printf("Min Singular value is %f\n",mins);
+//	printf("Max Singular value is %f\n",maxs);
+//	printf("Min Singular value is %f\n",mins);
 	if(mins==0 || mins < 0.000001 ){
 		prodMat->k=-1;
-		printf("K is infinity\n");
+//		printf("K is infinity\n");
 	}
 	else{
 		prodMat->k=maxs/mins;
-		printf("k is %f\n",prodMat->k);
+//		printf("k is %f\n",prodMat->k);
 	}
 	free(matrix);
 	LAPACKE_free(sva);

@@ -13,16 +13,20 @@ void main(int argc,char ** argv){
 	char v;
 	int in=0;
 	int changevar=0;
+	int problemisStd=0;
 	char temp[300];
 	char * function1=NULL;
 	int d1=0, dx1=0, dy1=0;
 	char * function2=NULL;
 	int d2=0, dx2=0, dy2=0;
 	double k=0;
+	int V=7;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
 	Sylvester * sylvester2=NULL;
+	CompanionMatrix * compMatr=NULL;
+	CMatrix * cMatr=NULL;
 	ProductMatrices * prodMatr=NULL;
 	ProductMatrices * point=NULL;
 	ProductMatrices * new=NULL;
@@ -52,6 +56,7 @@ void main(int argc,char ** argv){
 	createProdMatr(sylvester, &prodMatr);
 
 	changevar=changeofvar3(&new,prodMatr);
+	problemisStd=chooseMatrix(new, &compMatr, &cMatr, V);
 	point=prodMatr;
 
 	do{
@@ -71,9 +76,11 @@ void main(int argc,char ** argv){
 		}
 		else if(in>=0){printProdMatr_int(point,in);}
 	}while(in!=-2);
-	
 
-	
+
+	//if(problemisStd==1){deleteCompanionMatrix(&compMatr);}
+	//else{deleteCMatrix(&cMatr);}
+
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);
 	free(function1);

@@ -27,24 +27,22 @@ struct CMatrix{
 int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix ** cMatr, int V) {
 	int K, i;
 	double limit;
-	K=calculate_K(prodMat);
 	limit=1.0;
 	for (i=0 ; i<V ; i++) {
 		limit=limit/10;
 	}
 	if (prodMat->k == -1) {
 		printf("We have infinite k!\n");
-		return -1;
+		return 1;
 	}
-	else if (prodMat->k < limit) {
+	else if (prodMat->k <= limit) {
 		createCompanionMatrix(prodMat, compMatr);
 		return 0;
 	}
-	else if (prodMat->k >limit) {
+	else if(prodMat->k > limit){
 		createCMatrix(prodMat, cMatr);
 		return 1;
 	}
-	return -1;
 }
 
 void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr) {
