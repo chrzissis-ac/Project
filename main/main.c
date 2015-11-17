@@ -59,7 +59,20 @@ void main(int argc,char ** argv){
 	problemisGen=chooseMatrix(new, &compMatr, &cMatr, V);
 	point=prodMatr;
 	if(problemisGen==0){printf("\n----------\nProblem is Standard!\n----------\n");}
-	else{printf("\n----------\nProblem is Generalized!\n----------\n");}
+	else if(problemisGen==1){printf("\n----------\nProblem is Generalized!\n----------\n");}
+	
+	if(problemisGen==-1){
+		printsylvester(sylvester);
+		deletepoly2(polyonym1);
+		deletepoly2(polyonym2);
+		free(function1);
+		free(function2);
+		destroyProdMatr(prodMatr);
+		fclose(file);
+		destroysylvester(&sylvester);
+		return;
+	}
+
 	do{
 		menushow(&in);
 		//system("clear");

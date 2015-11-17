@@ -39,7 +39,7 @@ int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix
 		createCompanionMatrix(prodMat, compMatr);
 		return 0;
 	}
-	else(prodMat->k > limit){
+	else if(prodMat->k > limit){
 		createCMatrix(prodMat, cMatr);
 		return 1;
 	}
