@@ -18,7 +18,7 @@ struct CompanionMatrix{
 	int dim;
 };
 
-struct CompanionMatrixB{
+struct CMatrix{
 	double ** matrixY;
 	double ** matrix;
 	int dim;
@@ -155,29 +155,29 @@ void deleteCompanionMatrix(CompanionMatrix ** compMatr) {
 	return;
 }
 
-void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** compMatr) {
+void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	int dim, subDim, compDim, i, j, k, l;
 	printf("Creating companion matrix!\n");
 	(*compMatr)=NULL;
-	(*compMatr)=malloc(sizeof(struct CompanionMatrixB));
-	if ((*compMatr)==NULL) {perror("CompanionMatrixB struct malloc!");exit(0);}
+	(*compMatr)=malloc(sizeof(struct CMatrix));
+	if ((*compMatr)==NULL) {perror("CMatrix struct malloc!");exit(0);}
 	subDim=(prodMatr->degree);
 	dim=prodMatr->dim;
 	compDim=dim*subDim;
 	(*compMatr)->dim=compDim;
 	(*compMatr)->matrixY=NULL;
 	(*compMatr)->matrixY=malloc(sizeof(double*)*compDim);
-	if ((*compMatr)->matrixY==NULL) {perror("CompanionMatrixB matrixY malloc!");exit(0);}
+	if ((*compMatr)->matrixY==NULL) {perror("CMatrix matrixY malloc!");exit(0);}
 	for (i=0 ; i<compDim ; i++) {
 		(*compMatr)->matrixY[i]=malloc(sizeof(double)*compDim);
-		if ((*compMatr)->matrixY[i]==NULL) {perror("CompanionMatrixB matrix cell malloc!");exit(0);}
+		if ((*compMatr)->matrixY[i]==NULL) {perror("CMatrix matrix cell malloc!");exit(0);}
 	}
 	(*compMatr)->matrix=NULL;
 	(*compMatr)->matrix=malloc(sizeof(double*)*compDim);
-	if ((*compMatr)->matrix==NULL) {perror("CompanionMatrixB matrix malloc!");exit(0);}
+	if ((*compMatr)->matrix==NULL) {perror("CMatrix matrix malloc!");exit(0);}
 	for (i=0 ; i<compDim ; i++) {
 		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
-		if ((*compMatr)->matrix[i]==NULL) {perror("CompanionMatrixB matrix cell malloc!");exit(0);}
+		if ((*compMatr)->matrix[i]==NULL) {perror("CMatrix matrix cell malloc!");exit(0);}
 	}
 	printf("Dimension of product matrices is: %d, ", dim);
 	printf("so dimension of companion matrix is: %d\n", compDim);
@@ -244,7 +244,7 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 	return;
 }
 
-void printCompanionMatrixB(CompanionMatrixB * compMatr) {
+void printCMatrix(CMatrix * compMatr) {
 	int i, j, dim;
 	printf("Printing companion matrix!\n");
 	dim=compMatr->dim;
@@ -267,7 +267,7 @@ void printCompanionMatrixB(CompanionMatrixB * compMatr) {
 	return;
 }
 
-void deleteCompanionMatrixB(CompanionMatrixB ** compMatr) {
+void deleteCMatrix(CMatrix ** compMatr) {
 	int i, j, dim;
 	printf("Deleting companion matrix!\n");
 	dim=(*compMatr)->dim;
