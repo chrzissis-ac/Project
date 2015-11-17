@@ -1,14 +1,14 @@
 #include "../headers/ProdMatr.h"
 
-typedef struct CompanionMatrixA CompanionMatrixA;
+typedef struct CompanionMatrix CompanionMatrix;
 
 typedef struct CompanionMatrixB CompanionMatrixB;
 
-void createCompanionMatrixA(ProductMatrices * startProdMatr, CompanionMatrixA ** compMatr);
+void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr);
 
-void printCompanionMatrixA(CompanionMatrixA * compMatr);
+void printCompanionMatrix(CompanionMatrix * compMatr);
 
-void deleteCompanionMatrixA(CompanionMatrixA ** compMatr);
+void deleteCompanionMatrix(CompanionMatrix ** compMatr);
 
 void createCompanionMatrixB(ProductMatrices * startProdMatr, CompanionMatrixB ** compMatr);
 

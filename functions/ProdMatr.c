@@ -32,7 +32,7 @@ struct ProductMatrices{
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
 
 // createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
-void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat) {
+void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 	int degree, dim, i, j, m;
 	(*prodMat)=NULL;
 	(*prodMat)=malloc(sizeof(ProductMatrices));

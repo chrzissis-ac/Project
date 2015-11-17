@@ -49,10 +49,8 @@ void main(int argc,char ** argv){
 	createsylvester(&sylvester, polyonym2, polyonym1);
 	createProdMatr(sylvester, &prodMatr);
 
-//	CompanionMatrix * compMatr = NULL;
-//	createCompanionMatrix(prodMatr, &compMatr);
-//	printCompanionMatrix(compMatr);
-//	deleteCompanionMatrix(&compMatr);
+	CompanionMatrix * compMatr = NULL;
+	createCompanionMatrix(prodMatr, &compMatr);
 
 	create_newProd(&new, prodMatr);
 
@@ -63,6 +61,9 @@ void main(int argc,char ** argv){
 		else if(in==-3){
 			createInputVector(&vector);
 			Svmult(sylvester, vector, &fin);
+		}
+		else if(in==-5){
+			printCompanionMatrix(compMatr);
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
@@ -78,6 +79,7 @@ void main(int argc,char ** argv){
 	free(function2);
 	destroyProdMatr(prodMatr);
 	if(new!=NULL){destroyProdMatr(new);}
+	deleteCompanionMatrix(&compMatr);
 	fclose(file);
 	destroysylvester(&sylvester);
 }
