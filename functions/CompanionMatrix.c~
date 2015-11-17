@@ -31,8 +31,6 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 	double * modifiedMatrixA=NULL;
 	double * modifiedMatrixB=NULL;
 	lapack_int * ipiv=NULL;
-	printf("Creating companion matrix!\n");
-
 	prodMatr=malloc(sizeof(struct ProductMatrices));
 	if (prodMatr==NULL) {perror("ProductMatrices struct malloc!");exit(0);}
 	prodMatr->dim=startProdMatr->dim;
@@ -148,7 +146,6 @@ void printCompanionMatrix(CompanionMatrix * compMatr) {
 
 void deleteCompanionMatrix(CompanionMatrix ** compMatr) {
 	int i, j, dim;
-	printf("Deleting companion matrix!\n");
 	dim=(*compMatr)->dim;
 	for (i=0 ; i<dim ; i++) {
 		free((*compMatr)->matrix[i]);

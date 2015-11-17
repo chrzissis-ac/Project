@@ -187,8 +187,6 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrixY[i*dim+k][j*dim+l]=prodMatr->matrix[j+1][k][l];
-						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
-						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
 					}
 				}
 			}
@@ -201,8 +199,6 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 						else {
 							(*compMatr)->matrixY[i*dim+k][j*dim+l]=0.0;
 						}
-						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
-						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
 					}
 				}
 			}
@@ -210,8 +206,6 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrixY[i*dim+k][j*dim+l]=0.0;
-						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
-						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
 					}
 				}
 			}
@@ -223,8 +217,6 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrix[i*dim+k][j*dim+l]=prodMatr->matrix[j][k][l];
-						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
-						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
 					}
 				}
 			}
@@ -237,8 +229,6 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 						else {
 							(*compMatr)->matrix[i*dim+k][j*dim+l]=0.0;
 						}
-						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
-						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
 					}
 				}
 			}
@@ -246,8 +236,6 @@ void createCompanionMatrixB(ProductMatrices * prodMatr, CompanionMatrixB ** comp
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrix[i*dim+k][j*dim+l]=0.0;
-						//printf("cell: (%d,%d)=", i*dim+k, j*dim+l);
-						//printf("%.2f ", (*compMatr)->matrix[i*dim+k][j*dim+l]);
 					}
 				}
 			}
