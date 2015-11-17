@@ -13,7 +13,7 @@ void main(int argc,char ** argv){
 	char v;
 	int in=0;
 	int changevar=0;
-	int problemisStd=0;
+	int problemisGen=0;
 	char temp[300];
 	char * function1=NULL;
 	int d1=0, dx1=0, dy1=0;
@@ -56,9 +56,10 @@ void main(int argc,char ** argv){
 	createProdMatr(sylvester, &prodMatr);
 
 	changevar=changeofvar3(&new,prodMatr);
-	problemisStd=chooseMatrix(new, &compMatr, &cMatr, V);
+	problemisGen=chooseMatrix(new, &compMatr, &cMatr, V);
 	point=prodMatr;
-
+	if(problemisGen==0){printf("\n----------\nProblem is Standard!\n----------\n");}
+	else{printf("\n----------\nProblem is Generalized!\n----------\n");}
 	do{
 		menushow(&in);
 		//system("clear");
@@ -78,8 +79,8 @@ void main(int argc,char ** argv){
 	}while(in!=-2);
 
 
-	//if(problemisStd==1){deleteCompanionMatrix(&compMatr);}
-	//else{deleteCMatrix(&cMatr);}
+	if(problemisGen==0){deleteCompanionMatrix(&compMatr);}
+	else{deleteCMatrix(&cMatr);}
 
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);
