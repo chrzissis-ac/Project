@@ -141,7 +141,6 @@ void printCompanionMatrix(CompanionMatrix * compMatr) {
 		printf("\n");
 	}
 	printf("\n");
-printf("1st element is:%f\n\n",compMatr->matrix[0][0]);
 	return;
 }
 
