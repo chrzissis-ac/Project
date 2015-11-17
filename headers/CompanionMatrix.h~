@@ -2,7 +2,7 @@
 
 typedef struct CompanionMatrix CompanionMatrix;
 
-typedef struct CompanionMatrixB CompanionMatrixB;
+typedef struct CMatrix CMatrix;
 
 void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr);
 
@@ -10,8 +10,8 @@ void printCompanionMatrix(CompanionMatrix * compMatr);
 
 void deleteCompanionMatrix(CompanionMatrix ** compMatr);
 
-void createCompanionMatrixB(ProductMatrices * startProdMatr, CompanionMatrixB ** compMatr);
+void createCMatrix(ProductMatrices * startProdMatr, CMatrix ** compMatr);
 
-void printCompanionMatrixB(CompanionMatrixB * compMatr);
+void printCMatrix(CMatrix * compMatr);
 
-void deleteCompanionMatrixB(CompanionMatrixB ** compMatr);
+void deleteCMatrix(CMatrix ** compMatr);
