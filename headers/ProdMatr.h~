@@ -10,7 +10,7 @@ void printProdMatr(ProductMatrices * prodMat, int in);
 
 void printProdMatr_int(ProductMatrices * prodMat, int in);
 
-int calculate_K(ProductMatrices * prodMat,double * k);
+int calculate_K(ProductMatrices * prodMat);
 
 void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g);
 

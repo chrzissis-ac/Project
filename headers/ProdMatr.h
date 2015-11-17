@@ -12,6 +12,8 @@ void printProdMatr_int(ProductMatrices * prodMat, int in);
 
 int calculate_K(ProductMatrices * prodMat);
 
+int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat);
+
 void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g);
 
 void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2);

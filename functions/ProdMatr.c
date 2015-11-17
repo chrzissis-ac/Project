@@ -114,6 +114,7 @@ void printProdMatr_int (ProductMatrices * prodMat, int in) {
 
 // destroyProdMatr() frees the memory that was allocated for 'prodMat'
 void destroyProdMatr (ProductMatrices * prodMat){
+	if(prodMat==NULL){return;}
 	int degree, dim, i, j, k;
 	degree=prodMat->degree;
 	dim=prodMat->dim;
@@ -275,14 +276,6 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 	change1polyonym(poly2,0,t4);
 	change1polyonym(poly2,1,t3);
 
-printf("Polyonym 1 is: ");
-print1polyonym(poly1);
-printf("\n");
-printf("Polyonym 2 is: ");
-print1polyonym(poly2);
-printf("\n");
-	
-
 	i=0;
 	while(i<=prodMat->degree){
 		//printf("i=%d\n",i);
@@ -306,19 +299,6 @@ printf("\n");
 			b++;
 		}
 		delete1polyonym(temp);
-	/*	print1polyonym(fin);
-		printf(" is the polyonym for matrix M-%d ==> ",i);
-		if(a>0){
-			printf("(");
-			print1polyonym(poly2);
-			printf(")^%d ",a);
-		}
-		if(b>0){
-			printf("(");
-			print1polyonym(poly1);
-			printf(")^%d",b);
-		}
-		printf("\n");*/
 		multProdMatr(&(target[i]), fin, prodMat, i);
 		delete1polyonym(fin);
 		i++;
@@ -342,4 +322,21 @@ printf("\n");
 		i++;
 	}
 	calculate_K(*finl);
+}
+
+int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
+	int i=0;
+	do{
+		create_newProd(finl,prodMat);
+		i++;
+		if( (prodMat->k==-1 && (*finl)->k>=0) || (prodMat->k>=0 && (*finl)->k<prodMat->k) ){break;}
+		destroyProdMatr (*finl);
+		*finl=NULL;
+	}while(i<3);
+	if(*finl!=NULL){return 1;}
+	*finl=prodMat;
+	return 0;
+
+
+
 }

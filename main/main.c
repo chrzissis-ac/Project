@@ -12,6 +12,7 @@ void main(int argc,char ** argv){
 	srand(time(NULL));
 	char v;
 	int in=0;
+	int changevar=0;
 	char temp[300];
 	char * function1=NULL;
 	int d1=0, dx1=0, dy1=0;
@@ -23,6 +24,7 @@ void main(int argc,char ** argv){
 	Sylvester * sylvester=NULL;
 	Sylvester * sylvester2=NULL;
 	ProductMatrices * prodMatr=NULL;
+	ProductMatrices * point=NULL;
 	ProductMatrices * new=NULL;
 	Vector * vector=NULL;
 	Vector * fin=NULL;
@@ -49,10 +51,8 @@ void main(int argc,char ** argv){
 	createsylvester(&sylvester, polyonym2, polyonym1);
 	createProdMatr(sylvester, &prodMatr);
 
-	CompanionMatrix * compMatr = NULL;
-	createCompanionMatrix(prodMatr, &compMatr);
-
-	create_newProd(&new, prodMatr);
+	changevar=changeofvar3(&new,prodMatr);
+	point=prodMatr;
 
 	do{
 		menushow(&in);
@@ -63,12 +63,13 @@ void main(int argc,char ** argv){
 			Svmult(sylvester, vector, &fin);
 		}
 		else if(in==-5){
-			printCompanionMatrix(compMatr);
+			if(point==prodMatr){point=new;}
+			else{point=prodMatr;}
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
 		}
-		else if(in>=0){printProdMatr_int(prodMatr,in);}
+		else if(in>=0){printProdMatr_int(point,in);}
 	}while(in!=-2);
 	
 
@@ -78,8 +79,7 @@ void main(int argc,char ** argv){
 	free(function1);
 	free(function2);
 	destroyProdMatr(prodMatr);
-	if(new!=NULL){destroyProdMatr(new);}
-	deleteCompanionMatrix(&compMatr);
+	if(changevar==1){destroyProdMatr(new);}
 	fclose(file);
 	destroysylvester(&sylvester);
 }
