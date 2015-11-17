@@ -119,7 +119,7 @@ void menushow(int * input){
 	printf("2-Any number \"#\" to print the corresponding Sylvester Matrix to the given Grade\n");
 	printf("3-\"V\" for Vector multiplication\n");
 	printf("4-\"O\" In case there is a change of variable, start printing the other matrix for each given No\n");
-	printf("5-\"C\" Print Companion matrix or Generalized Eigenproblem Matrices");
+	printf("5-\"C\" Print Companion matrix or Generalized Eigenproblem Matrices\n");
 	printf("6-\"T\" to terminate\n");
 	fgets(temp,300,stdin);
 	if(strcmp(temp,"S\n")==0 || strcmp(temp,"S")==0 || strcmp(temp,"s\n")==0 || strcmp(temp,"s")==0){
@@ -153,6 +153,19 @@ void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
 		j=0;
 		while(j<dimy){
 			(*target)[i*dimy+j]=source[i][j];
+			j++;
+		}
+		i++;
+	}
+
+}
+
+void from2Dto1D_double_static(double ** source, double * target, int dimx, int dimy){
+	int i=0,j=0;
+	while(i<dimx){
+		j=0;
+		while(j<dimy){
+			target[i*dimy+j]=source[i][j];
 			j++;
 		}
 		i++;

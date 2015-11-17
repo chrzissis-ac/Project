@@ -75,7 +75,6 @@ void main(int argc,char ** argv){
 
 	do{
 		menushow(&in);
-		//system("clear");
 		if(in==-1){printsylvester(sylvester);}
 		else if(in==-3){
 			createInputVector(&vector);
@@ -103,7 +102,7 @@ void main(int argc,char ** argv){
 	deletepoly2(polyonym2);
 	free(function1);
 	free(function2);
-	destroyProdMatr(prodMatr);
+	if(prodMatr!=NULL){destroyProdMatr(prodMatr);}
 	if(changevar==1){destroyProdMatr(new);}
 	fclose(file);
 	destroysylvester(&sylvester);

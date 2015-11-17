@@ -65,7 +65,7 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 	}
 	(*sylvester)->hidden=hidden;
 	(*sylvester)->dim=dim;
-	printf("Sylvester dimension is: %d and the", (*sylvester)->dim);
+	printf("Sylvester dimension is: %d and the ", (*sylvester)->dim);
 	if (hidden=='x') {
 		if (degP1x>=degP2x && degP2y!=0 ) {
 			(*sylvester)->degree=degP1x;

@@ -82,7 +82,7 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 			(*sylvester)->degree=degP2y;
 		}
 	}
-	printf("hidden variable is %c\n",hidden);
+	printf("hidden variable is %c with degree %d\n",hidden,(*sylvester)->degree);
 	(*sylvester)->matrix=NULL;
 	(*sylvester)->matrix=malloc(sizeof(Polyonym *)*dim);
 	if ((*sylvester)->matrix==NULL) {perror("Sylvester matrix malloc!");exit(0);}

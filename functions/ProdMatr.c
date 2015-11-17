@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <lapacke.h>
 
+
 #include "../headers/ProdMatr.h"
 #include "../headers/Sylvester.h"
 #include "../headers/SimplePoly.h"
@@ -33,6 +34,7 @@ struct ProductMatrices{
 
 // createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
 void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
+	printf("Creating Product Matrices!\n");
 	int degree, dim, i, j, m;
 	(*prodMat)=NULL;
 	(*prodMat)=malloc(sizeof(ProductMatrices));
@@ -62,7 +64,9 @@ void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 			}
 		}
 	}
+	(*prodMat)->k=-1;
 	calculate_K(*prodMat);
+	printf("Created Product Matrices!\n");
 	return;
 }
 
@@ -131,6 +135,7 @@ void destroyProdMatr (ProductMatrices * prodMat){
 }
 
 int calculate_K(ProductMatrices * prodMat){
+	printf("Calculating K!\n");
 	double * matrix=NULL;
 	double * sva=NULL;
 	double * stat=NULL;
@@ -155,23 +160,16 @@ int calculate_K(ProductMatrices * prodMat){
 		if(mins>sva[i]){mins=sva[i];}
 		i++;
 	}
-/*
-	i=0;
-	while(i<prodMat->dim){
-		printf("Singular value No-%d = %f\n",i+1,sva[i]);
-		i++;
-	}
-*/
-//	printf("Max Singular value is %f\n",maxs);
-//	printf("Min Singular value is %f\n",mins);
-	if(mins==0 || mins < 0.000001 ){
+
+	printf("Max Singular value is %f\n",maxs);
+	printf("Min Singular value is %f\n",mins);
+	if(mins==0){
 		prodMat->k=-1;
-//		printf("K is infinity\n");
 	}
 	else{
 		prodMat->k=maxs/mins;
-//		printf("k is %f\n",prodMat->k);
 	}
+	printf("Calculated K!\n");
 	free(matrix);
 	LAPACKE_free(sva);
 	LAPACKE_free(stat);

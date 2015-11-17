@@ -85,7 +85,7 @@ void main(int argc,char ** argv){
 			if(point==prodMatr){point=new;}
 			else{point=prodMatr;}
 		}
-		else if(in==-5){
+		else if(in==-6){
 			if(problemisGen==1){printCMatrix(cMatr);}
 			else{printCompanionMatrix(compMatr);}
 		}
@@ -103,7 +103,7 @@ void main(int argc,char ** argv){
 	deletepoly2(polyonym2);
 	free(function1);
 	free(function2);
-	destroyProdMatr(prodMatr);
+	if(prodMatr!=NULL){destroyProdMatr(prodMatr);}
 	if(changevar==1){destroyProdMatr(new);}
 	fclose(file);
 	destroysylvester(&sylvester);
