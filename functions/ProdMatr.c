@@ -34,7 +34,7 @@ struct ProductMatrices{
 
 // createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
 void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
-	printf("Creating Product Matrices!\n");
+//	printf("Creating Product Matrices!\n");
 	int degree, dim, i, j, m;
 	(*prodMat)=NULL;
 	(*prodMat)=malloc(sizeof(ProductMatrices));
@@ -66,7 +66,7 @@ void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 	}
 	(*prodMat)->k=-1;
 	calculate_K(*prodMat);
-	printf("Created Product Matrices!\n");
+//	printf("Created Product Matrices!\n");
 	return;
 }
 
@@ -135,7 +135,7 @@ void destroyProdMatr (ProductMatrices * prodMat){
 }
 
 int calculate_K(ProductMatrices * prodMat){
-	printf("Calculating K!\n");
+//	printf("Calculating K!\n");
 	double * matrix=NULL;
 	double * sva=NULL;
 	double * stat=NULL;
@@ -169,7 +169,7 @@ int calculate_K(ProductMatrices * prodMat){
 	else{
 		prodMat->k=maxs/mins;
 	}
-	printf("Calculated K!\n");
+//	printf("Calculated K!\n");
 	free(matrix);
 	LAPACKE_free(sva);
 	LAPACKE_free(stat);
@@ -331,6 +331,7 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
 	}
 	do{
 		create_newProd(finl,prodMat);
+		printf("K is %f\n",(*finl)->k);
 		i++;
 		if( (prodMat->k==-1 && (*finl)->k>=0) || (prodMat->k>=0 && (*finl)->k<prodMat->k) ){break;}
 		destroyProdMatr (*finl);

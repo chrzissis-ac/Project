@@ -48,7 +48,7 @@ while(a<2){
 	while(i<=dx){
 		j=0;
 		while(j<=dy){
-			if(rand()%4<1 || ( (setx==0 || sety==0) && i==dx && j==dy ) || (setf==0 && i==dx && j==dy)){
+			if(rand()%4<2 || ( (setx==0 || sety==0) && i==dx && j==dy ) || (setf==0 && i==dx && j==dy)){
 				setf=1;
 				if(i>=degx){degx=i;}
 				if(j>=degy){degy=j;}

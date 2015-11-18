@@ -30,7 +30,7 @@ int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix
 	limit=1.0;
 	if(prodMat->degree==0){return -1;}
 	for (i=0 ; i<V ; i++) {
-		limit=limit/10;
+		limit=limit*10;
 	}
 	if (prodMat->k == -1) {
 		createCMatrix(prodMat, cMatr);
@@ -38,6 +38,7 @@ int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix
 		return 1;
 	}
 	else if (prodMat->k <= limit) {
+		printf("here i go\n");
 		createCompanionMatrix(prodMat, compMatr);
 		return 0;
 	}
@@ -71,16 +72,15 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 			if (prodMatr->matrix[i][j]==NULL) {perror("Product 2D malloc!");exit(0);}
 		}
 	}
-
 	ipiv=NULL;
 	ipiv=LAPACKE_malloc(sizeof(int)*startProdMatr->dim);
 	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
 
 	from2Dto1D_double(startProdMatr->matrix[startProdMatr->degree], &modifiedMatrix, startProdMatr->dim, startProdMatr->dim);
-	LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
-
+printf("here i go1\n");
+	//LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
+printf("here i go2\n");
 	LAPACKE_free(ipiv);
-
 	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
 			modifiedMatrix[i]=modifiedMatrix[i]*(-1);
 	}
@@ -99,6 +99,7 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 		free(modifiedMatrixA);
 		LAPACKE_free(modifiedMatrixB);
 	}
+
 	free(modifiedMatrix);
 	(*compMatr)=NULL;
 	(*compMatr)=malloc(sizeof(struct CompanionMatrix));
@@ -202,11 +203,11 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
 		if ((*compMatr)->matrix[i]==NULL) {perror("CMatrix matrix cell malloc!");exit(0);}
 	}
-	printf("Dimension of product matrices is: %d, ", dim);
+	printf("Dimension of product matrices is: %d and degree is: %d, ", dim, subDim);
 	printf("so dimension of C matrix is: %d\n", compDim);
 	for (i=0 ; i<subDim ; i++) {
 		for (j=0 ; j<subDim ; j++) {
-			if (i==subDim && j==subDim){
+			if (i==subDim-1 && j==subDim-1){
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrixY[i*dim+k][j*dim+l]=prodMatr->matrix[j+1][k][l];
@@ -236,7 +237,7 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	}
 	for (i=0 ; i<subDim ; i++) {
 		for (j=0 ; j<subDim ; j++) {
-			if (i==subDim){
+			if (i==subDim-1){
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrix[i*dim+k][j*dim+l]=prodMatr->matrix[j][k][l];
@@ -266,7 +267,6 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	}
 	return;
 }
-
 void printCMatrix(CMatrix * compMatr) {
 	int i, j, dim;
 	printf("Printing C matrices!\n");
