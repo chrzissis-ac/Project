@@ -30,11 +30,11 @@ int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix
 	limit=1.0;
 	if(prodMat->degree==0){return -1;}
 	for (i=0 ; i<V ; i++) {
-		limit=limit*10;
+		limit=limit*10.0;
 	}
+	printf("Limit is %.2f\n",limit);
 	if (prodMat->k == -1) {
 		createCMatrix(prodMat, cMatr);
-		printf("We have infinite k!\n");
 		return 1;
 	}
 	else if (prodMat->k <= limit) {
@@ -90,20 +90,21 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 	}
 	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
 	from2Dto1D_double(startProdMatr->matrix[startProdMatr->degree], &modifiedMatrix, startProdMatr->dim, startProdMatr->dim);
-//	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, startProdMatr->dim, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
-//	LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
+	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, startProdMatr->dim, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
+	LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
 	LAPACKE_free(ipiv);
 	modifiedMatrixB=LAPACKE_malloc(sizeof(double)*(startProdMatr->dim)*(startProdMatr->dim));
 		if(modifiedMatrixB==NULL){perror("malloc modifiedMatrixB");exit(0);}
 
 	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
+			printf("MDM[%d] = %.2f",i,modifiedMatrix[i]);
 			modifiedMatrix[i]=modifiedMatrix[i]*(-1);
+			printf("MDM[%d] = %.2f\n",i,modifiedMatrix[i]);
 	}
-	for (m=0 ; m<prodMatr->degree ; m++) {
-		
-
+	for (m=0 ; m<=prodMatr->degree ; m++) {
+	
 		from2Dto1D_double(startProdMatr->matrix[m], &modifiedMatrixA, startProdMatr->dim, startProdMatr->dim);
-		cblas_dgemm(LAPACK_ROW_MAJOR, CblasNoTrans, CblasNoTrans, prodMatr->dim, prodMatr->dim, prodMatr->dim, 1.0,modifiedMatrix, startProdMatr->dim, modifiedMatrixA, startProdMatr->dim, 1.0, modifiedMatrixB, startProdMatr->dim);
+		cblas_dgemm(LAPACK_ROW_MAJOR, CblasNoTrans, CblasNoTrans, prodMatr->dim, prodMatr->dim, prodMatr->dim, 1.0,modifiedMatrix, startProdMatr->dim, modifiedMatrixA, startProdMatr->dim, 0.0, modifiedMatrixB, startProdMatr->dim);
 		for(i=0 ; i<prodMatr->dim ; i++){
 			for(j=0; j<prodMatr->dim; j++){
 				prodMatr->matrix[m][i][j]=modifiedMatrixB[i*(prodMatr->dim)+j];
@@ -128,13 +129,14 @@ LAPACKE_free(modifiedMatrixB);
 		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
 		if ((*compMatr)->matrix[i]==NULL) {perror("CompanionMatrix matrix cell malloc!");exit(0);}
 	}
-	printf("Dimension of product matrices is: %d, and degree is: %d ", dim, subDim);
+	printf("Dimension of product matrices is: %d, and degree is: %d ", dim, subDim+1);
 	printf("so dimension of companion matrix is: %d\n", compDim);
 	for (i=0 ; i<=subDim ; i++) {
 		for (j=0 ; j<=subDim ; j++) {
 			if (i==subDim){
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
+						printf("Copying %.2f to element [%d][%d]\n",prodMatr->matrix[j][k][l],i*dim+k,j*dim+l);
 						(*compMatr)->matrix[i*dim+k][j*dim+l]=prodMatr->matrix[j][k][l];
 					}
 				}
@@ -143,9 +145,11 @@ LAPACKE_free(modifiedMatrixB);
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						if (k==l) {
+							printf("Putting 1 to element [%d][%d]\n",i*dim+k,j*dim+l);
 							(*compMatr)->matrix[i*dim+k][j*dim+l]=1.0;
 						}
 						else {
+							printf("Putting 0 to element [%d][%d] - case 1\n",i*dim+k,j*dim+l);
 							(*compMatr)->matrix[i*dim+k][j*dim+l]=0.0;
 						}
 					}
@@ -154,12 +158,14 @@ LAPACKE_free(modifiedMatrixB);
 			else{
 				for (k=0 ; k<dim ; k++){
 					for (l=0 ; l<dim ; l++){
+						printf("Putting 0 to element [%d][%d] - case 2\n",i*dim+k,j*dim+l);
 						(*compMatr)->matrix[i*dim+k][j*dim+l]=0.0;
 					}
 				}
 			}
 		}
 	}
+	printCompanionMatrix(*compMatr);
 	destroyProdMatr(prodMatr);
 }
 
@@ -172,7 +178,7 @@ void printCompanionMatrix(CompanionMatrix * compMatr) {
 			printf ("%.2f", compMatr->matrix[i][j]);
 			printf("|\t");
 		}
-		printf("\n");
+		printf("-->\n");
 	}
 	printf("\n");
 	return;

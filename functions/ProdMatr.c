@@ -324,6 +324,8 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 
 int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
 	int i=0;
+	*finl=prodMat;
+		return 0;
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
 		*finl=prodMat;

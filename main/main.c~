@@ -56,9 +56,7 @@ void main(int argc,char ** argv){
 	createProdMatr(sylvester, &prodMatr);
 
 	changevar=changeofvar3(&new,prodMatr);
-	printf("lol1\n");
 	problemisGen=chooseMatrix(new, &compMatr, &cMatr, V);
-	printf("lol1\n");
 	point=prodMatr;
 	if(problemisGen==0){printf("\n----------\nProblem is Standard!\n----------\n");}
 	else if(problemisGen==1){printf("\n----------\nProblem is Generalized!\n----------\n");}

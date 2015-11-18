@@ -20,7 +20,7 @@ void main(int argc,char ** argv){
 	char * function2=NULL;
 	int d2=0, dx2=0, dy2=0;
 	double k=0;
-	int V=0;
+	int V=7;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;

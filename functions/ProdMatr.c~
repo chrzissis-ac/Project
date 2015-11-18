@@ -336,7 +336,7 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
 		if( (prodMat->k==-1 && (*finl)->k>=0) || (prodMat->k>=0 && (*finl)->k<prodMat->k) ){break;}
 		destroyProdMatr (*finl);
 		*finl=NULL;
-	}while(i<100);
+	}while(i<3);
 	if(*finl!=NULL){return 1;}
 	*finl=prodMat;
 	return 0;
