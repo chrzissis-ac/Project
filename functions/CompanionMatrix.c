@@ -66,47 +66,55 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 		prodMatr->matrix[i]=NULL;
 		prodMatr->matrix[i]=malloc(sizeof(double*)*prodMatr->dim);
 		if (prodMatr->matrix[i]==NULL) {perror("Product Matrices 1D malloc!");exit(0);}
-		for (j=0 ; j<prodMatr->dim ; j++) {
+		for (j=0 ; j< prodMatr->dim ; j++) {
 			prodMatr->matrix[i][j]=NULL;
 			prodMatr->matrix[i][j]=malloc(sizeof(double)*prodMatr->dim);
 			if (prodMatr->matrix[i][j]==NULL) {perror("Product 2D malloc!");exit(0);}
 		}
 	}
+	for (i=0 ; i<=prodMatr->degree ; i++) {
+		for (j=0 ; j<prodMatr->dim ; j++) {
+			for (k=0 ; k<prodMatr->dim ; k++) {
+				prodMatr->matrix[i][j][k]=0.0;
+			}
+		}
+	}
+			
+
 	ipiv=NULL;
 	ipiv=LAPACKE_malloc(sizeof(int)*startProdMatr->dim);
 	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
 
 	from2Dto1D_double(startProdMatr->matrix[startProdMatr->degree], &modifiedMatrix, startProdMatr->dim, startProdMatr->dim);
-printf("here i go1\n");
 	//LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
-printf("here i go2\n");
 	LAPACKE_free(ipiv);
+	modifiedMatrixB=LAPACKE_malloc(sizeof(double)*(startProdMatr->dim)*(startProdMatr->dim));
+		if(modifiedMatrixB==NULL){perror("malloc modifiedMatrixB");exit(0);}
+
 	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
 			modifiedMatrix[i]=modifiedMatrix[i]*(-1);
 	}
-	for (m=0 ; m<=prodMatr->degree ; m++) {
-		modifiedMatrixB=LAPACKE_malloc(sizeof(double)*(startProdMatr->dim)*(startProdMatr->dim));
-		if(modifiedMatrixB==NULL){perror("malloc modifiedMatrixB");exit(0);}
+	for (m=0 ; m<prodMatr->degree ; m++) {
+		
 
 		from2Dto1D_double(startProdMatr->matrix[m], &modifiedMatrixA, startProdMatr->dim, startProdMatr->dim);
 		cblas_dgemm(LAPACK_ROW_MAJOR, CblasNoTrans, CblasNoTrans, prodMatr->dim, prodMatr->dim, prodMatr->dim, 1.0,modifiedMatrix, startProdMatr->dim, modifiedMatrixA, startProdMatr->dim, 1.0, modifiedMatrixB, startProdMatr->dim);
 		for(i=0 ; i<prodMatr->dim ; i++){
 			for(j=0; j<prodMatr->dim; j++){
 				prodMatr->matrix[m][i][j]=modifiedMatrixB[i*(prodMatr->dim)+j];
-				
 			}
 		}
 		free(modifiedMatrixA);
-		LAPACKE_free(modifiedMatrixB);
-	}
 
+	}
+LAPACKE_free(modifiedMatrixB);
 	free(modifiedMatrix);
 	(*compMatr)=NULL;
 	(*compMatr)=malloc(sizeof(struct CompanionMatrix));
 	if ((*compMatr)==NULL) {perror("CompanionMatrix struct malloc!");exit(0);}
-	subDim=(prodMatr->degree)+1;
+	subDim=(prodMatr->degree);
 	dim=prodMatr->dim;
-	compDim=dim*subDim;
+	compDim=dim*(subDim+1);
 	(*compMatr)->dim=compDim;
 	(*compMatr)->matrix=NULL;
 	(*compMatr)->matrix=malloc(sizeof(double*)*compDim);
@@ -115,11 +123,11 @@ printf("here i go2\n");
 		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
 		if ((*compMatr)->matrix[i]==NULL) {perror("CompanionMatrix matrix cell malloc!");exit(0);}
 	}
-	printf("Dimension of product matrices is: %d, ", dim);
+	printf("Dimension of product matrices is: %d, and degree is: %d ", dim, subDim);
 	printf("so dimension of companion matrix is: %d\n", compDim);
-	for (i=0 ; i<subDim ; i++) {
-		for (j=0 ; j<subDim ; j++) {
-			if (i==subDim-1){
+	for (i=0 ; i<=subDim ; i++) {
+		for (j=0 ; j<=subDim ; j++) {
+			if (i==subDim){
 				for (k=0 ; k<dim ; k++) {
 					for (l=0 ; l<dim ; l++) {
 						(*compMatr)->matrix[i*dim+k][j*dim+l]=prodMatr->matrix[j][k][l];
@@ -147,7 +155,6 @@ printf("here i go2\n");
 			}
 		}
 	}
-	
 	destroyProdMatr(prodMatr);
 }
 
