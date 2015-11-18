@@ -9,6 +9,7 @@
 #include "../headers/CompanionMatrix.h"
 
 void main(int argc,char ** argv){
+	printf("---------------------------------------------\n");
 	srand(time(NULL));
 	char v;
 	int in=0;
@@ -20,7 +21,7 @@ void main(int argc,char ** argv){
 	char * function2=NULL;
 	int d2=0, dx2=0, dy2=0;
 	double k=0;
-	int V=0;
+	int V=7,i=0;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
@@ -33,20 +34,31 @@ void main(int argc,char ** argv){
 	Vector * vector=NULL;
 	Vector * fin=NULL;
 	FILE * file=stdin;
-	if(argc==5 && strcmp(argv[1],"-generate")==0 ){
-		file=fopen(argv[4],"w+");
-		if(file==NULL){perror("Could not create input file!");file=stdin;}
-		else{generatefunctions(atoi(argv[2]),atoi(argv[3]),file);}
-	}
-	else if(argc==3 && strcmp(argv[1],"-read")==0 ){
-		file=fopen(argv[2],"r");
-		if(file==NULL){
-			perror("Could not find file!");
-			file=stdin;
+	i=0;
+	while(i<argc){
+		if(strcmp(argv[i],"-generate")==0 && i!=argc-3){
+			file=fopen(argv[i+3],"w+");
+			if(file==NULL){perror("Could not create input file!");exit(0);}
+			else{generatefunctions(atoi(argv[i+1]),atoi(argv[i+2]),file);}
 		}
-	}
-	else if(argc>1){printf("Wrong arguments!\n");}
+		else if(strcmp(argv[i],"-read")==0 && i!=argc-1){
+			file=fopen(argv[i+1],"r");
+			if(file==NULL){
+				perror("Could not find file!");
+				file=stdin;
+			}
+		}
+		else if(strcmp(argv[i],"-solve")==0 && i!=argc-1){
+			V=atoi(argv[i+1]);
+		}
+		i++;
 
+	}
+	if(file==NULL){
+		printf("Wrong arguments!\n");
+		printf("Could not create input file!\n");exit(0);
+	}
+	
 	input(file,&d1,&function1);
 	input(file,&d2,&function2);
 
@@ -58,8 +70,8 @@ void main(int argc,char ** argv){
 	changevar=changeofvar3(&new,prodMatr);
 	problemisGen=chooseMatrix(new, &compMatr, &cMatr, V);
 	point=prodMatr;
-	if(problemisGen==0){printf("\n----------\nProblem is Standard!\n----------\n");}
-	else if(problemisGen==1){printf("\n----------\nProblem is Generalized!\n----------\n");}
+	if(problemisGen==0){printf("----------\nEigen-Problem is Standard!\n----------\n");}
+	else if(problemisGen==1){printf("----------\nEigen-Problem is Generalized!\n----------\n");}
 	
 	if(problemisGen==-1){
 		printsylvester(sylvester);
@@ -91,7 +103,7 @@ void main(int argc,char ** argv){
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
 		}
-		else if(in>=0){printProdMatr_int(point,in);}
+		else if(in>=0){printProdMatr(point,in);}
 	}while(in!=-2);
 
 

@@ -83,7 +83,7 @@ void printProdMatr(ProductMatrices * prodMat, int in) {
 	dim=prodMat->dim;
 		for (j=0 ; j<dim ; j++) {
 			for (k=0 ; k<dim ; k++) {
-				printf("%f", (prodMat->matrix[i][j][k]));
+				printf("%.2f", (prodMat->matrix[i][j][k]));
 				printf("|\t");
 			}
 			printf("\n");
@@ -95,8 +95,10 @@ void printProdMatr(ProductMatrices * prodMat, int in) {
 
 // printProdMatr_int() prints the matrix['in'] of 'prodMat' as integers
 void printProdMatr_int (ProductMatrices * prodMat, int in) {
+	printf("---------------------------------------------\n");
 	if(in>prodMat->degree || in<0){
 		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
+		printf("---------------------------------------------\n");
 		return;
 	}
 	printf("Product matrix of grade %d is:\n\n",in);
@@ -113,6 +115,7 @@ void printProdMatr_int (ProductMatrices * prodMat, int in) {
 		}
 		printf("\n");
 	printf("With dimension %dx%d.\n",prodMat->dim,prodMat->dim);
+	printf("---------------------------------------------\n");
 	return;
 }
 
@@ -160,16 +163,19 @@ int calculate_K(ProductMatrices * prodMat){
 		if(mins>sva[i]){mins=sva[i];}
 		i++;
 	}
-
+	
+	printf("Singular Values:\n");
 	printf("Max Singular value is %f\n",maxs);
 	printf("Min Singular value is %f\n",mins);
 	if(mins==0){
 		prodMat->k=-1;
+		printf("K is infinity.\n");
 	}
 	else{
 		prodMat->k=maxs/mins;
+		printf("K is %f\n",prodMat->k);
 	}
-//	printf("Calculated K!\n");
+	printf("---------------------------------------------\n");
 	free(matrix);
 	LAPACKE_free(sva);
 	LAPACKE_free(stat);
@@ -246,7 +252,7 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 	int t2=rand()%30 +1;
 	int t3=rand()%30 +1;
 	int t4=rand()%30 +1;	
-	printf("t1=%d , t2=%d, t3=%d, t4=%d\n",t1,t2,t3,t4);
+	printf("For t1=%d , t2=%d, t3=%d, t4=%d\n",t1,t2,t3,t4);
 	int i=0, a=0,b=0,j=0;
 	ProductMatrices * target[prodMat->degree+1];
 	ProductMatrices * tempprod=NULL;
@@ -276,9 +282,7 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 
 	i=0;
 	while(i<=prodMat->degree){
-		//printf("i=%d\n",i);
 		create1polyonym_one(&temp,'z');
-		//print1polyonym(temp);
 		a=0;b=0;
 		while(a<i){
 			if(a!=0){
@@ -324,8 +328,6 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 
 int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
 	int i=0;
-	*finl=prodMat;
-		return 0;
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
 		*finl=prodMat;
@@ -333,13 +335,16 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
 	}
 	do{
 		create_newProd(finl,prodMat);
-		printf("K is %f\n",(*finl)->k);
 		i++;
 		if( (prodMat->k==-1 && (*finl)->k>=0) || (prodMat->k>=0 && (*finl)->k<prodMat->k) ){break;}
 		destroyProdMatr (*finl);
 		*finl=NULL;
 	}while(i<3);
-	if(*finl!=NULL){return 1;}
+	if(*finl!=NULL){
+		printf("Changed variable to z!\n");
+		printf("---------------------------------------------\n");
+		return 1;
+	}
 	*finl=prodMat;
 	return 0;
 
