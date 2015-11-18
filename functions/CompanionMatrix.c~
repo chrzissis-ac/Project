@@ -75,18 +75,23 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 	for (i=0 ; i<=prodMatr->degree ; i++) {
 		for (j=0 ; j<prodMatr->dim ; j++) {
 			for (k=0 ; k<prodMatr->dim ; k++) {
-				prodMatr->matrix[i][j][k]=25.0;
+				prodMatr->matrix[i][j][k]=0.0;
 			}
 		}
 	}
 			
 
 	ipiv=NULL;
-	ipiv=LAPACKE_malloc(sizeof(int)*startProdMatr->dim);
+	if(startProdMatr->dim>=6){
+		ipiv=LAPACKE_malloc(sizeof(int)*startProdMatr->dim);
+	}
+	else{
+		ipiv=LAPACKE_malloc(sizeof(int)*6);
+	}
 	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
-
 	from2Dto1D_double(startProdMatr->matrix[startProdMatr->degree], &modifiedMatrix, startProdMatr->dim, startProdMatr->dim);
-	//LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
+	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, startProdMatr->dim, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
+	LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
 	LAPACKE_free(ipiv);
 	modifiedMatrixB=LAPACKE_malloc(sizeof(double)*(startProdMatr->dim)*(startProdMatr->dim));
 		if(modifiedMatrixB==NULL){perror("malloc modifiedMatrixB");exit(0);}
