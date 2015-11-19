@@ -65,7 +65,7 @@ void main(int argc,char ** argv){
 	createpolyonym2(function2,&polyonym2,d2);
 	createsylvester(&sylvester, polyonym2, polyonym1);	
 
-	if(createProdMatr(sylvester, &prodMatr)){
+	if(createProdMatr(sylvester, &prodMatr)==-1){
 		printsylvester(sylvester);
 		deletepoly2(polyonym1);
 		deletepoly2(polyonym2);

@@ -26,10 +26,10 @@ void main(int argc,char ** argv){
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
 	Sylvester * sylvester2=NULL;
-	Eigenstruct * eigenstruct=NULL;
 	ProductMatrices * prodMatr=NULL;
 	ProductMatrices * point=NULL;
 	ProductMatrices * new=NULL;
+	Eigenstruct * eigenstruct=NULL;
 	Vector * vector=NULL;
 	Vector * fin=NULL;
 	FILE * file=stdin;
