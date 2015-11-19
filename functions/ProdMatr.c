@@ -147,11 +147,18 @@ int calculate_K(ProductMatrices * prodMat){
 	int i=0;
 	int ldv=prodMat->dim;
 	double maxs=0,mins=0,info=0;
-	sva=LAPACKE_malloc(sizeof(double)*(prodMat->dim));
-	if(sva==NULL){perror("LAPACKE malloc sva to calc K failed");exit(0);}
-	stat=LAPACKE_malloc(sizeof(double)*(prodMat->dim)*2);
-	if(stat==NULL){perror("LAPACKE malloc stat to calc K failed");exit(0);}
-
+	if(prodMat->dim>=6){
+		sva=LAPACKE_malloc(sizeof(double)*(prodMat->dim));
+		if(sva==NULL){perror("LAPACKE malloc sva to calc K failed");exit(0);}
+		stat=LAPACKE_malloc(sizeof(double)*(prodMat->dim)*2);
+		if(stat==NULL){perror("LAPACKE malloc stat to calc K failed");exit(0);}
+	}
+	else{
+		sva=LAPACKE_malloc(sizeof(double)*6);
+		if(sva==NULL){perror("LAPACKE malloc sva to calc K failed");exit(0);}
+		stat=LAPACKE_malloc(sizeof(double)*6*2);
+		if(stat==NULL){perror("LAPACKE malloc stat to calc K failed");exit(0);}
+	}
 	from2Dto1D_double( prodMat->matrix[prodMat->degree], &matrix, prodMat->dim, prodMat->dim);
 	
 	info=LAPACKE_dgesvj(LAPACK_ROW_MAJOR, 'G','N', 'N', prodMat->dim, prodMat->dim, matrix, prodMat->dim, sva, 0, v, ldv, stat);
