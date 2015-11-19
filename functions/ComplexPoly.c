@@ -100,6 +100,7 @@ void gradeparser(char * func, int d, int * maxdx, int * maxdy){
 		}
 		i++;
 	}
+	if((*maxdx)+(*maxdy)!=d){printf("The right Function Grade is %d\n",(*maxdx)+(*maxdy));}
 }
 
 // parser() chooses the variable with the lowest degree that derives from 'func', along with its polyonimial grades dx, dy for x and y respectively, and stores the function and its degree in 'polyonym'

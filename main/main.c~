@@ -9,6 +9,7 @@
 #include "../headers/CompanionMatrix.h"
 
 void main(int argc,char ** argv){
+	system("clear");
 	printf("---------------------------------------------\n");
 	srand(time(NULL));
 	char v;
@@ -17,9 +18,9 @@ void main(int argc,char ** argv){
 	int problemisGen=0;
 	char temp[300];
 	char * function1=NULL;
-	int d1=0, dx1=0, dy1=0;
+	int d1=-1, dx1=0, dy1=0;
 	char * function2=NULL;
-	int d2=0, dx2=0, dy2=0;
+	int d2=-1, dx2=0, dy2=0;
 	double k=0;
 	int V=7,i=0,t=0;
 	Polyonym2 * polyonym1=NULL;
@@ -35,27 +36,33 @@ void main(int argc,char ** argv){
 	FILE * file=stdin;
 	i=0;
 	while(i<argc){
-		if(strcmp(argv[i],"-generate")==0 && i!=argc-3){
-			file=fopen(argv[i+3],"w+");
+		if(strcmp(argv[i],"-generate")==0 && i!=argc-5){
+			file=fopen(argv[i+5],"w+");
 			if(file==NULL){perror("Could not create input file!");exit(0);}
-			else{generatefunctions(atoi(argv[i+1]),atoi(argv[i+2]),file);}
+			else{generatefunctions(atoi(argv[i+2]),atoi(argv[i+4]),file);}
 		}
 		else if(strcmp(argv[i],"-read")==0 && i!=argc-1){
 			file=fopen(argv[i+1],"r");
 			if(file==NULL){
 				perror("Could not find file!");
-				file=stdin;
 			}
 		}
 		else if(strcmp(argv[i],"-solve")==0 && i!=argc-1){
 			V=atoi(argv[i+1]);
 		}
+		else if(strcmp(argv[i],"-d1")==0 && i!=argc-1){
+			d1=atoi(argv[i+1]);
+		}
+		else if(strcmp(argv[i],"-d2")==0 && i!=argc-1){
+			d2=atoi(argv[i+1]);
+		}
 		i++;
 
 	}
-	if(file==NULL){
+	if(file==NULL || ((d1==-1 || d2 ==-1) && file!=stdin)  ){
 		printf("Wrong arguments!\n");
-		printf("Could not create input file!\n");exit(0);
+		//printf("Could not create input file!\n");
+		exit(0);
 	}
 	
 	input(file,&d1,&function1);
@@ -63,9 +70,10 @@ void main(int argc,char ** argv){
 
 	createpolyonym2(function1,&polyonym1,d1);
 	createpolyonym2(function2,&polyonym2,d2);
+	printf("---------------------------------------------\n");
 	createsylvester(&sylvester, polyonym2, polyonym1);	
 
-	if(createProdMatr(sylvester, &prodMatr)){
+	if(createProdMatr(sylvester, &prodMatr)==-1){
 		printsylvester(sylvester);
 		deletepoly2(polyonym1);
 		deletepoly2(polyonym2);
@@ -81,8 +89,6 @@ void main(int argc,char ** argv){
 	chooseMatrix(new, eigenstruct, V);
 	point=prodMatr;
 	
-	
-
 	do{
 		menushow(&in);
 		if(in==-1){printsylvester(sylvester);}

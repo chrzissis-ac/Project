@@ -86,7 +86,7 @@ while(a<2){
 		}
 		i++;
 	}
-	fprintf(file,"%d\n",d);
+//	fprintf(file,"%d\n",d);
 	fprintf(file,"%s\n",func);
 	a++;
 }
@@ -101,10 +101,11 @@ void input(FILE * file,int * d,char ** function){
 	(*function)=malloc(sizeof(char)*300*((*d)+1)*((*d)+1));
 	if((*function)==NULL){perror("Function allocation");exit(0);}
 
-	if(file==stdin){printf("Give degree of function\n");}
-	fgets(temp,300,file);
-	(*d)=atoi(temp);
-
+	if(file==stdin){
+		printf("Give degree of function\n");
+		fgets(temp,300,file);
+		(*d)=atoi(temp);
+	}
 	if(file==stdin){printf("Give function f\n");}
 	strcpy(temp,"");
 	fgets(*function,300*((*d)+1)*((*d)+1),file);
