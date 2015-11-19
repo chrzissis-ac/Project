@@ -21,16 +21,15 @@ void main(int argc,char ** argv){
 	char * function2=NULL;
 	int d2=0, dx2=0, dy2=0;
 	double k=0;
-	int V=7,i=0;
+	int V=7,i=0,t=0;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
 	Sylvester * sylvester2=NULL;
-	CompanionMatrix * compMatr=NULL;
-	CMatrix * cMatr=NULL;
 	ProductMatrices * prodMatr=NULL;
 	ProductMatrices * point=NULL;
 	ProductMatrices * new=NULL;
+	Eigenstruct * eigenstruct=NULL;
 	Vector * vector=NULL;
 	Vector * fin=NULL;
 	FILE * file=stdin;
@@ -64,26 +63,25 @@ void main(int argc,char ** argv){
 
 	createpolyonym2(function1,&polyonym1,d1);
 	createpolyonym2(function2,&polyonym2,d2);
-	createsylvester(&sylvester, polyonym2, polyonym1);
-	createProdMatr(sylvester, &prodMatr);
+	createsylvester(&sylvester, polyonym2, polyonym1);	
 
-	changevar=changeofvar3(&new,prodMatr);
-	problemisGen=chooseMatrix(new, &compMatr, &cMatr, V);
-	point=prodMatr;
-	if(problemisGen==0){printf("----------\nEigen-Problem is Standard!\n----------\n");}
-	else if(problemisGen==1){printf("----------\nEigen-Problem is Generalized!\n----------\n");}
-	
-	if(problemisGen==-1){
+	if(createProdMatr(sylvester, &prodMatr)){
 		printsylvester(sylvester);
 		deletepoly2(polyonym1);
 		deletepoly2(polyonym2);
 		free(function1);
 		free(function2);
-		destroyProdMatr(prodMatr);
 		fclose(file);
 		destroysylvester(&sylvester);
 		return;
 	}
+	
+	changevar=changeofvar3(&new,prodMatr);
+	createEigenstruct(&eigenstruct);
+	chooseMatrix(new, eigenstruct, V);
+	point=prodMatr;
+	
+	
 
 	do{
 		menushow(&in);
@@ -97,8 +95,7 @@ void main(int argc,char ** argv){
 			else{point=prodMatr;}
 		}
 		else if(in==-6){
-			if(problemisGen==1){printCMatrix(cMatr);}
-			else{printCompanionMatrix(compMatr);}
+			printEigenstruct(eigenstruct);
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
@@ -107,8 +104,7 @@ void main(int argc,char ** argv){
 	}while(in!=-2);
 
 
-	if(problemisGen==0){deleteCompanionMatrix(&compMatr);}
-	else{deleteCMatrix(&cMatr);}
+	deleteEigenstruct(&eigenstruct);
 
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);

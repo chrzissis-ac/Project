@@ -33,8 +33,9 @@ struct ProductMatrices{
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
 
 // createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
-void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
+int createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 //	printf("Creating Product Matrices!\n");
+	if(sylvester->degree==0){return -1;}
 	int degree, dim, i, j, m;
 	(*prodMat)=NULL;
 	(*prodMat)=malloc(sizeof(ProductMatrices));
@@ -67,7 +68,7 @@ void createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 	(*prodMat)->k=-1;
 	calculate_K(*prodMat);
 //	printf("Created Product Matrices!\n");
-	return;
+	return 0;
 }
 
 // printProdMatr() prints the matrix['in'] of 'prodMat'
@@ -179,6 +180,7 @@ int calculate_K(ProductMatrices * prodMat){
 	free(matrix);
 	LAPACKE_free(sva);
 	LAPACKE_free(stat);
+
 	LAPACKE_free(v);
 }
 

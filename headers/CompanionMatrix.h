@@ -4,7 +4,15 @@ typedef struct CompanionMatrix CompanionMatrix;
 
 typedef struct CMatrix CMatrix;
 
-int chooseMatrix(ProductMatrices * prodMat, CompanionMatrix ** compMatr, CMatrix ** cMatr, int V);
+typedef struct Eigenstruct Eigenstruct;
+
+void createEigenstruct(Eigenstruct ** eigenstruct);
+
+void deleteEigenstruct(Eigenstruct ** eigenstruct);
+
+void printEigenstruct(Eigenstruct * eigenstruct);
+
+int chooseMatrix(ProductMatrices * prodMat, Eigenstruct * eigenstruct, int V);
 
 void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr);
 

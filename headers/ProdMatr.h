@@ -2,7 +2,7 @@
 
 typedef struct ProductMatrices ProductMatrices;
 
-void createProdMatr (Sylvester * sylvester, ProductMatrices **  prodMat);
+int createProdMatr (Sylvester * sylvester, ProductMatrices **  prodMat);
 
 void destroyProdMatr (ProductMatrices * prodMat);
 

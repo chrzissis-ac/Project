@@ -44,7 +44,6 @@ while(a<2){
 		dx=rand()%(d+1);
 		dy=d-dx;
 	}
-	printf("i=%d, d=%d, dx=%d, dy=%d\n",i,d,dx,dy);
 	while(i<=dx){
 		j=0;
 		while(j<=dy){
