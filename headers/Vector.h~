@@ -10,7 +10,7 @@ void createFileVector(Vector ** vector, char * inputfile);
 
 void createZeroVector(Vector ** vector, int dim,char v);
 
-void createStableVector(Vector * vector, double * input, int dim, char c);
+void createStableVector(Vector * vector, double * input, int dim, char c)
 
 void deleteVector(Vector * vector);
 
