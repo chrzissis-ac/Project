@@ -81,7 +81,7 @@ void delete1polyonym(Polyonym * poly){
 }
 
 // change1polyonym() changes the value of matrix['grade'] of 'poly' with 'in'
-void change1polyonym(Polyonym * poly,int grade,int in){
+void change1polyonym(Polyonym * poly,int grade, double in){
 	poly->matrix[grade]=in;
 }
 

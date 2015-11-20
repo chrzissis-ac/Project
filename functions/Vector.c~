@@ -30,8 +30,8 @@ void createStableVector(Vector * vector, double * input, int dim, char c){
 	vector->matrix=malloc(sizeof(Polyonym)*dim);
 	if(vector->matrix==NULL){perror("Vector matrix malloc!");exit(0);}
 	while(i<dim){
-		create1polyonym(ZeroPoly, &((vector->matrix)[i]), c, 0);
-		change1polyonym(&((vector->matrix)[i]),0,input[i]);
+		create1polyonym(ZeroPoly, &((*vector)->matrix[i]), c, 0);
+		change1polyonym(&((*vector)->matrix[i]),0,input[i]);
 		i++;
 	}
 	deletepoly2(ZeroPoly);
