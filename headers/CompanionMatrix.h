@@ -25,3 +25,5 @@ void createCMatrix(ProductMatrices * startProdMatr, CMatrix ** compMatr);
 void printCMatrix(CMatrix * compMatr);
 
 void deleteCMatrix(CMatrix ** compMatr);
+
+void solver(Eigenstruct * eigen);

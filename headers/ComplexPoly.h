@@ -4,7 +4,7 @@ void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy);
 
 void createpolyonym2(char * function, Polyonym2 ** poly, int d);
 
-void deletepoly2(Polyonym2 * poly);//
+void deletepoly2(Polyonym2 * poly);
 
 void gradeparser(char * func, int d, int * maxdx, int * maxdy);
 

@@ -122,7 +122,7 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 			}
 		}
 	}
-			
+
 
 	ipiv=NULL;
 	if(startProdMatr->dim>=6){
@@ -143,7 +143,7 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 			modifiedMatrix[i]=modifiedMatrix[i]*(-1);
 	}
 	for (m=0 ; m<=prodMatr->degree ; m++) {
-	
+
 		from2Dto1D_double(startProdMatr->matrix[m], &modifiedMatrixA, startProdMatr->dim, startProdMatr->dim);
 		cblas_dgemm(LAPACK_ROW_MAJOR, CblasNoTrans, CblasNoTrans, prodMatr->dim, prodMatr->dim, prodMatr->dim, 1.0,modifiedMatrix, startProdMatr->dim, modifiedMatrixA, startProdMatr->dim, 0.0, modifiedMatrixB, startProdMatr->dim);
 		for(i=0 ; i<prodMatr->dim ; i++){
@@ -170,7 +170,7 @@ LAPACKE_free(modifiedMatrixB);
 		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
 		if ((*compMatr)->matrix[i]==NULL) {perror("CompanionMatrix matrix cell malloc!");exit(0);}
 	}
-	
+
 	printf("Dimension of product matrices is: %dx%d, and Sylvester Grade is: %d\n", dim,dim, subDim+1);
 	printf("thus dimension of Companion matrix is: %dx%d\n", compDim,compDim);
 	for (i=0 ; i<=subDim ; i++) {
@@ -363,5 +363,64 @@ void deleteCMatrix(CMatrix ** compMatr) {
 	}
 	free((*compMatr)->matrix);
 	free(*compMatr);
+	return;
+}
+
+void solver(Eigenstruct * eigen) {
+	double * insertMatrix = NULL;
+	double * insertMatrixB = NULL;
+	double * realSolution = NULL;
+	double * imaginarySolution = NULL;
+	double * betaSolution = NULL;
+	double * leftEigenvectors = NULL;
+	double * rightEigenvectors = NULL;
+	if (eigen->problemisGen==0) {
+		insertMatrix=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
+		if(insertMatrix==NULL){perror("malloc insertMatrix");exit(0);}
+		realSolution=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim));
+		if(realSolution==NULL){perror("malloc realSolution");exit(0);}
+		imaginarySolution=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim));
+		if(imaginarySolution==NULL){perror("malloc imaginarySolution");exit(0);}
+		leftEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
+		if(leftEigenvectors==NULL){perror("malloc leftEigenvectors");exit(0);}
+		rightEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
+		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
+		from2Dto1D_double(eigen->Comp->matrix,&insertMatrix,eigen->Comp->dim,eigen->Comp->dim);
+		LAPACKE_dgeev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->Comp->dim,realSolution,imaginarySolution,leftEigenvectors,eigen->Comp->dim,rightEigenvectors,eigen->Comp->dim);
+		
+		LAPACKE_free(insertMatrix);
+		LAPACKE_free(realSolution);
+		LAPACKE_free(imaginarySolution);
+		LAPACKE_free(leftEigenvectors);
+		LAPACKE_free(rightEigenvectors);
+	}
+	else {
+		insertMatrix=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
+		if(insertMatrix==NULL){perror("malloc insertMatrix");exit(0);}
+		insertMatrixB=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
+		if(insertMatrixB==NULL){perror("malloc insertMatrix");exit(0);}
+		realSolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
+		if(realSolution==NULL){perror("malloc realSolution");exit(0);}
+		imaginarySolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
+		if(imaginarySolution==NULL){perror("malloc imaginarySolution");exit(0);}
+		betaSolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
+		if(betaSolution==NULL){perror("malloc betaSolution");exit(0);}
+		leftEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
+		if(leftEigenvectors==NULL){perror("malloc leftEigenvectors");exit(0);}
+		rightEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
+		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
+		
+		from2Dto1D_double(eigen->C->matrixY,&insertMatrix,eigen->C->dim,eigen->C->dim);
+		from2Dto1D_double(eigen->C->matrix,&insertMatrixB,eigen->C->dim,eigen->C->dim);
+		LAPACKE_dggev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->C->dim,insertMatrixB,eigen->C->dim,realSolution,imaginarySolution,betaSolution,leftEigenvectors,eigen->C->dim,rightEigenvectors,eigen->C->dim);
+		
+		LAPACKE_free(insertMatrix);
+		LAPACKE_free(insertMatrixB);
+		LAPACKE_free(realSolution);
+		LAPACKE_free(imaginarySolution);
+		LAPACKE_free(betaSolution);
+		LAPACKE_free(leftEigenvectors);
+		LAPACKE_free(rightEigenvectors);
+	}
 	return;
 }

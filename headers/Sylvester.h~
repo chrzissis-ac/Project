@@ -9,6 +9,6 @@ void copysylvester(Sylvester ** target, Sylvester * source);
 
 void printsylvester (Sylvester * sylvester);
 
-void destroysylvester (Sylvester ** sylvester);
+void destroysylvester (Sylvester ** sylvester); //
 
 void Svmult(Sylvester * sylvester, Vector * vector, Vector ** fin);

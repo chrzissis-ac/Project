@@ -39,8 +39,12 @@ void createEigenstruct(Eigenstruct ** eigenstruct){
 }
 
 void deleteEigenstruct(Eigenstruct ** eigenstruct){
-	if((*eigenstruct)->problemisGen==0){deleteCompanionMatrix(&((*eigenstruct)->Comp));}
-	else{deleteCMatrix(&((*eigenstruct)->C));}
+	if((*eigenstruct)->problemisGen==0){
+		deleteCompanionMatrix(&((*eigenstruct)->Comp));
+	}
+	else if((*eigenstruct)->problemisGen==1){
+		deleteCMatrix(&((*eigenstruct)->C));
+	}
 	free(*eigenstruct);
 }
 
@@ -118,7 +122,7 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 			}
 		}
 	}
-			
+
 
 	ipiv=NULL;
 	if(startProdMatr->dim>=6){
@@ -139,7 +143,7 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 			modifiedMatrix[i]=modifiedMatrix[i]*(-1);
 	}
 	for (m=0 ; m<=prodMatr->degree ; m++) {
-	
+
 		from2Dto1D_double(startProdMatr->matrix[m], &modifiedMatrixA, startProdMatr->dim, startProdMatr->dim);
 		cblas_dgemm(LAPACK_ROW_MAJOR, CblasNoTrans, CblasNoTrans, prodMatr->dim, prodMatr->dim, prodMatr->dim, 1.0,modifiedMatrix, startProdMatr->dim, modifiedMatrixA, startProdMatr->dim, 0.0, modifiedMatrixB, startProdMatr->dim);
 		for(i=0 ; i<prodMatr->dim ; i++){
@@ -166,7 +170,7 @@ LAPACKE_free(modifiedMatrixB);
 		(*compMatr)->matrix[i]=malloc(sizeof(double)*compDim);
 		if ((*compMatr)->matrix[i]==NULL) {perror("CompanionMatrix matrix cell malloc!");exit(0);}
 	}
-	
+
 	printf("Dimension of product matrices is: %dx%d, and Sylvester Grade is: %d\n", dim,dim, subDim+1);
 	printf("thus dimension of Companion matrix is: %dx%d\n", compDim,compDim);
 	for (i=0 ; i<=subDim ; i++) {
@@ -360,4 +364,8 @@ void deleteCMatrix(CMatrix ** compMatr) {
 	free((*compMatr)->matrix);
 	free(*compMatr);
 	return;
+}
+
+void solver() {
+	
 }
