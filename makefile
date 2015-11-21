@@ -3,7 +3,7 @@ GCCO= gcc -o
 RMVF= rm -f
 
 EXEC1= prog
-OBJS1= Sylvester.o SimplePoly.o ComplexPoly.o Routines.o Vector.o ProdMatr.o CompanionMatrix.o main.o
+OBJS1= Sylvester.o SimplePoly.o ComplexPoly.o Routines.o Vector.o ProdMatr.o CompanionMatrix.o Solution.o main.o
 
 all: cl final1
 	$(RMVF) $(OBJS1)
@@ -34,6 +34,9 @@ Vector.o: ./functions/Vector.c
 
 CompanionMatrix.o: ./functions/CompanionMatrix.c
 	$(GCCC) ./functions/CompanionMatrix.c
+
+Solution.o: ./functions/Solution.c
+	$(GCCC) ./functions/Solution.c
 
 main.o: ./main/main.c
 	$(GCCC) ./main/main.c

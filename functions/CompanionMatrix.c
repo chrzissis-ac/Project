@@ -4,6 +4,7 @@
 #include <cblas.h>
 #include "../headers/ProdMatr.h"
 #include "../headers/CompanionMatrix.h"
+#include "../headers/Solution.h"
 
 struct ProductMatrices{
 	double *** matrix;
@@ -27,6 +28,11 @@ struct CompanionMatrix{
 struct CMatrix{
 	double ** matrixY;
 	double ** matrix;
+	int dim;
+};
+
+struct Gen_eigensol{
+	eigensol * solution;
 	int dim;
 };
 
@@ -367,6 +373,7 @@ void deleteCMatrix(CMatrix ** compMatr) {
 }
 
 void solver(Eigenstruct * eigen) {
+	int i;
 	double * insertMatrix = NULL;
 	double * insertMatrixB = NULL;
 	double * realSolution = NULL;
@@ -374,6 +381,7 @@ void solver(Eigenstruct * eigen) {
 	double * betaSolution = NULL;
 	double * leftEigenvectors = NULL;
 	double * rightEigenvectors = NULL;
+	Gen_eigensol * solution = NULL;
 	if (eigen->problemisGen==0) {
 		insertMatrix=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
 		if(insertMatrix==NULL){perror("malloc insertMatrix");exit(0);}
@@ -387,7 +395,7 @@ void solver(Eigenstruct * eigen) {
 		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
 		from2Dto1D_double(eigen->Comp->matrix,&insertMatrix,eigen->Comp->dim,eigen->Comp->dim);
 		LAPACKE_dgeev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->Comp->dim,realSolution,imaginarySolution,leftEigenvectors,eigen->Comp->dim,rightEigenvectors,eigen->Comp->dim);
-		
+		createSolution(solution,eigen->Comp->dim,realSolution,rightEigenvectors);
 		LAPACKE_free(insertMatrix);
 		LAPACKE_free(realSolution);
 		LAPACKE_free(imaginarySolution);
@@ -409,11 +417,15 @@ void solver(Eigenstruct * eigen) {
 		if(leftEigenvectors==NULL){perror("malloc leftEigenvectors");exit(0);}
 		rightEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
 		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
-		
 		from2Dto1D_double(eigen->C->matrixY,&insertMatrix,eigen->C->dim,eigen->C->dim);
 		from2Dto1D_double(eigen->C->matrix,&insertMatrixB,eigen->C->dim,eigen->C->dim);
 		LAPACKE_dggev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->C->dim,insertMatrixB,eigen->C->dim,realSolution,imaginarySolution,betaSolution,leftEigenvectors,eigen->C->dim,rightEigenvectors,eigen->C->dim);
-		
+		for (i=0 ; i<eigen->C->dim ; i++) {
+			if (betaSolution[i]!=0.0) {
+				realSolution[i]=realSolution[i]/betaSolution[i];
+			}
+		}
+		createSolution(solution,eigen->C->dim,realSolution,rightEigenvectors);
 		LAPACKE_free(insertMatrix);
 		LAPACKE_free(insertMatrixB);
 		LAPACKE_free(realSolution);
