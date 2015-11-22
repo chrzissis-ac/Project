@@ -1,4 +1,5 @@
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include "../headers/Solution.h"
 #include "../headers/Vector.h"
 
@@ -41,7 +42,10 @@ void createSolution(Gen_eigensol ** solution, int dim, double * eigenValue, doub
 
 	for (i=0 ; i<dim ; i++) {
 		createStableVector(&((*solution)->solution[i].eigenvector), &(eigenVector[i*dim]), dim, 'b');
+		printf("====Vector-%d=====\n\n",i);
+		printVector(&((*solution)->solution[i].eigenvector));
 		(*solution)->solution->eigenvalue=eigenValue[i];
+		printf("\n with eigenvalue %f\n",eigenValue[i]);
 	}
 	(*solution)->dim=dim;
 	return;

@@ -7,6 +7,7 @@
 #include "../headers/ProdMatr.h"
 #include "../headers/Vector.h"
 #include "../headers/CompanionMatrix.h"
+#include "../headers/Solution.h"
 
 void main(int argc,char ** argv){
 	system("clear");
@@ -33,6 +34,8 @@ void main(int argc,char ** argv){
 	ProductMatrices * point=NULL;
 	ProductMatrices * new=NULL;
 	Eigenstruct * eigenstruct=NULL;
+	Gen_eigensol * eigensolution = NULL;
+	
 	Vector * vector=NULL;
 	Vector * fin=NULL;
 	FILE * file=stdin;
@@ -61,11 +64,6 @@ void main(int argc,char ** argv){
 		i++;
 
 	}
-	if((d1<0 || d2 <0) && file!=stdin ){
-		printf("Wrong arguments!\n");
-		//printf("Could not create input file!\n");
-		exit(0);
-	}
 	if(read==1){
 		file=fopen(inf,"r");
 		if(file==NULL){perror("Could not find file!");exit(0);}
@@ -73,10 +71,13 @@ void main(int argc,char ** argv){
 	else if(read==0){
 		file=fopen(inf,"w+");
 		if(file==NULL){perror("Could not create input file!");exit(0);}
-		else{generatefunctions(d1,d2,file);}
 	}
-
-	
+	if((d1<0 || d2 <0) && file!=stdin ){
+		printf("Wrong arguments!\n");
+		//printf("Could not create input file!\n");
+		exit(0);
+	}
+	if(read==0){generatefunctions(d1,d2,file);}
 	input(file,&d1,&function1);
 	input(file,&d2,&function2);
 
@@ -99,6 +100,7 @@ void main(int argc,char ** argv){
 	changevar=changeofvar3(&new,prodMatr);
 	createEigenstruct(&eigenstruct);
 	chooseMatrix(new, eigenstruct, V);
+	solver(Eigenstruct * eigen, Gen_eigensol ** solution);
 	point=prodMatr;
 	
 	do{

@@ -7,6 +7,7 @@
 #include "../headers/ProdMatr.h"
 #include "../headers/Vector.h"
 #include "../headers/CompanionMatrix.h"
+#include "../headers/Solution.h"
 
 void main(int argc,char ** argv){
 	system("clear");
@@ -33,6 +34,8 @@ void main(int argc,char ** argv){
 	ProductMatrices * point=NULL;
 	ProductMatrices * new=NULL;
 	Eigenstruct * eigenstruct=NULL;
+	Gen_eigensol * eigensolution = NULL;
+	
 	Vector * vector=NULL;
 	Vector * fin=NULL;
 	FILE * file=stdin;
@@ -97,6 +100,7 @@ void main(int argc,char ** argv){
 	changevar=changeofvar3(&new,prodMatr);
 	createEigenstruct(&eigenstruct);
 	chooseMatrix(new, eigenstruct, V);
+	solver(eigenstruct, &eigensolution);
 	point=prodMatr;
 	
 	do{
