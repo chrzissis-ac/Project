@@ -51,4 +51,14 @@ void createSolution(Gen_eigensol ** solution, int dim, double * eigenValue, doub
 	return;
 }
 
+void destroyGen_eigensol(Gen_eigensol ** solution){
+	int i;
+	for(i=0;i<(*solution)->dim;i++){
+		deleteVector_static(&((*solution)->solution->eigenvector));
+	}
+	free((*solution)->solution);
+	free(*solution);
+
+
+}
 

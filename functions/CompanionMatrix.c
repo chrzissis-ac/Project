@@ -395,7 +395,6 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
 		LAPACKE_dgeev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->Comp->dim,realSolution,imaginarySolution,leftEigenvectors,eigen->Comp->dim,rightEigenvectors,eigen->Comp->dim);
 		createSolution(solution,eigen->Comp->dim,realSolution,rightEigenvectors,'a');
 
-		LAPACKE_free(insertMatrix);
 		LAPACKE_free(realSolution);
 		LAPACKE_free(imaginarySolution);
 		LAPACKE_free(leftEigenvectors);
@@ -422,8 +421,7 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
 			}
 		}
 		createSolution(solution,eigen->C->dim,realSolution,rightEigenvectors,'a');
-		LAPACKE_free(insertMatrix);
-		LAPACKE_free(insertMatrixB);
+
 		LAPACKE_free(realSolution);
 		LAPACKE_free(imaginarySolution);
 		LAPACKE_free(betaSolution);

@@ -14,6 +14,8 @@ void createStableVector(Vector * vector, double * input, int dim, char c);
 
 void deleteVector(Vector * vector);
 
+void deleteVector_static(Vector * vector);
+
 void printVector(Vector * vector);
 
 int getVectordim(Vector * vector);

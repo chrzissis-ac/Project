@@ -163,5 +163,15 @@ void deleteVector(Vector * vector){
 	free(vector);
 }
 
+void deleteVector_static(Vector * vector){
+	if(vector==NULL){return;}
+	int i=0;
+	while(i<vector->dim){
+		delete1matrix(&(vector->matrix[i]));
+		i++;
+	}
+	free(vector->matrix);
+}
+
 // getVectordim() returns the dimension of 'vector'
 int getVectordim(Vector * vector){return vector->dim;}

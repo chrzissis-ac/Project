@@ -100,7 +100,7 @@ void main(int argc,char ** argv){
 	changevar=changeofvar3(&new,prodMatr);
 	createEigenstruct(&eigenstruct);
 	chooseMatrix(new, eigenstruct, V);
-	solver(Eigenstruct * eigen, Gen_eigensol ** solution);
+	solver(eigenstruct, &eigensolution);
 	point=prodMatr;
 	
 	do{
@@ -125,6 +125,7 @@ void main(int argc,char ** argv){
 
 
 	deleteEigenstruct(&eigenstruct);
+	destroyGen_eigensol(Gen_eigensol ** solution);
 
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);

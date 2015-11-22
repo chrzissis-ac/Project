@@ -125,6 +125,7 @@ void main(int argc,char ** argv){
 
 
 	deleteEigenstruct(&eigenstruct);
+	destroyGen_eigensol(&eigensolution);
 
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);
