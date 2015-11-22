@@ -145,7 +145,7 @@ void printVector(Vector * vector){
 	printf("Vector with dimension %d:\n\n",vector->dim);
 	while(i<vector->dim){
 		printf("|");
-		print1polyonym(&(vector->matrix[i]));
+		print1polyonym_double(&(vector->matrix[i]));
 		printf("\t|\n");
 		i++;
 	}

@@ -20,6 +20,8 @@ void delete1polyonym(Polyonym * poly);
 
 void print1polyonym(Polyonym * poly);
 
+void print1polyonym_double(Polyonym * poly);
+
 int get1Degree(Polyonym * poly);
 
 int get1NumByDegree(Polyonym * poly, int targetDeg);

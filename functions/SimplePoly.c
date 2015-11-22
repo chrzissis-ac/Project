@@ -104,6 +104,24 @@ void print1polyonym(Polyonym * poly){
 	if(set==0){printf("0");}
 }
 
+void print1polyonym_double(Polyonym * poly){
+	int i=0,set=0;
+	while(i<=poly->d){
+		if(poly->matrix[i]!=0){
+			set=1;
+			if(poly->matrix[i]>0){printf("+");}
+			if(poly->matrix[i]!=1 ||(poly->matrix[i]==1 && i==0)){printf("%.3f",(poly->matrix[i]));}
+			if(i!=0){
+				printf("%c",poly->var);
+				if(i!=1){printf("^%d",i);}
+			}
+		}
+		i++;
+		
+	}
+	if(set==0){printf("0");}
+}
+
 // get1Degree() return the degree of 'poly'
 int get1Degree(Polyonym * poly){
 	return poly->d;

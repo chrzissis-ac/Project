@@ -54,7 +54,9 @@ void createSolution(Gen_eigensol ** solution, int dim, double * eigenValue, doub
 void destroyGen_eigensol(Gen_eigensol ** solution){
 	int i;
 	for(i=0;i<(*solution)->dim;i++){
+		printf("deleting element i=%d\n",i);
 		deleteVector_static(&((*solution)->solution->eigenvector));
+		printf("deleted element i=%d\n",i);
 	}
 	free((*solution)->solution);
 	free(*solution);
