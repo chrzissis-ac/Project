@@ -33,7 +33,7 @@ void createSolution(Gen_eigensol ** solution, int dim, double * eigenValue, doub
 	if((*solution)->solution==NULL){perror("malloc Solution");exit(0);}
 	
 	for (i=0 ; i<dim ; i++) {
-			if (eigenVector[i*dim]!=0.0) {
+			if (eigenVector[(i+1)*dim-1]!=0.0) {
 				for (j=0 ; j<dim ; j++) {
 					eigenVector[i*dim+j]=eigenVector[i*dim+j]/eigenVector[(i+1)*dim-1];
 				}
