@@ -35,7 +35,7 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 		}
 		polyonym->var='y';
 	}
-	else if(v=='y'){
+	else if(v!='x'){
 		i=point;
 		set=0;
 		while(j<=getDegree2(polyonym2, 'x')){

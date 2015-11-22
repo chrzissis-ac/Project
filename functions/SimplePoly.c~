@@ -35,7 +35,7 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 		}
 		polyonym->var='y';
 	}
-	else if(v=='y'){
+	else {
 		i=point;
 		set=0;
 		while(j<=getDegree2(polyonym2, 'x')){
@@ -51,7 +51,7 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 			(polyonym->matrix)[j]=get_polymatrix2(polyonym2,j,i);
 			j++;
 		}
-		polyonym->var='x';
+		polyonym->var=v;
 	}
 }
 
@@ -81,7 +81,7 @@ void delete1polyonym(Polyonym * poly){
 }
 
 // change1polyonym() changes the value of matrix['grade'] of 'poly' with 'in'
-void change1polyonym(Polyonym * poly,int grade,int in){
+void change1polyonym(Polyonym * poly,int grade, double in){
 	poly->matrix[grade]=in;
 }
 

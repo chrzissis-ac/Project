@@ -35,7 +35,7 @@ void createSolution(Gen_eigensol ** solution, int dim, double * eigenValue, doub
 	for (i=0 ; i<dim ; i++) {
 			if (eigenVector[i*dim]!=0.0) {
 				for (j=0 ; j<dim ; j++) {
-					eigenVector[i*dim+j]=eigenVector[i*dim+j]/eigenVector[i*dim];
+					eigenVector[i*dim+j]=eigenVector[i*dim+j]/eigenVector[(i+1)*dim-1];
 				}
 		}
 	}
