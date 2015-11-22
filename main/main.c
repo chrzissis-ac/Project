@@ -26,6 +26,7 @@ void main(int argc,char ** argv){
 	double k=0;
 	int V=7,i=0,t=0;
 	int read=-1;
+	int cv=0;
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
@@ -47,6 +48,9 @@ void main(int argc,char ** argv){
 		}
 		else if(strcmp(argv[i],"-read")==0 && i!=argc-1){
 			read=1;
+		}
+		else if(strcmp(argv[i],"-cv")==0){
+			cv=1;
 		}
 		else if((strcmp(argv[i],"-i")==0 || strcmp(argv[i],"-o")==0) && i!=argc-1){
 			strcpy(inf,"");
@@ -97,7 +101,7 @@ void main(int argc,char ** argv){
 		return;
 	}
 	
-	changevar=changeofvar3(&new,prodMatr);
+	changevar=changeofvar3(&new,prodMatr,cv);
 	createEigenstruct(&eigenstruct);
 	chooseMatrix(new, eigenstruct, V);
 	solver(eigenstruct, &eigensolution);
@@ -116,6 +120,9 @@ void main(int argc,char ** argv){
 		}
 		else if(in==-6){
 			printEigenstruct(eigenstruct);
+		}
+		else if(in==-7){
+			printGen_eigensol(eigensolution);
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");

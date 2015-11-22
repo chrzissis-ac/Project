@@ -17,6 +17,7 @@ struct ProductMatrices{
 struct Eigenstruct{
 	CompanionMatrix * Comp;
 	CMatrix * C;
+	char eigenvar;
 	int problemisGen;
 };
 
@@ -92,6 +93,7 @@ int chooseMatrix(ProductMatrices * prodMat, Eigenstruct * eigenstruct, int V) {
 		createCMatrix(prodMat, cMatr);
 		eigenstruct->problemisGen=1;
 	}
+	eigenstruct->eigenvar=prodMat->hidden;
 	if(eigenstruct->problemisGen==0){printf("----------\nEigen-Problem is Standard!\n----------\n");}
 	else if(eigenstruct->problemisGen==1){printf("----------\nEigen-Problem is Generalized!\n----------\n");}
 	return eigenstruct->problemisGen;
@@ -373,7 +375,7 @@ void deleteCMatrix(CMatrix ** compMatr) {
 }
 
 void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
-	int i;
+	int i,j;
 	double * insertMatrix = NULL;
 	double * insertMatrixB = NULL;
 	double * realSolution = NULL;
@@ -381,7 +383,12 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
 	double * betaSolution = NULL;
 	double * leftEigenvectors = NULL;
 	double * rightEigenvectors = NULL;
-	if (eigen->problemisGen==0) {
+	double insertMatrixtemp[3][3]={0,1,1,1,0,1,1,1,0};
+	
+	double insertMatrixtempA[3][3]={-1,-1,0,0,-1,-1,-1,-2,-1};
+	double insertMatrixtempB[3][3]={-1,1,0,0,-1,1,-1,1,1};
+
+	if (eigen->problemisGen==0){
 		realSolution=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim));
 		if(realSolution==NULL){perror("malloc realSolution");exit(0);}
 		imaginarySolution=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim));
@@ -391,14 +398,11 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
 		rightEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
 		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
 		from2Dto1D_double(eigen->Comp->matrix,&insertMatrix,eigen->Comp->dim,eigen->Comp->dim);
+		
 
-		LAPACKE_dgeev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->Comp->dim,realSolution,imaginarySolution,leftEigenvectors,eigen->Comp->dim,rightEigenvectors,eigen->Comp->dim);
-		createSolution(solution,eigen->Comp->dim,realSolution,rightEigenvectors,'a');
-
-		LAPACKE_free(realSolution);
-		LAPACKE_free(imaginarySolution);
-		LAPACKE_free(leftEigenvectors);
-		LAPACKE_free(rightEigenvectors);
+		LAPACKE_dgeev(LAPACK_ROW_MAJOR,'N','V',eigen->Comp->dim,insertMatrix,eigen->Comp->dim,realSolution,imaginarySolution,leftEigenvectors,eigen->Comp->dim,rightEigenvectors,eigen->Comp->dim);
+		//for (i=0 ; i<eigen->Comp->dim * eigen->Comp->dim ; i++) {printf("rEv[%d]=%.2f\n",i,rightEigenvectors[i]);}
+		createSolution(solution,eigen->Comp->dim,realSolution,rightEigenvectors,eigen->eigenvar);
 	}
 	else {
 		realSolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
@@ -414,19 +418,25 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
 
 		from2Dto1D_double(eigen->C->matrixY,&insertMatrix,eigen->C->dim,eigen->C->dim);
 		from2Dto1D_double(eigen->C->matrix,&insertMatrixB,eigen->C->dim,eigen->C->dim);
-		LAPACKE_dggev(LAPACK_ROW_MAJOR,'N','V',1,insertMatrix,eigen->C->dim,insertMatrixB,eigen->C->dim,realSolution,imaginarySolution,betaSolution,leftEigenvectors,eigen->C->dim,rightEigenvectors,eigen->C->dim);
+		LAPACKE_dggev(LAPACK_ROW_MAJOR,'N','V',eigen->C->dim,insertMatrixtempB,eigen->C->dim,insertMatrixtempA,eigen->C->dim,realSolution,imaginarySolution,betaSolution,leftEigenvectors,eigen->C->dim,rightEigenvectors,eigen->C->dim);
+
 		for (i=0 ; i<eigen->C->dim ; i++) {
+			//printf("rEv[%d]=%.2f\n",i,rightEigenvectors[i]);
+			printf("rSL[%d]=%.2f + %.2f//bSL[%d]=%f\n",i,realSolution[i],imaginarySolution[i],i,betaSolution[i]);
 			if (betaSolution[i]!=0.0) {
 				realSolution[i]=realSolution[i]/betaSolution[i];
 			}
 		}
-		createSolution(solution,eigen->C->dim,realSolution,rightEigenvectors,'a');
-
+		
+		createSolution(solution,eigen->C->dim,realSolution,rightEigenvectors,eigen->eigenvar);
+		
+		free(insertMatrixB);
+		LAPACKE_free(betaSolution);
+	}
+		free(insertMatrix);
 		LAPACKE_free(realSolution);
 		LAPACKE_free(imaginarySolution);
-		LAPACKE_free(betaSolution);
 		LAPACKE_free(leftEigenvectors);
 		LAPACKE_free(rightEigenvectors);
-	}
 	return;
 }

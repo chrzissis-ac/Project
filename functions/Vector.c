@@ -167,7 +167,7 @@ void deleteVector_static(Vector * vector){
 	if(vector==NULL){return;}
 	int i=0;
 	while(i<vector->dim){
-		delete1matrix(&(vector->matrix[i]));
+		delete1matrix(&((vector->matrix)[i]));
 		i++;
 	}
 	free(vector->matrix);

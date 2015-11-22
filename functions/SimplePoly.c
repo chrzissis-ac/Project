@@ -35,7 +35,7 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 		}
 		polyonym->var='y';
 	}
-	else if(v!='x'){
+	else if(v=='y'){
 		i=point;
 		set=0;
 		while(j<=getDegree2(polyonym2, 'x')){
@@ -110,7 +110,7 @@ void print1polyonym_double(Polyonym * poly){
 		if(poly->matrix[i]!=0){
 			set=1;
 			if(poly->matrix[i]>0){printf("+");}
-			if(poly->matrix[i]!=1 ||(poly->matrix[i]==1 && i==0)){printf("%.3f",(poly->matrix[i]));}
+			if(poly->matrix[i]!=1 ||(poly->matrix[i]==1 && i==0)){printf("%f",(poly->matrix[i]));}
 			if(i!=0){
 				printf("%c",poly->var);
 				if(i!=1){printf("^%d",i);}

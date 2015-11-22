@@ -2,7 +2,7 @@
 
 typedef struct ProductMatrices ProductMatrices;
 
-void createProdMatr (Sylvester * sylvester, ProductMatrices **  prodMat);
+int createProdMatr (Sylvester * sylvester, ProductMatrices **  prodMat);
 
 void destroyProdMatr (ProductMatrices * prodMat);
 
@@ -12,7 +12,7 @@ void printProdMatr_int(ProductMatrices * prodMat, int in);
 
 int calculate_K(ProductMatrices * prodMat);
 
-int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat);
+int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int i);
 
 void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g);
 

@@ -175,7 +175,7 @@ int calculate_K(ProductMatrices * prodMat){
 	printf("Singular Values:\n");
 	printf("Max Singular value is %f\n",maxs);
 	printf("Min Singular value is %f\n",mins);
-	if(mins==0){
+	if(mins < 0.00001 || mins==0){
 		prodMat->k=-1;
 		printf("K is infinity.\n");
 	}
@@ -275,8 +275,8 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 	if(poly2==NULL){perror("malloc poly2 newprod");exit(0);}
 	poly1->d=1;
 	poly2->d=1;
-	poly1->var='z';
-	poly2->var='z';
+	poly1->var=prodMat->hidden;
+	poly2->var=prodMat->hidden;
 	poly1->matrix=NULL;
 	poly1->matrix=malloc(sizeof(double)*2);
 	if(poly1->matrix==NULL){perror("new prod polyonym malloc matrix1");exit(0);}
@@ -291,7 +291,7 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 
 	i=0;
 	while(i<=prodMat->degree){
-		create1polyonym_one(&temp,'z');
+		create1polyonym_one(&temp,poly1->var);
 		a=0;b=0;
 		while(a<i){
 			if(a!=0){
@@ -332,11 +332,16 @@ void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 		destroyProdMatr(target[i]);
 		i++;
 	}
+	(*finl)->hidden=prodMat->hidden;
 	calculate_K(*finl);
 }
 
-int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat){
+int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow){
 	int i=0;
+	if(allow==0){
+		*finl=prodMat;
+		return 0;
+	}
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
 		*finl=prodMat;

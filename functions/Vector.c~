@@ -145,7 +145,7 @@ void printVector(Vector * vector){
 	printf("Vector with dimension %d:\n\n",vector->dim);
 	while(i<vector->dim){
 		printf("|");
-		print1polyonym(&(vector->matrix[i]));
+		print1polyonym_double(&(vector->matrix[i]));
 		printf("\t|\n");
 		i++;
 	}
@@ -167,7 +167,7 @@ void deleteVector_static(Vector * vector){
 	if(vector==NULL){return;}
 	int i=0;
 	while(i<vector->dim){
-		delete1matrix(&(vector->matrix[i]));
+		delete1matrix(&((vector->matrix)[i]));
 		i++;
 	}
 	free(vector->matrix);
