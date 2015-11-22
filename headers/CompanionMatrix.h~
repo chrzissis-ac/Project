@@ -1,5 +1,6 @@
 #include "../headers/ProdMatr.h"
 
+
 typedef struct CompanionMatrix CompanionMatrix;
 
 typedef struct CMatrix CMatrix;
@@ -25,3 +26,5 @@ void createCMatrix(ProductMatrices * startProdMatr, CMatrix ** compMatr);
 void printCMatrix(CMatrix * compMatr);
 
 void deleteCMatrix(CMatrix ** compMatr);
+
+void solver(Eigenstruct * eigen, Gen_eigensol ** solution);

@@ -40,7 +40,7 @@ void createSolution(Gen_eigensol ** solution, int dim, double * eigenValue, doub
 	}
 
 	for (i=0 ; i<dim ; i++) {
-		createStableVector(&((*solution)->solution[i].eigenvector), &(eigenVector[i*dim]), dim, 'b');
+		createStableVector(&((*solution)->solution[i].vector), &(eigenVector[i*dim]), dim, 'b');
 		(*solution)->solution->eigenvalue=eigenValue[i];
 	}
 	(*solution)->dim=dim;
