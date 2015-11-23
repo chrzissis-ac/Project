@@ -19,3 +19,11 @@ void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * 
 void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2);
 
 void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat);
+
+int get_Productdim(ProductMatrices * prod);
+
+double get_Productk(ProductMatrices * prod);
+
+char get_Producthidden(ProductMatrices * prod);
+
+int get_Productdegree(ProductMatrices * prod);

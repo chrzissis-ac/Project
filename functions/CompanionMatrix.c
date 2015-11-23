@@ -14,13 +14,6 @@ struct ProductMatrices{
 	double k;
 };
 
-struct Eigenstruct{
-	CompanionMatrix * Comp;
-	CMatrix * C;
-	char eigenvar;
-	int problemisGen;
-};
-
 struct CompanionMatrix{
 	double ** matrix;
 	int dim;
@@ -32,72 +25,7 @@ struct CMatrix{
 	int dim;
 };
 
-struct Gen_eigensol{
-	eigensol * solution;
-	int dim;
-};
 
-void createEigenstruct(Eigenstruct ** eigenstruct){
-	(*eigenstruct)=NULL;
-	(*eigenstruct)=malloc(sizeof(Eigenstruct));
-	if(*eigenstruct==NULL){perror("malloc Eigenstruct");exit(0);}
-	(*eigenstruct)->Comp=NULL;
-	(*eigenstruct)->C=NULL;
-}
-
-void deleteEigenstruct(Eigenstruct ** eigenstruct){
-	if((*eigenstruct)->problemisGen==0){
-		deleteCompanionMatrix(&((*eigenstruct)->Comp));
-	}
-	else if((*eigenstruct)->problemisGen==1){
-		deleteCMatrix(&((*eigenstruct)->C));
-	}
-	free(*eigenstruct);
-}
-
-void printEigenstruct(Eigenstruct * eigenstruct){
-	if(eigenstruct->problemisGen==1){printCMatrix(eigenstruct->C);}
-	else{printCompanionMatrix(eigenstruct->Comp);}
-
-}
-
-
-int chooseMatrix(ProductMatrices * prodMat, Eigenstruct * eigenstruct, int V) {
-	CompanionMatrix ** compMatr=&(eigenstruct->Comp);
-	CMatrix ** cMatr=&(eigenstruct->C);
-	int K, i;
-	double limit;
-	limit=1.0;
-	if(prodMat->degree==0){return -1;}
-	if(V>=0){
-		for (i=0 ; i<V ; i++) {
-			limit=limit*10.0;
-		}
-	}
-	else{
-		for (i=0 ; i>V ; i--) {
-			limit=limit/10.0;
-		}
-	}
-	printf("10^B Limit for K is 10^(%d) = %.2f\n",V,limit);
-	printf("---------------------------------------------\n");
-	if (prodMat->k == -1) {
-		createCMatrix(prodMat, cMatr);
-		eigenstruct->problemisGen=1;
-	}
-	else if (prodMat->k <= limit) {
-		createCompanionMatrix(prodMat, compMatr);
-		eigenstruct->problemisGen=0;
-	}
-	else if(prodMat->k > limit){
-		createCMatrix(prodMat, cMatr);
-		eigenstruct->problemisGen=1;
-	}
-	eigenstruct->eigenvar=prodMat->hidden;
-	if(eigenstruct->problemisGen==0){printf("----------\nEigen-Problem is Standard!\n----------\n");}
-	else if(eigenstruct->problemisGen==1){printf("----------\nEigen-Problem is Generalized!\n----------\n");}
-	return eigenstruct->problemisGen;
-}
 
 void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr) {
 	int dim, subDim, compDim, i, j, k, l, m;
@@ -215,6 +143,14 @@ LAPACKE_free(modifiedMatrixB);
 	destroyProdMatr(prodMatr);
 }
 
+int get_Companiondim(CompanionMatrix * comp){
+	return comp->dim;
+}
+
+double ** get_Companionmatrix(CompanionMatrix * comp){
+	return comp->matrix;
+}
+
 void printCompanionMatrix(CompanionMatrix * compMatr) {
 	int i, j, dim;
 	printf("---------------------------------------------\n");
@@ -247,7 +183,6 @@ void deleteCompanionMatrix(CompanionMatrix ** compMatr) {
 
 void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	int dim, subDim, compDim, i, j, k, l;
-//	printf("Creating companion matrix!\n");
 	(*compMatr)=NULL;
 	(*compMatr)=malloc(sizeof(struct CMatrix));
 	if ((*compMatr)==NULL) {perror("CMatrix struct malloc!");exit(0);}
@@ -333,6 +268,19 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	}
 	return;
 }
+
+int get_Cdim(CMatrix * c){
+	return c->dim;
+}
+
+double ** get_CmatrixY(CMatrix * c){
+	return c->matrixY;
+}
+
+double ** get_Cmatrix(CMatrix * c){
+	return c->matrix;
+}
+
 void printCMatrix(CMatrix * compMatr) {
 	int i, j, dim;
 	printf("---------------------------------------------\n");
@@ -340,15 +288,15 @@ void printCMatrix(CMatrix * compMatr) {
 	printf("Dimension of Generalized matrices is: %dx%d\n", dim,dim);
 	for (i=0 ; i<dim ; i++) {
 		for (j=0 ; j<dim ; j++) {
-			printf ("%.2f", compMatr->matrixY[i][j]);
+			printf ("%.2f", compMatr->matrix[i][j]);
 			printf("|\t");
 		}
 		printf("\n");
 	}
-	printf("\n            +\n");
+	printf("\n+y*\n");
 	for (i=0 ; i<dim ; i++) {
 		for (j=0 ; j<dim ; j++) {
-			printf ("%.2f", compMatr->matrix[i][j]);
+			printf ("%.2f", compMatr->matrixY[i][j]);
 			printf("|\t");
 		}
 		printf("\n");
@@ -371,72 +319,5 @@ void deleteCMatrix(CMatrix ** compMatr) {
 	}
 	free((*compMatr)->matrix);
 	free(*compMatr);
-	return;
-}
-
-void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
-	int i,j;
-	double * insertMatrix = NULL;
-	double * insertMatrixB = NULL;
-	double * realSolution = NULL;
-	double * imaginarySolution = NULL;
-	double * betaSolution = NULL;
-	double * leftEigenvectors = NULL;
-	double * rightEigenvectors = NULL;
-	double insertMatrixtemp[3][3]={0,1,1,1,0,1,1,1,0};
-	
-	double insertMatrixtempA[3][3]={-1,-1,0,0,-1,-1,-1,-2,-1};
-	double insertMatrixtempB[3][3]={-1,1,0,0,-1,1,-1,1,1};
-
-	if (eigen->problemisGen==0){
-		realSolution=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim));
-		if(realSolution==NULL){perror("malloc realSolution");exit(0);}
-		imaginarySolution=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim));
-		if(imaginarySolution==NULL){perror("malloc imaginarySolution");exit(0);}
-		leftEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
-		if(leftEigenvectors==NULL){perror("malloc leftEigenvectors");exit(0);}
-		rightEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->Comp->dim*eigen->Comp->dim));
-		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
-		from2Dto1D_double(eigen->Comp->matrix,&insertMatrix,eigen->Comp->dim,eigen->Comp->dim);
-		
-
-		LAPACKE_dgeev(LAPACK_ROW_MAJOR,'N','V',eigen->Comp->dim,insertMatrix,eigen->Comp->dim,realSolution,imaginarySolution,leftEigenvectors,eigen->Comp->dim,rightEigenvectors,eigen->Comp->dim);
-		//for (i=0 ; i<eigen->Comp->dim * eigen->Comp->dim ; i++) {printf("rEv[%d]=%.2f\n",i,rightEigenvectors[i]);}
-		createSolution(solution,eigen->Comp->dim,realSolution,rightEigenvectors,eigen->eigenvar);
-	}
-	else {
-		realSolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
-		if(realSolution==NULL){perror("malloc realSolution");exit(0);}
-		imaginarySolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
-		if(imaginarySolution==NULL){perror("malloc imaginarySolution");exit(0);}
-		betaSolution=LAPACKE_malloc(sizeof(double)*(eigen->C->dim));
-		if(betaSolution==NULL){perror("malloc betaSolution");exit(0);}
-		leftEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
-		if(leftEigenvectors==NULL){perror("malloc leftEigenvectors");exit(0);}
-		rightEigenvectors=LAPACKE_malloc(sizeof(double)*(eigen->C->dim*eigen->C->dim));
-		if(rightEigenvectors==NULL){perror("malloc rightEigenvectors");exit(0);}
-
-		from2Dto1D_double(eigen->C->matrixY,&insertMatrix,eigen->C->dim,eigen->C->dim);
-		from2Dto1D_double(eigen->C->matrix,&insertMatrixB,eigen->C->dim,eigen->C->dim);
-		LAPACKE_dggev(LAPACK_ROW_MAJOR,'N','V',eigen->C->dim,insertMatrixtempB,eigen->C->dim,insertMatrixtempA,eigen->C->dim,realSolution,imaginarySolution,betaSolution,leftEigenvectors,eigen->C->dim,rightEigenvectors,eigen->C->dim);
-
-		for (i=0 ; i<eigen->C->dim ; i++) {
-			//printf("rEv[%d]=%.2f\n",i,rightEigenvectors[i]);
-			printf("rSL[%d]=%.2f + %.2f//bSL[%d]=%f\n",i,realSolution[i],imaginarySolution[i],i,betaSolution[i]);
-			if (betaSolution[i]!=0.0) {
-		//		realSolution[i]=realSolution[i]/betaSolution[i];
-			}
-		}
-		
-		createSolution(solution,eigen->C->dim,realSolution,rightEigenvectors,eigen->eigenvar);
-		
-		free(insertMatrixB);
-		LAPACKE_free(betaSolution);
-	}
-		free(insertMatrix);
-		LAPACKE_free(realSolution);
-		LAPACKE_free(imaginarySolution);
-		LAPACKE_free(leftEigenvectors);
-		LAPACKE_free(rightEigenvectors);
 	return;
 }

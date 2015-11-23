@@ -12,7 +12,25 @@ struct Polyonym2{
 };
 
 //----------------------------------------------------------Polyonyma of 2 variables management-----------------------------------------------
-
+double polyonymtryvalue(Polyonym2 * poly, double vx, double vy){
+	int i,j;
+	double value=0.0;
+	double tempx,tempy;
+	tempx=1.0;
+//	if(vx==0.0){tempx=0.0;}
+	for(i=0;i<=(poly->dx);i++){
+		tempy=1.0;
+		
+		for(j=0;j<=(poly->dy);j++){
+		//	printf("value[a]= %f,tempx=%f,tempy=%f\n",value,tempx,tempy);
+			value=value+poly->matrix[i][j]*tempx*tempy;
+		//	printf("value[b]= %f,tempx=%f,tempy=%f\n",value,tempx,tempy);
+			tempy=tempy*vy;
+		}
+		tempx=tempx*vx;
+	}
+	return value;
+}
 // createpolyonym() creates a Polyonym2 struct ('poly') with 'v' as its variable that derives from 'function'
 void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy){
 	Polyonym2 * polyonym;

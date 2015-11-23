@@ -30,6 +30,7 @@ struct ProductMatrices{
 	double k;
 };
 
+
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
 
 // createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
@@ -361,7 +362,19 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow){
 	}
 	*finl=prodMat;
 	return 0;
+}
 
 
+int get_Productdim(ProductMatrices * prod){
+	return prod->dim;
+}
 
+double get_Productk(ProductMatrices * prod){
+	return prod->k;
+}
+char get_Producthidden(ProductMatrices * prod){
+	return prod->hidden;
+}
+int get_Productdegree(ProductMatrices * prod){
+	return prod->degree;
 }

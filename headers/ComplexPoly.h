@@ -1,5 +1,7 @@
 typedef struct Polyonym2  Polyonym2;
 
+double polyonymtryvalue(Polyonym2 * poly, double vx, double vy);
+
 void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy);
 
 void createpolyonym2(char * function, Polyonym2 ** poly, int d);
@@ -19,3 +21,5 @@ void printpoly_byvar(Polyonym2 * polyonym, char v);
 int getDegree2(Polyonym2 * poly, char v);
 
 int get_polymatrix2(Polyonym2 * poly,int i,int j);
+
+
