@@ -2,11 +2,8 @@
 
 typedef struct Vector Vector;
 
-void createRandVector(Vector ** vector, int dim);
 
 void createInputVector(Vector ** vector);
-
-void createFileVector(Vector ** vector, char * inputfile);
 
 void createZeroVector(Vector ** vector, int dim,char v);
 

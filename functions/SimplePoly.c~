@@ -35,7 +35,7 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 		}
 		polyonym->var='y';
 	}
-	else {
+	else if(v=='y'){
 		i=point;
 		set=0;
 		while(j<=getDegree2(polyonym2, 'x')){
@@ -141,7 +141,7 @@ int get1NumByDegree(Polyonym * poly, int targetDeg) {
 }
 
 // copy1polyonym() copies a Polyonym struct ('source') to another Polyonym struct ('target')
-void copy1polyonym(Polyonym * target,Polyonym * source){
+static void copy1polyonym(Polyonym * target,Polyonym * source){
 	target->d=source->d;
 	target->var=source->var;
 	target->matrix=NULL;

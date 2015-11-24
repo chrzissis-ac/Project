@@ -5,8 +5,6 @@ typedef struct Sylvester Sylvester;
 
 void createsylvester (Sylvester ** sylvester, Polyonym2 * p1, Polyonym2 * p2);
 
-void copysylvester(Sylvester ** target, Sylvester * source);
-
 void printsylvester (Sylvester * sylvester);
 
 void destroysylvester (Sylvester ** sylvester);

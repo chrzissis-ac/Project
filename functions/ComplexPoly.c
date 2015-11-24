@@ -12,77 +12,7 @@ struct Polyonym2{
 };
 
 //----------------------------------------------------------Polyonyma of 2 variables management-----------------------------------------------
-double polyonymtryvalue(Polyonym2 * poly, double vx, double vy){
-	int i,j;
-	double value=0.0;
-	double tempx,tempy;
-	tempx=1.0;
-//	if(vx==0.0){tempx=0.0;}
-	for(i=0;i<=(poly->dx);i++){
-		tempy=1.0;
-		
-		for(j=0;j<=(poly->dy);j++){
-		//	printf("value[a]= %f,tempx=%f,tempy=%f\n",value,tempx,tempy);
-			value=value+poly->matrix[i][j]*tempx*tempy;
-		//	printf("value[b]= %f,tempx=%f,tempy=%f\n",value,tempx,tempy);
-			tempy=tempy*vy;
-		}
-		tempx=tempx*vx;
-	}
-	return value;
-}
-// createpolyonym() creates a Polyonym2 struct ('poly') with 'v' as its variable that derives from 'function'
-void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy){
-	Polyonym2 * polyonym;
-	int i=0, j=0;
-	polyonym=NULL;
-	polyonym=malloc(sizeof(struct Polyonym2));
-	if(polyonym==NULL){perror("malloc poly2");exit(0);}
-	polyonym->matrix=NULL;
-	polyonym->matrix=malloc(sizeof(int*)*(dx+1));
-	if(polyonym->matrix==NULL){perror("malloc matrix poly2 1D");exit(0);}
-	while(i<=dx){
-		(polyonym->matrix)[i]=NULL;
-		(polyonym->matrix)[i]=malloc(sizeof(int)*(dy+1));
-		if((polyonym->matrix)[i]==NULL){perror("malloc matrix 2D");exit(0);}
-		i++;
-	}
-	i=0;j=0;
-	while(i<=dx){
-		j=0;
-		while(j<=dy){
-			(polyonym->matrix)[i][j]=0;
-			j++;
-		}
-		i++;
-	}
-	
-	polyonym->dx=dx;
-	polyonym->dy=dy;
-	parser(function , polyonym);
-	(*poly)=polyonym;
-}
-
-void createpolyonym2(char * function, Polyonym2 ** poly, int d){
-	int dx=0, dy=0;
-	gradeparser(function, d, &dx, &dy);
-	createpolyonym(function, poly, dx, dy);
-
-}
-
-// deletepoly2() frees the memory that was allocated for 'poly'
-void deletepoly2(Polyonym2 * poly){
-	int i=0;
-	while(i<=poly->dx){
-		free(poly->matrix[i]);
-		i++;
-	}
-	free(poly->matrix);
-	free(poly);
-
-}
-
-void gradeparser(char * func, int d, int * maxdx, int * maxdy){
+static void gradeparser(char * func, int d, int * maxdx, int * maxdy){
 	*maxdx=0;
 	*maxdy=0;
 	int i=0,a=0,s=0;
@@ -122,7 +52,7 @@ void gradeparser(char * func, int d, int * maxdx, int * maxdy){
 }
 
 // parser() chooses the variable with the lowest degree that derives from 'func', along with its polyonimial grades dx, dy for x and y respectively, and stores the function and its degree in 'polyonym'
-void parser(char * func , Polyonym2 * polyonym){
+static void parser(char * func , Polyonym2 * polyonym){
 	if(func[strlen(func)]=='\n'){
 		func[strlen(func)]='\0';	//Delete change of line
 	}
@@ -185,6 +115,79 @@ void parser(char * func , Polyonym2 * polyonym){
 		i++;
 	}
 }
+// createpolyonym() creates a Polyonym2 struct ('poly') with 'v' as its variable that derives from 'function'
+static void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy){
+	Polyonym2 * polyonym;
+	int i=0, j=0;
+	polyonym=NULL;
+	polyonym=malloc(sizeof(struct Polyonym2));
+	if(polyonym==NULL){perror("malloc poly2");exit(0);}
+	polyonym->matrix=NULL;
+	polyonym->matrix=malloc(sizeof(int*)*(dx+1));
+	if(polyonym->matrix==NULL){perror("malloc matrix poly2 1D");exit(0);}
+	while(i<=dx){
+		(polyonym->matrix)[i]=NULL;
+		(polyonym->matrix)[i]=malloc(sizeof(int)*(dy+1));
+		if((polyonym->matrix)[i]==NULL){perror("malloc matrix 2D");exit(0);}
+		i++;
+	}
+	i=0;j=0;
+	while(i<=dx){
+		j=0;
+		while(j<=dy){
+			(polyonym->matrix)[i][j]=0;
+			j++;
+		}
+		i++;
+	}
+	
+	polyonym->dx=dx;
+	polyonym->dy=dy;
+	parser(function , polyonym);
+	(*poly)=polyonym;
+}
+
+double polyonymtryvalue(Polyonym2 * poly, double vx, double vy){
+	int i,j;
+	double value=0.0;
+	double tempx,tempy;
+	tempx=1.0;
+//	if(vx==0.0){tempx=0.0;}
+	for(i=0;i<=(poly->dx);i++){
+		tempy=1.0;
+		
+		for(j=0;j<=(poly->dy);j++){
+		//	printf("value[a]= %f,tempx=%f,tempy=%f\n",value,tempx,tempy);
+			value=value+poly->matrix[i][j]*tempx*tempy;
+		//	printf("value[b]= %f,tempx=%f,tempy=%f\n",value,tempx,tempy);
+			tempy=tempy*vy;
+		}
+		tempx=tempx*vx;
+	}
+	return value;
+}
+
+
+void createpolyonym2(char * function, Polyonym2 ** poly, int d){
+	int dx=0, dy=0;
+	gradeparser(function, d, &dx, &dy);
+	createpolyonym(function, poly, dx, dy);
+
+}
+
+// deletepoly2() frees the memory that was allocated for 'poly'
+void deletepoly2(Polyonym2 * poly){
+	int i=0;
+	while(i<=poly->dx){
+		free(poly->matrix[i]);
+		i++;
+	}
+	free(poly->matrix);
+	free(poly);
+
+}
+
+
 
 // printpolymatrix() prints the matrix of 'polyonym' where every row[i] corresponds to the coefficient of y^i and every column[j] corresponds to coefficient of x^j
 void printpolymatrix(Polyonym2 * polyonym){

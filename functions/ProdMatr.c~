@@ -33,113 +33,7 @@ struct ProductMatrices{
 
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
 
-// createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
-int createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
-//	printf("Creating Product Matrices!\n");
-	if(sylvester->degree==0){return -1;}
-	int degree, dim, i, j, m;
-	(*prodMat)=NULL;
-	(*prodMat)=malloc(sizeof(ProductMatrices));
-	if ((*prodMat)==NULL) {perror("Product Matrix malloc!");exit(0);}
-	(*prodMat)->hidden=sylvester->hidden;
-	degree=sylvester->degree;
-	(*prodMat)->degree=degree;
-	dim=sylvester->dim;
-	(*prodMat)->dim=dim;
-	(*prodMat)->matrix=NULL;
-	(*prodMat)->matrix=malloc(sizeof(double**)*(degree+1));
-	if ((*prodMat)->matrix==NULL) {perror("Product Matrices malloc!");exit(0);}
-	for (i=0 ; i<=degree ; i++) {
-		(*prodMat)->matrix[i]=NULL;
-		(*prodMat)->matrix[i]=malloc(sizeof(double*)*dim);
-		if ((*prodMat)->matrix[i]==NULL) {perror("Product Matrices 1D malloc!");exit(0);}
-		for (j=0 ; j<dim ; j++) {
-			(*prodMat)->matrix[i][j]=NULL;
-			(*prodMat)->matrix[i][j]=malloc(sizeof(double)*dim);
-			if ((*prodMat)->matrix[i][j]==NULL) {perror("Product 2D malloc!");exit(0);}
-		}
-	}
-	for (m=0 ; m<=degree ; m++) {
-		for (i=0 ; i<dim ; i++) {
-			for (j=0 ; j<dim ; j++) {
-				(*prodMat)->matrix[m][i][j]=get1NumByDegree(&(sylvester->matrix[i][j]), m);
-			}
-		}
-	}
-	(*prodMat)->k=-1;
-	calculate_K(*prodMat);
-//	printf("Created Product Matrices!\n");
-	return 0;
-}
-
-// printProdMatr() prints the matrix['in'] of 'prodMat'
-void printProdMatr(ProductMatrices * prodMat, int in) {
-	if(in>prodMat->degree || in<0){
-		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
-		return;
-	}
-	printf("Product matrix of grade %d is:\n\n",in);
-	int degree, dim, i, j, k;
-	i=in;
-	degree=prodMat->degree;
-	dim=prodMat->dim;
-		for (j=0 ; j<dim ; j++) {
-			for (k=0 ; k<dim ; k++) {
-				printf("%.2f", (prodMat->matrix[i][j][k]));
-				printf("|\t");
-			}
-			printf("\n");
-		}
-		printf("\n");
-	printf("With dimension %dx%d.\n",prodMat->dim,prodMat->dim);
-	return;
-}
-
-// printProdMatr_int() prints the matrix['in'] of 'prodMat' as integers
-void printProdMatr_int (ProductMatrices * prodMat, int in) {
-	printf("---------------------------------------------\n");
-	if(in>prodMat->degree || in<0){
-		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
-		printf("---------------------------------------------\n");
-		return;
-	}
-	printf("Product matrix of grade %d is:\n\n",in);
-	int degree, dim, i, j, k;
-	i=in;
-	degree=prodMat->degree;
-	dim=prodMat->dim;
-		for (j=0 ; j<dim ; j++) {
-			for (k=0 ; k<dim ; k++) {
-				printf("%d", (int)(prodMat->matrix[i][j][k]));
-				printf("|\t");
-			}
-			printf("\n");
-		}
-		printf("\n");
-	printf("With dimension %dx%d.\n",prodMat->dim,prodMat->dim);
-	printf("---------------------------------------------\n");
-	return;
-}
-
-// destroyProdMatr() frees the memory that was allocated for 'prodMat'
-void destroyProdMatr (ProductMatrices * prodMat){
-	if(prodMat==NULL){return;}
-	int degree, dim, i, j, k;
-	degree=prodMat->degree;
-	dim=prodMat->dim;
-	for (i=0 ; i<=degree ; i++) {
-		for (j=0 ; j<dim ; j++) {
-			free(prodMat->matrix[i][j]);
-		}
-		free(prodMat->matrix[i]);
-	}
-	
-	free(prodMat->matrix);
-	free(prodMat);
-	return;
-}
-
-int calculate_K(ProductMatrices * prodMat){
+static int calculate_K(ProductMatrices * prodMat){
 //	printf("Calculating K!\n");
 	double * matrix=NULL;
 	double * sva=NULL;
@@ -191,8 +85,117 @@ int calculate_K(ProductMatrices * prodMat){
 
 	LAPACKE_free(v);
 }
+// createProdMatr() creates a ProductMatrices struct  ('prodMat') and its matrices[i] are filled with the coefficients of hidden variable ^ i that are stored in the matrix of 'sylvester'
+int createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
+//	printf("Creating Product Matrices!\n");
+	if(sylvester->degree==0){return -1;}
+	int degree, dim, i, j, m;
+	(*prodMat)=NULL;
+	(*prodMat)=malloc(sizeof(ProductMatrices));
+	if ((*prodMat)==NULL) {perror("Product Matrix malloc!");exit(0);}
+	(*prodMat)->hidden=sylvester->hidden;
+	degree=sylvester->degree;
+	(*prodMat)->degree=degree;
+	dim=sylvester->dim;
+	(*prodMat)->dim=dim;
+	(*prodMat)->matrix=NULL;
+	(*prodMat)->matrix=malloc(sizeof(double**)*(degree+1));
+	if ((*prodMat)->matrix==NULL) {perror("Product Matrices malloc!");exit(0);}
+	for (i=0 ; i<=degree ; i++) {
+		(*prodMat)->matrix[i]=NULL;
+		(*prodMat)->matrix[i]=malloc(sizeof(double*)*dim);
+		if ((*prodMat)->matrix[i]==NULL) {perror("Product Matrices 1D malloc!");exit(0);}
+		for (j=0 ; j<dim ; j++) {
+			(*prodMat)->matrix[i][j]=NULL;
+			(*prodMat)->matrix[i][j]=malloc(sizeof(double)*dim);
+			if ((*prodMat)->matrix[i][j]==NULL) {perror("Product 2D malloc!");exit(0);}
+		}
+	}
+	for (m=0 ; m<=degree ; m++) {
+		for (i=0 ; i<dim ; i++) {
+			for (j=0 ; j<dim ; j++) {
+				(*prodMat)->matrix[m][i][j]=get1NumByDegree(&(sylvester->matrix[i][j]), m);
+			}
+		}
+	}
+	(*prodMat)->k=-1;
+	calculate_K(*prodMat);
+//	printf("Created Product Matrices!\n");
+	return 0;
+}
 
-void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
+
+
+// printProdMatr() prints the matrix['in'] of 'prodMat'
+void printProdMatr(ProductMatrices * prodMat, int in) {
+	if(in>prodMat->degree || in<0){
+		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
+		return;
+	}
+	printf("Product matrix of grade %d is:\n\n",in);
+	int degree, dim, i, j, k;
+	i=in;
+	degree=prodMat->degree;
+	dim=prodMat->dim;
+		for (j=0 ; j<dim ; j++) {
+			for (k=0 ; k<dim ; k++) {
+				printf("%.2f", (prodMat->matrix[i][j][k]));
+				printf("|\t");
+			}
+			printf("\n");
+		}
+		printf("\n");
+	printf("With dimension %dx%d.\n",prodMat->dim,prodMat->dim);
+	return;
+}
+
+// printProdMatr_int() prints the matrix['in'] of 'prodMat' as integers
+static void printProdMatr_int (ProductMatrices * prodMat, int in) {
+	printf("---------------------------------------------\n");
+	if(in>prodMat->degree || in<0){
+		printf("There is no %d grade in the Sylvester Product Matrices!\n",in);
+		printf("---------------------------------------------\n");
+		return;
+	}
+	printf("Product matrix of grade %d is:\n\n",in);
+	int degree, dim, i, j, k;
+	i=in;
+	degree=prodMat->degree;
+	dim=prodMat->dim;
+		for (j=0 ; j<dim ; j++) {
+			for (k=0 ; k<dim ; k++) {
+				printf("%d", (int)(prodMat->matrix[i][j][k]));
+				printf("|\t");
+			}
+			printf("\n");
+		}
+		printf("\n");
+	printf("With dimension %dx%d.\n",prodMat->dim,prodMat->dim);
+	printf("---------------------------------------------\n");
+	return;
+}
+
+// destroyProdMatr() frees the memory that was allocated for 'prodMat'
+void destroyProdMatr (ProductMatrices * prodMat){
+	if(prodMat==NULL){return;}
+	int degree, dim, i, j, k;
+	degree=prodMat->degree;
+	dim=prodMat->dim;
+	for (i=0 ; i<=degree ; i++) {
+		for (j=0 ; j<dim ; j++) {
+			free(prodMat->matrix[i][j]);
+		}
+		free(prodMat->matrix[i]);
+	}
+	
+	free(prodMat->matrix);
+	free(prodMat);
+	return;
+}
+
+
+
+static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
 	int i=0,j=0,m=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
@@ -223,7 +226,7 @@ void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * 
 	}
 }
 
-void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2){
+static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2){
 	int i=0,j=0,m=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
@@ -253,7 +256,7 @@ void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMa
 	}
 }
 
-void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
+static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
 		return;

@@ -6,9 +6,6 @@ typedef struct CompanionMatrix CompanionMatrix;
 typedef struct CMatrix CMatrix;
 
 
-
-//int chooseMatrix(ProductMatrices * prodMat, Eigenstruct * eigenstruct, int V);
-
 void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr);
 
 void printCompanionMatrix(CompanionMatrix * compMatr);

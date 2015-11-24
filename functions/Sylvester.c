@@ -13,11 +13,6 @@ struct Polyonym{
 	int d;
 };
 
-struct Vector{
-	Polyonym * matrix;
-	int dim;
-};
-
 struct Sylvester{
 	Polyonym ** matrix;
 	int dim;
@@ -33,7 +28,7 @@ void createsylvester (Sylvester ** sylvester, Polyonym2 * p1, Polyonym2 * p2) {
 int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m, n;
 	char hidden;
 	Polyonym2 * ZeroPoly=NULL;
-	createpolyonym("0", &ZeroPoly, 0, 0);
+	createpolyonym2("0", &ZeroPoly, 0);
 	(*sylvester)=NULL;
 	(*sylvester)=malloc(sizeof(struct Sylvester));
 	if ((*sylvester)==NULL) {perror("Sylvester malloc!");exit(0);}
@@ -41,8 +36,6 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 	degP2x=getDegree2(p2, 'x');
 	degP1y=getDegree2(p1, 'y');
 	degP2y=getDegree2(p2, 'y');
-	//hidden=choosevar_bydeg(degP1x, degP1y, degP2x, degP2y);
-	//printf("hidden by func: %c\n", hidden);
 	if (degP1x>=degP2x) {
 		maxX=degP1x;
 	}
@@ -212,15 +205,12 @@ int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m
 		}
 		m--;
 	}
-/*	Polyonym * trgt=NULL;
-	mult_polyonym1polyonym(&trgt, &((*sylvester)->matrix[0][1]),&((*sylvester)->matrix[0][3]));
-	delete1polyonym(trgt);*/
 	deletepoly2(ZeroPoly);
 	return;
 }
 
 // copysylvester() copies a Sylvester struct ('source') to another Sylvester struct ('target')
-void copysylvester(Sylvester ** target, Sylvester * source){
+static void copysylvester(Sylvester ** target, Sylvester * source){
 	int i=0,j=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(Sylvester));
@@ -279,7 +269,10 @@ void destroysylvester (Sylvester ** sylvester) {
 }
 
 //-----------------------------------Sylvester x Vector multiplication------------------------------------------------------------
-
+struct Vector{
+	Polyonym * matrix;
+	int dim;
+};
 // Svmult() multiplies mathematically the matrix of 'sylvester' with the matrix of 'vector'
 void Svmult(Sylvester * sylvester, Vector * vector, Vector ** fin){
 	if(vector->dim!=sylvester->dim){

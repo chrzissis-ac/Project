@@ -20,29 +20,14 @@ struct Vector{
 
 //---------------------------------------------------------Vector struct management----------------------------------------------------------------
 
-void createStableVector(Vector * vector, double * input, int dim, char c){
-	if(dim<=0){printf("Dimension must be greater than 0!\n");return;}
-	int i=0;
-	Polyonym2 * ZeroPoly=NULL;
-	createpolyonym("0", &ZeroPoly, 0, 0);
-	vector->dim=dim;
-	vector->matrix=NULL;
-	vector->matrix=malloc(sizeof(Polyonym)*dim);
-	if(vector->matrix==NULL){perror("Vector matrix malloc!");exit(0);}
-	while(i<dim){
-		create1polyonym(ZeroPoly, &((vector->matrix)[i]), c, 0);
-		change1polyonym(&((vector->matrix)[i]),0,input[i]);
-		i++;
-	}
-	deletepoly2(ZeroPoly);
-}
+
 
 // createZeroVector() creates a zero-vector 'vector' with dimension 'dim' and variable 'v'
 void createZeroVector(Vector ** vector, int dim, char v){
 	if(dim<=0){printf("Dimension must be greater than 0!\n");return;}
 	int i=0;
 	Polyonym2 * ZeroPoly=NULL;
-	createpolyonym("0", &ZeroPoly, v, 0);
+	createpolyonym2("0", &ZeroPoly, 0);
 	srand(time(NULL));
 	(*vector)=NULL;
 	(*vector)=malloc(sizeof(Vector));
@@ -58,12 +43,29 @@ void createZeroVector(Vector ** vector, int dim, char v){
 	deletepoly2(ZeroPoly);
 }
 
-// createRandVector() creates a random-value 'vector' with dimension 'dim'
-void createRandVector(Vector ** vector, int dim){
+void createStableVector(Vector * vector, double * input, int dim, char c){
 	if(dim<=0){printf("Dimension must be greater than 0!\n");return;}
 	int i=0;
 	Polyonym2 * ZeroPoly=NULL;
-	createpolyonym("0", &ZeroPoly, 0, 0);
+	createpolyonym2("0", &ZeroPoly, 0);
+	vector->dim=dim;
+	vector->matrix=NULL;
+	vector->matrix=malloc(sizeof(Polyonym)*dim);
+	if(vector->matrix==NULL){perror("Vector matrix malloc!");exit(0);}
+	while(i<dim){
+		create1polyonym(ZeroPoly, &((vector->matrix)[i]), c, 0);
+		change1polyonym(&((vector->matrix)[i]),0,input[i]);
+		i++;
+	}
+	deletepoly2(ZeroPoly);
+}
+
+// createRandVector() creates a random-value 'vector' with dimension 'dim'
+static void createRandVector(Vector ** vector, int dim){
+	if(dim<=0){printf("Dimension must be greater than 0!\n");return;}
+	int i=0;
+	Polyonym2 * ZeroPoly=NULL;
+	createpolyonym2("0", &ZeroPoly, 0);
 	srand(time(NULL));
 	(*vector)=NULL;
 	(*vector)=malloc(sizeof(Vector));
@@ -89,7 +91,7 @@ void createInputVector(Vector ** vector){
 	dim=atoi(temp);
 	if(dim<=0){printf("Dimension must be greater than 0!\n");return;}
 	Polyonym2 * ZeroPoly=NULL;
-	createpolyonym("0", &ZeroPoly, 0, 0);
+	createpolyonym2("0", &ZeroPoly, 0);
 	srand(time(NULL));
 	(*vector)=NULL;
 	(*vector)=malloc(sizeof(Vector));
@@ -109,7 +111,7 @@ void createInputVector(Vector ** vector){
 }
 
 // createFileVector() creates a 'vector' from 'inputfile'
-void createFileVector(Vector ** vector, char * inputfile){
+static void createFileVector(Vector ** vector, char * inputfile){
 	FILE * file=NULL;
 	file=fopen(inputfile,"r");
 	if(file==NULL){perror("Input Vector file!");return;}
@@ -119,7 +121,7 @@ void createFileVector(Vector ** vector, char * inputfile){
 	dim=atoi(temp);
 	if(dim<=0){printf("Dimension must be greater than 0!\n");fclose(file);return;}
 	Polyonym2 * ZeroPoly=NULL;
-	createpolyonym("0", &ZeroPoly, 0, 0);
+	createpolyonym2("0", &ZeroPoly, 0);
 	srand(time(NULL));
 	(*vector)=NULL;
 	(*vector)=malloc(sizeof(Vector));

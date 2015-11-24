@@ -104,10 +104,8 @@ void main(int argc,char ** argv){
 	}
 	
 	changevar=changeofvar3(&new,prodMatr,cv);
-	createEigenstruct(&eigenstruct);
-	chooseMatrix(new, eigenstruct, V);
-	solver(eigenstruct, &eigensolution);
-	createGen_sol(eigensolution,&GSol);
+	chooseMatrix(new, &eigenstruct, V);
+	solver(eigenstruct, &eigensolution, &GSol);
 	
 	point=prodMatr;
 	
@@ -129,7 +127,7 @@ void main(int argc,char ** argv){
 			printGen_eigensol(eigensolution);
 		}
 		else if(in==-8){
-			printGen_sol(GSol);
+			printGen_sol(GSol,polyonym1,polyonym2);
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
@@ -140,7 +138,6 @@ void main(int argc,char ** argv){
 
 	deleteEigenstruct(&eigenstruct);
 	destroyGen_eigensol(&eigensolution);
-
 	deleteGen_sol(&GSol);
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);
