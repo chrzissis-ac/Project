@@ -36,6 +36,8 @@ void main(int argc,char ** argv){
 	ProductMatrices * new=NULL;
 	Eigenstruct * eigenstruct=NULL;
 	Gen_eigensol * eigensolution = NULL;
+	Gen_sol * GSol=NULL;
+		
 	
 	Vector * vector=NULL;
 	Vector * fin=NULL;
@@ -105,6 +107,8 @@ void main(int argc,char ** argv){
 	createEigenstruct(&eigenstruct);
 	chooseMatrix(new, eigenstruct, V);
 	solver(eigenstruct, &eigensolution);
+	createGen_sol(eigensolution,&GSol);
+	
 	point=prodMatr;
 	
 	do{
@@ -124,6 +128,9 @@ void main(int argc,char ** argv){
 		else if(in==-7){
 			printGen_eigensol(eigensolution);
 		}
+		else if(in==-8){
+			printGen_sol(GSol);
+		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
 		}
@@ -134,6 +141,7 @@ void main(int argc,char ** argv){
 	deleteEigenstruct(&eigenstruct);
 	destroyGen_eigensol(&eigensolution);
 
+	deleteGen_sol(&GSol);
 	deletepoly2(polyonym1);
 	deletepoly2(polyonym2);
 	free(function1);

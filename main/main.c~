@@ -106,10 +106,7 @@ void main(int argc,char ** argv){
 	chooseMatrix(new, eigenstruct, V);
 	solver(eigenstruct, &eigensolution);
 	point=prodMatr;
-	printf("value for %s = %f\n",function1, polyonymtryvalue(polyonym1, 0, 1));
-	printf("value for %s = %f\n",function1, polyonymtryvalue(polyonym1, 1, 0));
-	printf("value for %s = %f\n",function1, polyonymtryvalue(polyonym1, 2, 1));
-	printf("value for %s = %f\n",function1, polyonymtryvalue(polyonym1, 1, 2));
+	
 	do{
 		menushow(&in);
 		if(in==-1){printsylvester(sylvester);}

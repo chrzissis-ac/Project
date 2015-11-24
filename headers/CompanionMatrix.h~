@@ -5,9 +5,7 @@ typedef struct CompanionMatrix CompanionMatrix;
 
 typedef struct CMatrix CMatrix;
 
-typedef struct Eigenstruct Eigenstruct;
 
-typedef struct Gen_eigensol Gen_eigensol;
 
 //int chooseMatrix(ProductMatrices * prodMat, Eigenstruct * eigenstruct, int V);
 

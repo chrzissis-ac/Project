@@ -121,6 +121,7 @@ void menushow(int * input){
 	printf("4-\"O\" In case there is a change of variable, start printing the other matrix for each given No\n");
 	printf("5-\"C\" Print Companion matrix or Generalized Eigenproblem Matrices\n");
 	printf("6-\"E\" Print Eigen-Vectors and Eigen-Values\n");
+	printf("6-\"L\" Print Solutions\n");
 	printf("7-\"T\" to terminate\n");
 	fgets(temp,300,stdin);
 	if(strcmp(temp,"S\n")==0 || strcmp(temp,"S")==0 || strcmp(temp,"s\n")==0 || strcmp(temp,"s")==0){
@@ -140,6 +141,9 @@ void menushow(int * input){
 	}
 	else if(strcmp(temp,"E\n")==0 || strcmp(temp,"E")==0 || strcmp(temp,"e\n")==0 || strcmp(temp,"e")==0){
 		*input=-7;
+	}
+	else if(strcmp(temp,"L\n")==0 || strcmp(temp,"L")==0 || strcmp(temp,"l\n")==0 || strcmp(temp,"l")==0){
+		*input=-8;
 	}
 	else if( (atoi(temp)==0 &&  strcmp(temp,"0\n")!=0)   ){
 		*input=-4;
