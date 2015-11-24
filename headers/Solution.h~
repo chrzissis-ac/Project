@@ -1,3 +1,4 @@
+#include "../headers/CompanionMatrix.h"
 typedef struct Gen_eigensol Gen_eigensol;
 
 typedef struct eigensol eigensol;
@@ -19,3 +20,5 @@ void destroyGen_eigensol(Gen_eigensol ** solution);
 void printGen_eigensol(Gen_eigensol * solution);
 
 int chooseMatrix(ProductMatrices * prodMat, Eigenstruct * eigenstruct, int V);
+
+void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol);

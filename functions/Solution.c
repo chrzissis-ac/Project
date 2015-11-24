@@ -28,6 +28,16 @@ struct eigensol{
 	int inf;
 };
 
+struct Gen_sol{
+	sol * solution;
+	int dim;
+};
+
+struct sol{
+	double value[2];
+	int multiplicity;
+};
+
 struct Eigenstruct{
 	CompanionMatrix * Comp;
 	CMatrix * C;
@@ -35,6 +45,24 @@ struct Eigenstruct{
 	int grade;
 	int problemisGen;
 };
+
+void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
+	int i, j;
+	double temp1[eigensol->dim];
+	double temp2[eigensol->dim];
+	(*GSol)=malloc(sizeof(Gen_sol));
+	if((*GSol)==NULL){perror("Gen sol create malloc");exit(0);}
+	(*GSol)->solution=NULL;
+	(*GSol)->solution=malloc(sizeof(sol) * (eigensol->dim));
+	if((*GSol)->solution==NULL){perror("Gen sol - sol create malloc");exit(0);}
+	for(i=0;i<eigensol->dim;i++){
+		temp1[i]=eigensol->solution[i].eigenvalue;
+		temp2[i]=eigensol->solution[i].eigenvector.matrix[eigensol->solution[i].eigenvector.dim -2].matrix[0];
+		printf("temp1[%d]=%f\n",i,temp1[i]);
+		if(eigensol->solution[i].inf==0){printf("temp2[%d]=%f\n",i,temp2[i]);}
+		printf("------\n");
+	}
+}
 
 void createEigenstruct(Eigenstruct ** eigenstruct){
 	(*eigenstruct)=NULL;
@@ -167,6 +195,7 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution) {
 		LAPACKE_free(betaSolution);
 		LAPACKE_free(leftEigenvectors);
 		LAPACKE_free(rightEigenvectors);
+	
 }
 
 void createSolution(Gen_eigensol ** solution, int dim, double * realSolution, double * imaginarySolution,double * betaSolution, double * eigenVector,char c) {
