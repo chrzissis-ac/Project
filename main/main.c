@@ -108,7 +108,7 @@ void main(int argc,char ** argv){
 	solver(eigenstruct, &eigensolution, &GSol);
 	
 	point=prodMatr;
-	
+	//printf("Value is %f\n",polyonymtryvalue(polyonym2, 0.019728, -148651.84)-polyonymtryvalue(polyonym1, 0.019728, -148651.84));
 	do{
 		menushow(&in);
 		if(in==-1){printsylvester(sylvester);}
