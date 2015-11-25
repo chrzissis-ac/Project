@@ -394,7 +394,6 @@ void printGen_eigensol(Gen_eigensol * solution){
 		}
 		else if(solution->solution[i].inf==1){
 			printf("=====Vector-%d=====\n",i+1);
-//			printVector(&(solution->solution[i].eigenvector));
 			printf("The Eigenvalue is Infinite\n");
 		}
 		else if(solution->solution[i].inf==-1){
