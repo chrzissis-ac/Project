@@ -59,7 +59,7 @@ void changevarback(Gen_sol ** GSol, int t[4]){
 		imagx=(*GSol)->solution[i].value_imaginary[(*GSol)->p];
 		//imagy=(*GSol)->solution[i].value_imaginary[1];
 		if( ((t[2]*realx+t[3])!=0 || (t[2]*imagx!=0)) && ((t[2]*realy+t[3])!=0 || (t[2]*imagy!=0)) ){
-			(*GSol)->solution[i].value[(*GSol)->p]=t[0]*t[2]*realx*realx + t[0]*t[3]*realx +(-1)*t[0]*t[2]*imagx*imagx + t[1]*t[2]*realx + t[1]*t[3];
+			(*GSol)->solution[i].value[(*GSol)->p]= t[0]*t[2]*realx*realx + t[0]*t[3]*realx +(-1)*t[0]*t[2]*imagx*imagx + t[1]*t[2]*realx + t[1]*t[3];
 			//(*GSol)->solution[i].value[1]=t[0]*t[2]*realy*realy + t[0]*t[3]*realy +(-1)*t[0]*t[2]*imagy*imagy + t[1]*t[2]*realy + t[1]*t[3];
 			(*GSol)->solution[i].value_imaginary[(*GSol)->p]= 2*t[0]*t[2]*imagx*realx + t[0]*t[3]*imagx + t[1]*t[2]*imagx;
 			//(*GSol)->solution[i].value_imaginary[1]=2*t[0]*t[2]*imagy*realy + t[0]*t[3]*imagy + t[1]*t[2]*imagy;

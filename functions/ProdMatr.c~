@@ -360,7 +360,7 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, i
 		return 0;
 	}
 	do{
-		create_newProd(finl,prodMat);
+		create_newProd(finl,prodMat,t);
 		i++;
 		if( (prodMat->k==-1 && (*finl)->k>=0) || (prodMat->k>=0 && (*finl)->k<prodMat->k) ){break;}
 		destroyProdMatr (*finl);
