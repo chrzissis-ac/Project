@@ -27,6 +27,7 @@ void main(int argc,char ** argv){
 	int V=7,i=0,t=0;
 	int read=-1;
 	int cv=0;
+	int taf[4];
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
 	Sylvester * sylvester=NULL;
@@ -103,9 +104,11 @@ void main(int argc,char ** argv){
 		return;
 	}
 	
-	changevar=changeofvar3(&new,prodMatr,cv);
+	changevar=changeofvar3(&new,prodMatr,cv,taf);
 	chooseMatrix(new, &eigenstruct, V);
 	solver(eigenstruct, &eigensolution, &GSol);
+	printGen_sol(GSol,NULL,NULL);
+	//changevarback(&GSol, taf);
 	
 	point=prodMatr;
 	//printf("Value is %f\n",polyonymtryvalue(polyonym2, 0.019728, -148651.84)-polyonymtryvalue(polyonym1, 0.019728, -148651.84));

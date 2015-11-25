@@ -39,6 +39,7 @@ struct Polyonym{
 
 struct Gen_sol{
 	sol * solution;
+	int p;
 	int dim;
 };
 
@@ -48,6 +49,26 @@ struct sol{
 	int multiplicity;
 	int inf;
 };
+
+void changevarback(Gen_sol ** GSol, int t[4]){
+	int i=0;
+	double realx, realy, imagx, imagy;
+	for (i=0 ; i < (*GSol)->dim ; i++) {
+		realx=(*GSol)->solution[i].value[0];
+		realy=(*GSol)->solution[i].value[1];
+		imagx=(*GSol)->solution[i].value_imaginary[0];
+		imagy=(*GSol)->solution[i].value_imaginary[1];
+		if( ((t[2]*realx+t[3])!=0 || (t[2]*imagx!=0)) && ((t[2]*realy+t[3])!=0 || (t[2]*imagy!=0)) ){
+			(*GSol)->solution[i].value[0]=t[0]*t[2]*realx*realx + t[0]*t[3]*realx +(-1)*t[0]*t[2]*imagx*imagx + t[1]*t[2]*realx + t[1]*t[3];
+			//(*GSol)->solution[i].value[1]=t[0]*t[2]*realy*realy + t[0]*t[3]*realy +(-1)*t[0]*t[2]*imagy*imagy + t[1]*t[2]*realy + t[1]*t[3];
+			(*GSol)->solution[i].value_imaginary[0]= 2*t[0]*t[2]*imagx*realx + t[0]*t[3]*imagx + t[1]*t[2]*imagx;
+			//(*GSol)->solution[i].value_imaginary[1]=2*t[0]*t[2]*imagy*realy + t[0]*t[3]*imagy + t[1]*t[2]*imagy;
+		}
+		else{
+			(*GSol)->solution[i].inf=1;
+		}
+	}
+}
 
 static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
 	int i, j=0,k,flag=0,a=0;
@@ -67,6 +88,7 @@ static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
 		(*GSol)->solution[i].multiplicity=0;
 	}
 	if(eigensol->solution[0].eigenvector.matrix[0].var=='x'){a=1;}
+	(*GSol)->p=a;
 	for(i=0;i < eigensol->dim;i++){
 			flag=0;
 			for(k=0;k<j;k++){
@@ -92,7 +114,7 @@ static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
 	}
 	(*GSol)->solution=realloc((*GSol)->solution,sizeof(sol)*j);
 	(*GSol)->dim=j;
-
+	
 }
 
 static void createSolution(Gen_eigensol ** solution, int dim, int grade, double * realSolution, double * imaginarySolution,double * betaSolution, double * eigenVector,char c) {
@@ -180,7 +202,7 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
 				if(poly2!=NULL){
 					b=polyonymtryvalue(poly2, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]);
 				}
-				printf(" with function value = %.5f\n",a-b);
+				printf(" with function value = %.5f",a-b);
 			}
 				printf("\n");
 		}

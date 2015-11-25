@@ -8,7 +8,7 @@ void destroyProdMatr (ProductMatrices * prodMat);
 
 void printProdMatr(ProductMatrices * prodMat, int in);
 
-int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow);
+int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, int t[4]);
 
 int get_Productdim(ProductMatrices * prod);
 

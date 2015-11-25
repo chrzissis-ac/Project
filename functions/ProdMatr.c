@@ -256,7 +256,7 @@ static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, Pr
 	}
 }
 
-static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
+static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, int t[4]){
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
 		return;
@@ -338,10 +338,18 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat){
 	}
 	(*finl)->hidden=prodMat->hidden;
 	calculate_K(*finl);
+	t[0]=t1;
+	t[1]=t2;
+	t[2]=t3;
+	t[3]=t4;
 }
 
-int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow){
+int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, int t[4]){
 	int i=0;
+	t[0]=1;
+	t[1]=0;
+	t[2]=0;
+	t[3]=1;
 	if(allow==0){
 		*finl=prodMat;
 		return 0;
@@ -352,7 +360,7 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow){
 		return 0;
 	}
 	do{
-		create_newProd(finl,prodMat);
+		create_newProd(finl,prodMat,t);
 		i++;
 		if( (prodMat->k==-1 && (*finl)->k>=0) || (prodMat->k>=0 && (*finl)->k<prodMat->k) ){break;}
 		destroyProdMatr (*finl);
@@ -363,6 +371,10 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow){
 		printf("---------------------------------------------\n");
 		return 1;
 	}
+	t[0]=1;
+	t[1]=0;
+	t[2]=0;
+	t[3]=1;
 	*finl=prodMat;
 	return 0;
 }
