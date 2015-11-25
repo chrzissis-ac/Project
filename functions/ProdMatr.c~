@@ -288,10 +288,10 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, i
 	poly2->matrix=malloc(sizeof(double)*2);
 	if(poly2->matrix==NULL){perror("new prod polyonym malloc matrix2");exit(0);}
 
-	change1polyonym(poly1,0,t2);
-	change1polyonym(poly1,1,t1);
-	change1polyonym(poly2,0,t4);
-	change1polyonym(poly2,1,t3);
+	change1polyonym(poly1,0,t1);
+	change1polyonym(poly1,1,t2);
+	change1polyonym(poly2,0,t3);
+	change1polyonym(poly2,1,t4);
 
 	i=0;
 	while(i<=prodMat->degree){
