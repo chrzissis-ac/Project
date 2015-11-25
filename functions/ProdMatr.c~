@@ -196,7 +196,7 @@ void destroyProdMatr (ProductMatrices * prodMat){
 
 
 static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
-	int i=0,j=0,m=0;
+	int i=0,j=0,m=0,k;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
 	if((*target)==NULL){perror("prod matrices multiplication malloc");exit(0);}
@@ -214,6 +214,9 @@ static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatr
 			(*target)->matrix[i][j]=NULL;
 			(*target)->matrix[i][j]=malloc(sizeof(double)*(*target)->dim);
 			if ((*target)->matrix[i][j]==NULL) {perror("Product multiplication 2D malloc!");exit(0);}
+			for (k=0 ; k<(*target)->dim ; k++){
+				(*target)->matrix[i][j][k]=0;
+			}
 		}
 	}
 	for (m=0 ; m<=(*target)->degree ; m++) {
@@ -227,13 +230,13 @@ static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatr
 }
 
 static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2){
-	int i=0,j=0,m=0;
+	int i=0,j=0,m=0,k;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
 	if((*target)==NULL){perror("prod matrices add malloc");exit(0);}
 	(*target)->dim=matrix1->dim;
 	(*target)->hidden=matrix1->hidden;
-	(*target)->degree=matrix1->degree;
+	(*target)->degree=matrix1->degree*(matrix1->degree>=matrix2->degree) + matrix2->degree*(matrix1->degree<matrix2->degree);
 	(*target)->matrix=NULL;
 	(*target)->matrix=malloc(sizeof(double**)*((*target)->degree+1));
 	if ((*target)->matrix==NULL) {perror("Product Matrices add malloc!");exit(0);}
@@ -245,6 +248,9 @@ static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, Pr
 			(*target)->matrix[i][j]=NULL;
 			(*target)->matrix[i][j]=malloc(sizeof(double)*(*target)->dim);
 			if ((*target)->matrix[i][j]==NULL) {perror("Product add 2D malloc!");exit(0);}
+			for (k=0 ; k<(*target)->dim ; k++){
+				(*target)->matrix[i][j][k]=0;
+			}
 		}
 	}
 	for (m=0 ; m<=(*target)->degree ; m++) {
@@ -265,8 +271,8 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, i
 	int t2=rand()%30 +1;
 	int t3=rand()%30 +1;
 	int t4=rand()%30 +1;	
-	printf("For t1=%d , t2=%d, t3=%d, t4=%d\n",t1,t2,t3,t4);
-	int i=0, a=0,b=0,j=0;
+	printf("For %d*z+(%d) / %d*z+(%d)\n",t1,t2,t3,t4);
+	int i=0, a=0,b=0,j=0,k;
 	ProductMatrices * target[prodMat->degree+1];
 	ProductMatrices * tempprod=NULL;
 	Polyonym * temp=NULL;
@@ -288,10 +294,10 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, i
 	poly2->matrix=malloc(sizeof(double)*2);
 	if(poly2->matrix==NULL){perror("new prod polyonym malloc matrix2");exit(0);}
 
-	change1polyonym(poly1,0,t2);
-	change1polyonym(poly1,1,t1);
-	change1polyonym(poly2,0,t4);
-	change1polyonym(poly2,1,t3);
+	change1polyonym(poly1,0,t4);
+	change1polyonym(poly1,1,t3);
+	change1polyonym(poly2,0,t2);
+	change1polyonym(poly2,1,t1);
 
 	i=0;
 	while(i<=prodMat->degree){

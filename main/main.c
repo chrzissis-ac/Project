@@ -26,7 +26,7 @@ void main(int argc,char ** argv){
 	double k=0;
 	int V=7,i=0,t=0;
 	int read=-1;
-	int cv=0;
+	int cv=0,pdr=0;
 	int taf[4];
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
@@ -61,6 +61,9 @@ void main(int argc,char ** argv){
 		}
 		else if(strcmp(argv[i],"-solve")==0 && i!=argc-1){
 			V=atoi(argv[i+1]);
+		}
+		else if(strcmp(argv[i],"-print_direct_roots")==0){
+			pdr=1;
 		}
 		else if(strcmp(argv[i],"-d1")==0 && i!=argc-1){
 			d1=atoi(argv[i+1]);
@@ -107,8 +110,10 @@ void main(int argc,char ** argv){
 	changevar=changeofvar3(&new,prodMatr,cv,taf);
 	chooseMatrix(new, &eigenstruct, V);
 	solver(eigenstruct, &eigensolution, &GSol);
-	printGen_sol(GSol,NULL,NULL);
-	//changevarback(&GSol, taf);
+	if(pdr){
+		printGen_sol(GSol,NULL,NULL);
+	}
+	changevarback(&GSol, taf);
 	
 	point=prodMatr;
 	//printf("Value is %f\n",polyonymtryvalue(polyonym2, 0.019728, -148651.84)-polyonymtryvalue(polyonym1, 0.019728, -148651.84));

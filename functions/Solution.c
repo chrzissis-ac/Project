@@ -52,17 +52,15 @@ struct sol{
 
 void changevarback(Gen_sol ** GSol, int t[4]){
 	int i=0;
-	double realx, realy, imagx, imagy;
+	double real, imag;
 	for (i=0 ; i < (*GSol)->dim ; i++) {
-		realx=(*GSol)->solution[i].value[(*GSol)->p];
-		//realy=(*GSol)->solution[i].value[1];
-		imagx=(*GSol)->solution[i].value_imaginary[(*GSol)->p];
-		//imagy=(*GSol)->solution[i].value_imaginary[1];
-		if( ((t[2]*realx+t[3])!=0 || (t[2]*imagx!=0)) && ((t[2]*realy+t[3])!=0 || (t[2]*imagy!=0)) ){
-			(*GSol)->solution[i].value[(*GSol)->p]= t[0]*t[2]*realx*realx + t[0]*t[3]*realx +(-1)*t[0]*t[2]*imagx*imagx + t[1]*t[2]*realx + t[1]*t[3];
-			//(*GSol)->solution[i].value[1]=t[0]*t[2]*realy*realy + t[0]*t[3]*realy +(-1)*t[0]*t[2]*imagy*imagy + t[1]*t[2]*realy + t[1]*t[3];
-			(*GSol)->solution[i].value_imaginary[(*GSol)->p]= 2*t[0]*t[2]*imagx*realx + t[0]*t[3]*imagx + t[1]*t[2]*imagx;
-			//(*GSol)->solution[i].value_imaginary[1]=2*t[0]*t[2]*imagy*realy + t[0]*t[3]*imagy + t[1]*t[2]*imagy;
+		real=(*GSol)->solution[i].value[(*GSol)->p];
+		imag=(*GSol)->solution[i].value_imaginary[(*GSol)->p];
+		if( ( (t[2]*real+t[3])>=0.00001 || (t[2]*real+t[3])<=-0.00001) || (t[2]*imag>=0.00001 || t[2]*imag<=-0.00001) ){
+			(*GSol)->solution[i].value[(*GSol)->p]= t[0]*t[2]*real*real + t[0]*t[3]*real +(-1)*t[0]*t[2]*imag*imag + t[1]*t[2]*real + t[1]*t[3];
+			(*GSol)->solution[i].value[(*GSol)->p]=(*GSol)->solution[i].value[(*GSol)->p]/(t[2]*t[2]*real*real + 2*t[2]*t[3]*real+t[3]*t[3] - t[2]*t[2]*imag*imag);
+			(*GSol)->solution[i].value_imaginary[(*GSol)->p]= 2*t[0]*t[2]*imag*real + t[0]*t[3]*imag + t[1]*t[2]*imag;
+			(*GSol)->solution[i].value_imaginary[(*GSol)->p]=(*GSol)->solution[i].value_imaginary[(*GSol)->p]/(t[2]*t[2]*real*real + 2*t[2]*t[3]*real+t[3]*t[3] - t[2]*t[2]*imag*imag);
 		}
 		else{
 			(*GSol)->solution[i].inf=1;
@@ -137,7 +135,7 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 	for (i=0 ; i<dim ; i++) {
 		temp2[i]=0.0;
 		temp3[i]=0.0;
-		if (betaSolution[i]!=0.0 && imaginarySolution[i]==0.0) {
+		if ((betaSolution[i]>=0.00001 || betaSolution[i]<=-0.00001) && imaginarySolution[i]==0.0) {
 			temp2[i]=realSolution[i]/betaSolution[i];
 			(*solution)->solution[i].inf=0;
 		}
@@ -146,7 +144,7 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 			temp3[i]=imaginarySolution[i]/betaSolution[i];
 			(*solution)->solution[i].inf=-1;
 		}
-		if (betaSolution[i]==0.0){
+		if ((betaSolution[i]<0.00001 && betaSolution[i]>-0.00001)){
 			(*solution)->solution[i].inf=1;
 		}
 	}
@@ -168,7 +166,7 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 			a=a*temp2[i];
 			}
 		}
-		else if(temp1[i*dim+dim/grade-1]==0.0){
+		else if(temp1[i*dim+dim/grade-1]<0.00001 && temp1[i*dim+dim/grade-1]>-0.00001){
 			(*solution)->solution[i].inf=-3;
 		}
 	}
@@ -187,7 +185,6 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 
 
 void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
-	//double polyonymtryvalue(Polyonym2 * poly, double vx, double vy);
 	double a=0,b=0,c;
 	int i;
 	printf("---------------------------------------------\n");
@@ -397,7 +394,6 @@ void printGen_eigensol(Gen_eigensol * solution){
 		}
 		else if(solution->solution[i].inf==1){
 			printf("=====Vector-%d=====\n",i+1);
-//			printVector(&(solution->solution[i].eigenvector));
 			printf("The Eigenvalue is Infinite\n");
 		}
 		else if(solution->solution[i].inf==-1){
