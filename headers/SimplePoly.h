@@ -14,6 +14,8 @@ void create1polyonym_one(Polyonym ** polyonym,char v);
 
 void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * polyonym2);
 
+void create1polyonym_imag(Polyonym ** polyonym, double real, double imag);
+
 void delete1matrix(Polyonym * poly);
 
 void delete1polyonym(Polyonym * poly);

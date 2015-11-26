@@ -141,7 +141,7 @@ int get1NumByDegree(Polyonym * poly, int targetDeg) {
 }
 
 // copy1polyonym() copies a Polyonym struct ('source') to another Polyonym struct ('target')
-static void copy1polyonym(Polyonym * target,Polyonym * source){
+void copy1polyonym(Polyonym * target,Polyonym * source){
 	target->d=source->d;
 	target->var=source->var;
 	target->matrix=NULL;

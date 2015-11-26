@@ -16,4 +16,6 @@ int getDegree2(Polyonym2 * poly, char v);
 
 int get_polymatrix2(Polyonym2 * poly,int i,int j);
 
+void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double realy, double imagy, double *R, double * im);
+
 
