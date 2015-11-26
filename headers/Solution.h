@@ -25,6 +25,6 @@ int chooseMatrix(ProductMatrices * prodMat, Eigenstruct ** eigenstruct, int V);
 
 void deleteGen_sol(Gen_sol ** GSol);
 
-void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2);
+void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2,int imag_flag);
 
 void changevarback(Gen_sol ** GSol, int t[4]);

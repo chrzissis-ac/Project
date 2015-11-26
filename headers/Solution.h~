@@ -15,7 +15,7 @@ void deleteEigenstruct(Eigenstruct ** eigenstruct);
 
 void printEigenstruct(Eigenstruct * eigenstruct);
 
-void solver(Eigenstruct * eigen, Gen_eigensol ** solution, Gen_sol ** GSol,int t[4]);
+void solver(Eigenstruct * eigen, Gen_eigensol ** solution, Gen_sol ** GSol);
 
 void destroyGen_eigensol(Gen_eigensol ** solution);
 

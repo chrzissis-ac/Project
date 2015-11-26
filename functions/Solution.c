@@ -58,7 +58,7 @@ void changevarback(Gen_sol ** GSol, int t[4]){
 		real=(*GSol)->solution[i].value[(*GSol)->p];
 		imag=(*GSol)->solution[i].value_imaginary[(*GSol)->p];
 		//printf("Changing %i from %f + i* %f (with inf=%d) to ",i,real,imag,(*GSol)->solution[i].inf);
-		if( (((t[2]*real+t[3])>0.00001 || (t[2]*real+t[3])<-0.00001) || (t[2]*imag>0.00001 || t[2]*imag<-0.00001) && ((t[2]*real+t[2]*imag+t[3])>0.00001 || (t[2]*real+t[2]*imag+t[3])<-0.00001)) || (((t[0]*real+t[1])>0.00001 || (t[0]*real+t[1])<-0.00001) || (t[0]*imag>0.00001 || t[1]*imag<-0.00001) && ((t[0]*real+t[0]*imag+t[1])>0.00001 || (t[0]*real+t[0]*imag+t[1])<-0.00001)) ){
+		if( (((t[2]*real+t[3])>0.00001 || (t[2]*real+t[3])<-0.00001) || (t[2]*imag>0.00001 || t[2]*imag<-0.00001) && ((t[2]*real+t[2]*imag+t[3])>0.00001 || (t[2]*real+t[2]*imag+t[3])<-0.00001)) ){
 			(*GSol)->solution[i].value[(*GSol)->p]= t[0]*t[2]*real*real + t[0]*t[3]*real +(-1)*t[0]*t[2]*imag*imag + t[1]*t[2]*real + t[1]*t[3];
 			(*GSol)->solution[i].value[(*GSol)->p]=(*GSol)->solution[i].value[(*GSol)->p]/(t[2]*t[2]*real*real + 2*t[2]*t[3]*real+t[3]*t[3] - t[2]*t[2]*imag*imag);
 			(*GSol)->solution[i].value_imaginary[(*GSol)->p]= 2*t[0]*t[2]*imag*real + t[0]*t[3]*imag + t[1]*t[2]*imag;
@@ -106,14 +106,11 @@ static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
 				(*GSol)->solution[j].inf=eigensol->solution[i].inf;
 				
 				if(i<eigensol->dim-1 && (*GSol)->solution[i].value_imaginary[a]!=0.0){
-
-					if(eigensol->solution[i-1].eigenvalue-eigensol->solution[i].eigenvalue<=0.00001 && eigensol->solution[i-1].eigenvalue-eigensol->solution[i].eigenvalue>=-0.00001){
+					if(eigensol->solution[i-1].eigenvalue-eigensol->solution[i].eigenvalue<=0.00001 && eigensol->solution[i-1].eigenvalue-eigensol->solution[i].eigenvalue>=-0.00001 && (*GSol)->solution[i-1].value_imaginary[a]+(*GSol)->solution[i].value_imaginary[a]<=0.00001 && (*GSol)->solution[i-1].value_imaginary[a]+(*GSol)->solution[i].value_imaginary[a]>=-0.00001){
 						(*GSol)->solution[j-1].value[1-a]=eigensol->solution[i-1].eigenvector.matrix[eigensol->solution[i-1].eigenvector.dim -2].matrix[0];
 						(*GSol)->solution[j-1].value_imaginary[1-a]=eigensol->solution[i].eigenvector.matrix[eigensol->solution[i].eigenvector.dim -2].matrix[0];
 						(*GSol)->solution[j].value[1-a]=eigensol->solution[i-1].eigenvector.matrix[eigensol->solution[i-1].eigenvector.dim -2].matrix[0];
 						(*GSol)->solution[j].value_imaginary[1-a]=eigensol->solution[i].eigenvector.matrix[eigensol->solution[i].eigenvector.dim -2].matrix[0]*(-1);
-						printf("Got in here for i=%d eival=%f , eivect=%f\n",i,(*GSol)->solution[j].value[a],(*GSol)->solution[j].value[1-a]);
-						//j++; i++;
 					}
 				}
 				j++;
@@ -184,9 +181,9 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 				a=a*temp2[i];
 			}
 		}
-		// -> else if(temp1[i*dim+dim/grade-1]<0.00001 && temp1[i*dim+dim/grade-1]>-0.00001){
-		else if(temp1[i*dim+dim/grade-1]==0.0){
-			(*solution)->solution[i].inf=-3;
+		if(temp1[i*dim+dim/grade-1]<0.00001 && temp1[i*dim+dim/grade-1]>-0.00001){
+		//else if(temp1[i*dim+dim/grade-1]==0.0){
+			(*solution)->solution[i].inf=-3;	//apeiro?
 		}
 	}
 	for (i=0 ; i<dim ; i++) {
@@ -202,14 +199,14 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 }
 
 
-void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
+void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_flag){
 	double a=0,b=0,c;
 	double r1,I1,r2,I2;
 	int i;
 	printf("---------------------------------------------\n");
 	printf("Roots:\n");
 	for(i=0;i < GSol->dim; i++){
-		if((GSol)->solution[i].inf==0 && (GSol)->solution[i].multiplicity==1){
+		if((GSol)->solution[i].inf==0 && (GSol)->solution[i].multiplicity==1 && (GSol)->solution[i].inf==0){
 			if((GSol)->solution[i].value_imaginary[0]==0.0 && (GSol)->solution[i].value_imaginary[1]==0.0){
 				printf("Real:\t\t[%f , %f]\t\t\t",(GSol)->solution[i].value[0],(GSol)->solution[i].value[1]);
 				if(poly1!=NULL || poly2!=NULL){
@@ -223,7 +220,7 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
 				}
 				printf("\n");
 			}
-			else if((GSol)->solution[i].value_imaginary[0]!=0.0 || (GSol)->solution[i].value_imaginary[1]!=0.0){
+			else if(((GSol)->solution[i].value_imaginary[0]!=0.0 || (GSol)->solution[i].value_imaginary[1]!=0.0) && imag_flag==1){
 				printf("Imaginary:\t");
 				printf("[%f",(GSol)->solution[i].value[0]);
 				if((GSol)->solution[i].value_imaginary[0]!=0.0){printf(" +i*(%f)",(GSol)->solution[i].value_imaginary[0]);}
@@ -245,8 +242,9 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
 			}
 		}
 		else if((GSol)->solution[i].inf==0 && (GSol)->solution[i].multiplicity>1){
-			if((GSol)->solution[i].value_imaginary[0]!=0.0 || (GSol)->solution[i].value_imaginary[1]!=0.0 ){
-				printf("Imaginary:\t%f +i*(%f) with multiplicity %d \n",(GSol)->solution[i].value[(GSol)->p],(GSol)->solution[i].value_imaginary[(GSol)->p],(GSol)->solution[i].multiplicity);
+			if((GSol)->solution[i].value_imaginary[0]!=0.0 || (GSol)->solution[i].value_imaginary[1]!=0.0){
+				if(imag_flag==1)
+					printf("Imaginary:\t%f +i*(%f) with multiplicity %d \n",(GSol)->solution[i].value[(GSol)->p],(GSol)->solution[i].value_imaginary[(GSol)->p],(GSol)->solution[i].multiplicity);
 			}
 			else{
 				printf("Real:\t\t%f with multiplicity %d \n",(GSol)->solution[i].value[(GSol)->p],(GSol)->solution[i].multiplicity);

@@ -111,7 +111,7 @@ void main(int argc,char ** argv){
 	chooseMatrix(new, &eigenstruct, V);
 	solver(eigenstruct, &eigensolution, &GSol);
 	if(pdr){
-		printGen_sol(GSol,NULL,NULL);
+		printGen_sol(GSol,NULL,NULL,0);
 	}
 	changevarback(&GSol, taf);
 	
@@ -135,7 +135,10 @@ void main(int argc,char ** argv){
 			printGen_eigensol(eigensolution);
 		}
 		else if(in==-8){
-			printGen_sol(GSol,polyonym1,polyonym2);
+			printGen_sol(GSol,polyonym1,polyonym2,0);
+		}
+		else if(in==-9){
+			printGen_sol(GSol,polyonym1,polyonym2,1);
 		}
 		else if(in==-4){
 			printf("Wrong input! Please read the instructions and try again!\n");
