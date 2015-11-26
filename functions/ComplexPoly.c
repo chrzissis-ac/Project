@@ -182,12 +182,13 @@ void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double
 			ryt=0; iyt=0;
 			create1polyonym_one(&p1t,'y');
 			create1polyonym_one(&p2t,'y');
-			for(i=0;i<=k;i++){
+			px=p1t; py=p2t;
+			for(i=0;i<k;i++){
 				mult_polyonym1polyonym(&py, p2t,p2);
 				delete1polyonym(p2t);
 				p2t=py;
 			}
-			for(j=0;j<=m;j++){
+			for(j=0;j<m;j++){
 				mult_polyonym1polyonym(&px, p1t,p1);
 				delete1polyonym(p1t);
 				p1t=px;
@@ -222,6 +223,7 @@ void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double
 			}
 			real=real + poly->matrix[k][m]*(rxt*ryt - ixt*iyt);
 			imag=imag + poly->matrix[k][m]*(rxt*iyt + ixt*ryt);
+			//printf("\n-->real=%f, addedr =%f\n-->imag=%f, addedi=%f\n-->value=%d, rxt=%f ixt=%f, ryt=%f iyt=%f\n",real, poly->matrix[k][m]*(rxt*ryt - ixt*iyt),imag,poly->matrix[k][m]*(rxt*iyt + ixt*ryt), poly->matrix[k][m],rxt,ixt,ryt,iyt);
 			delete1polyonym(px);
 			delete1polyonym(py);
 		}
