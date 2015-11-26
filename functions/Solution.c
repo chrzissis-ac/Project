@@ -183,7 +183,7 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 		}
 		if(temp1[i*dim+dim/grade-1]<0.00001 && temp1[i*dim+dim/grade-1]>-0.00001){
 		//else if(temp1[i*dim+dim/grade-1]==0.0){
-			(*solution)->solution[i].inf=-3;	//apeiro?
+			(*solution)->solution[i].inf=-3;
 		}
 	}
 	for (i=0 ; i<dim ; i++) {
