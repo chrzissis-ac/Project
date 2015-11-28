@@ -254,6 +254,31 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 	printf("---------------------------------------------\n");
 }
 
+void double_check(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
+	int i=0;
+	double v1=0, vr1=0, vi1=0;
+	double v2=0, vr2=0, vi2=0;
+	int size=GSol->dim;
+	for(i=0;i<size;i++){
+		v1=0, vr1=0, vi1=0;
+		v2=0, vr2=0, vi2=0;
+		if((GSol)->solution[i].inf==0 && (GSol)->solution[i].multiplicity==1){
+			if(GSol->solution[i].value_imaginary[GSol->p]==0){
+				v1=polyonymtryvalue(poly1, GSol->solution[i].value[0], GSol->solution[i].value[1]);
+				v2=polyonymtryvalue(poly2, GSol->solution[i].value[0], GSol->solution[i].value[1]);
+			}
+			else{
+				polyonymtry_imag_value(poly1, GSol->solution[i].value[0], GSol->solution[i].value_imaginary[0], GSol->solution[i].value[1], GSol->solution[i].value_imaginary[1], &vr1, &vi1);
+				polyonymtry_imag_value(poly2, GSol->solution[i].value[0], GSol->solution[i].value_imaginary[0], GSol->solution[i].value[1], GSol->solution[i].value_imaginary[1], &vr2, &vi2);
+			}
+			if(!(v1<=0.00001 && v1>=-0.00001 && v2<=0.00001 && v2>=-0.00001 && vr1<=0.00001 && vr1>=-0.00001 && vr2<=0.00001 && vr2>=-0.00001 && vi1<=0.00001 && vi1>=-0.00001 && vi2<=0.00001 && vi2>=-0.00001)){
+				GSol->solution[i].inf=-4;
+			}
+		}
+	}
+
+}
+
 void deleteGen_sol(Gen_sol ** GSol){
 	int i;
 	free((*GSol)->solution);

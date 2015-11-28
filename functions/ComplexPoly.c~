@@ -50,6 +50,8 @@ static void gradeparser(char * func, int d, int * maxdx, int * maxdy){
 		i++;
 	}
 	if((*maxdx)+(*maxdy)!=d){printf("The right Function Grade is %d\n",(*maxdx)+(*maxdy));}
+	if((*maxdx)==0){(*maxdx)==1;}
+	if((*maxdy)==0){(*maxdy)==1;}
 }
 
 // parser() chooses the variable with the lowest degree that derives from 'func', along with its polyonimial grades dx, dy for x and y respectively, and stores the function and its degree in 'polyonym'
@@ -223,7 +225,7 @@ void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double
 			}
 			real=real + poly->matrix[k][m]*(rxt*ryt - ixt*iyt);
 			imag=imag + poly->matrix[k][m]*(rxt*iyt + ixt*ryt);
-			printf("\n-->real=%f, addedr =%f\n-->imag=%f, addedi=%f\n-->value=%d, rxt=%f ixt=%f, ryt=%f iyt=%f\n",real, poly->matrix[k][m]*(rxt*ryt - ixt*iyt),imag,poly->matrix[k][m]*(rxt*iyt + ixt*ryt), poly->matrix[k][m],rxt,ixt,ryt,iyt);
+			//printf("\n-->real=%f, addedr =%f\n-->imag=%f, addedi=%f\n-->value=%d, rxt=%f ixt=%f, ryt=%f iyt=%f\n",real, poly->matrix[k][m]*(rxt*ryt - ixt*iyt),imag,poly->matrix[k][m]*(rxt*iyt + ixt*ryt), poly->matrix[k][m],rxt,ixt,ryt,iyt);
 			delete1polyonym(px);
 			delete1polyonym(py);
 		}

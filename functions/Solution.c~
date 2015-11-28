@@ -183,7 +183,7 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 		}
 		if(temp1[i*dim+dim/grade-1]<0.00001 && temp1[i*dim+dim/grade-1]>-0.00001){
 		//else if(temp1[i*dim+dim/grade-1]==0.0){
-			(*solution)->solution[i].inf=-3;	//apeiro?
+			(*solution)->solution[i].inf=-3;
 		}
 	}
 	for (i=0 ; i<dim ; i++) {
@@ -252,6 +252,31 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 		}
 	}
 	printf("---------------------------------------------\n");
+}
+
+void double_check(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
+	int i=0;
+	double v1=0, vr1=0, vi1=0;
+	double v2=0, vr2=0, vi2=0;
+	int size=Gsol->dim;
+	for(i=0;i<size;i++){
+		v1=0, vr1=0, vi1=0;
+		v2=0, vr2=0, vi2=0;
+		if((GSol)->solution[i].inf==0 && (GSol)->solution[i].multiplicity==1){
+			if(Gsol->solution[i].value_imaginary[Gsol->p]==0){
+				v1=polyonymtryvalue(poly1, Gsol->solution[i].value[0], Gsol->solution[i].value[1]);
+				v2=polyonymtryvalue(poly2, Gsol->solution[i].value[0], Gsol->solution[i].value[1]);
+			}
+			else{
+				polyonymtry_imag_value(poly1, Gsol->solution[i].value[0], Gsol->solution[i].value_imaginary[0], Gsol->solution[i].value[1], Gsol->solution[i].value_imaginary[1], &vr1, &vi1);
+				polyonymtry_imag_value(poly2, Gsol->solution[i].value[0], Gsol->solution[i].value_imaginary[0], Gsol->solution[i].value[1], Gsol->solution[i].value_imaginary[1], &vr2, &vi2);
+			}
+			if(!(v1<=0.00001 && v1>=-0.00001 && v2<=0.00001 && v2>=-0.00001 && vr1<=0.00001 && vr1>=-0.00001 && vr2<=0.00001 && vr2>=-0.00001 && vi1<=0.00001 && vi1>=-0.00001 && vi2<=0.00001 && vi2>=-0.00001)){
+				Gsol->solution[i].inf=-4;
+			}
+		}
+	}
+
 }
 
 void deleteGen_sol(Gen_sol ** GSol){

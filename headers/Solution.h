@@ -28,3 +28,5 @@ void deleteGen_sol(Gen_sol ** GSol);
 void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2,int imag_flag);
 
 void changevarback(Gen_sol ** GSol, int t[4]);
+
+void double_check(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2);
