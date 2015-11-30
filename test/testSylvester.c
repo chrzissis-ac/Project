@@ -1,0 +1,172 @@
+#include <CUnit/CUnit.h>
+#include <CUnit/Basic.h>
+#include "../headers/Vector.h"
+#include "../headers/Sylvester.h"
+#include "../headers/SimplePoly.h"
+
+typedef int ** Poly2;
+struct Polyonym2{
+	Poly2 matrix;
+	int dx;
+	int dy;
+};
+
+typedef double * Poly;
+struct Polyonym{
+	Poly matrix;
+	char var;
+	int d;
+};
+
+struct Vector{
+	Polyonym * matrix;
+	int dim;
+};
+
+struct Sylvester{
+	Polyonym ** matrix;
+	int dim;
+	char hidden;
+	int degree;
+};
+
+void testcreatesylvesteranddestroysylvester(void);
+void testprintsylvester(void);
+void testSvmult(void);
+
+static FILE* temp_file = NULL;
+
+int init_suite1(void)
+{
+   if (NULL == (temp_file = fopen("temp.txt", "w+"))) {
+      return -1;
+   }
+   else {
+      return 0;
+   }
+}
+
+int clean_suite1(void)
+{
+   if (0 != fclose(temp_file)) {
+      return -1;
+   }
+   else {
+      temp_file = NULL;
+      return 0;
+   }
+}
+
+int main()
+{
+	CU_pSuite pSuite = NULL;
+	if (CU_initialize_registry() != CUE_SUCCESS) {
+		return CU_get_error();
+	}
+	pSuite = CU_add_suite("Suite_1", init_suite1, clean_suite1);
+	if (pSuite == NULL) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	
+	if (CU_add_test(pSuite, "test of createsylvester() and destroysylvester()", testcreatesylvesteranddestroysylvester) == NULL) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	if (CU_add_test(pSuite, "test of printsylvester()", testprintsylvester) == NULL) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	if (CU_add_test(pSuite, "test of Svmult()", testSvmult) == NULL) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	
+	CU_basic_set_mode(CU_BRM_VERBOSE);
+	CU_basic_run_tests();
+	CU_cleanup_registry();
+	return CU_get_error();
+}
+
+void testcreatesylvesteranddestroysylvester(void)
+{
+	Polyonym2 poly1;
+	poly1.matrix[2][2];
+	poly1.matrix[0][0] = 0;
+	poly1.matrix[0][1] = 1;
+	poly1.matrix[1][0] = 2;
+	poly1.matrix[1][1] = 3;
+	poly1.dy = 2;
+	poly1.dx = 2;
+	Polyonym2 poly2;
+	poly2.matrix[2][2];
+	poly2.matrix[0][0] = 0;
+	poly2.matrix[0][1] = 1;
+	poly2.matrix[1][0] = 2;
+	poly2.matrix[1][1] = 3;
+	poly2.dy = 2;
+	poly2.dx = 2;
+	Sylvester * sylv;
+	
+	createsylvester(&sylv, &poly1, &poly2);
+	destroysylvester(&sylv);
+}
+
+void testprintsylvester(void)
+{
+	Polyonym source1;
+	source1.matrix[2];
+	source1.matrix[0] = 0.0;
+	source1.matrix[1] = 0.0;
+	source1.var = 'y';
+	source1.d = 2;
+	Polyonym source2;
+	source2.matrix[2];
+	source2.matrix[0] = 0.0;
+	source2.matrix[1] = 0.0;
+	source2.var = 'y';
+	source2.d = 2;
+	Sylvester sylvester;
+	sylvester.matrix[2];
+	sylvester.matrix[0] = &source1;
+	sylvester.matrix[1] = &source2;
+	sylvester.dim = 2;
+	sylvester.hidden = 'y';
+	sylvester.degree = 2;
+	
+	printsylvester(&sylvester);
+}
+
+void testSvmult(void)
+{
+	Polyonym source1;
+	source1.matrix[2];
+	source1.matrix[0] = 0.0;
+	source1.matrix[1] = 0.0;
+	source1.var = 'y';
+	source1.d = 2;
+	Polyonym source2;
+	source2.matrix[2];
+	source2.matrix[0] = 0.0;
+	source2.matrix[1] = 0.0;
+	source2.var = 'y';
+	source2.d = 2;
+	Sylvester sylvester;
+	sylvester.matrix[2];
+	sylvester.matrix[0] = &source1;
+	sylvester.matrix[1] = &source2;
+	sylvester.dim = 2;
+	sylvester.hidden = 'y';
+	sylvester.degree = 2;
+	Polyonym poly;
+	poly.matrix[1];
+	poly.matrix[0] = 0.0;
+	poly.var = 'y';
+	poly.d = 1;
+	Vector vector;
+	vector.matrix = &poly;
+	vector.dim = 1;
+	Vector * final;
+	
+	Svmult(&sylvester, &vector, &final);
+}

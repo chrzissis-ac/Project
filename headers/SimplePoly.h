@@ -31,3 +31,5 @@ int get1NumByDegree(Polyonym * poly, int targetDeg);
 char get1var(Polyonym * poly);
 
 void change1polyonym(Polyonym * poly,int grade,double in);
+
+double get_polyonymvalue(Polyonym * poly, double v);

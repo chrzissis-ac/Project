@@ -5,16 +5,17 @@ RMVF= rm -f
 EXEC1= prog
 OBJS1= Sylvester.o SimplePoly.o ComplexPoly.o Routines.o Vector.o ProdMatr.o CompanionMatrix.o Solution.o main.o
 testOBJS= testCompanionMatrix.o testComplexPoly.o testProdMatr.o testSimplePoly.o testSolution.o testSylvester.o testVector.o
+testEXEC= testComplexPoly testSimplePoly testSylvester testProdMatr testVector testCompanionMatrix testSolution
+
+all: cl final1
+	$(RMVF) $(OBJS1)
 
 clean: cl
-	$(RMVF) $(OBJS1) $(EXEC1) 
+	$(RMVF) $(OBJS1) $(EXEC1) $(testEXEC)
 
 cl:
 	clear;clear;
 
-
-all: cl final1
-	$(RMVF) $(OBJS1)
 
 final1: $(OBJS1)
 	$(GCCO) $(EXEC1) $(OBJS1) -llapacke -lblas
@@ -53,14 +54,14 @@ main.o: ./main/main.c
 test: cl test_final
 	$(RMVF) $(OBJS1) $(testOBJS) 
 
-test_final: $(testOBJS)
-	$(GCCO) testComplexPoly testComplexPoly.o ComplexPoly.o;
-	$(GCCO) testSimplePoly testSimplePoly.o SimplePoly.o;
-	$(GCCO) testSylvester testSylvester.o Sylvester.o;
-	$(GCCO) testProdMatr testProdMatr.o ProdMatr.o -llapacke -lblas;
-	$(GCCO) testVector testVector.o Vector.o;
-	$(GCCO) testCompanionMatrix testCompanionMatrix.o CompanionMatrix.o -llapacke -lblas;
-	$(GCCO) testSolution testSolution.o Solution.o -llapacke -lblas;
+test_final: $(testOBJS) $(OBJS1)
+	$(GCCO) testComplexPoly testComplexPoly.o ComplexPoly.o SimplePoly.o -lcunit;
+	$(GCCO) testSimplePoly testSimplePoly.o ComplexPoly.o SimplePoly.o -lcunit;
+	$(GCCO) testSylvester testSylvester.o Sylvester.o ComplexPoly.o SimplePoly.o Vector.o -lcunit;
+	$(GCCO) testProdMatr testProdMatr.o ProdMatr.o SimplePoly.o ComplexPoly.o Routines.o -llapacke -lblas -lcunit;
+	$(GCCO) testVector testVector.o Vector.o SimplePoly.o ComplexPoly.o -lcunit;
+	$(GCCO) testCompanionMatrix testCompanionMatrix.o CompanionMatrix.o Routines.o ProdMatr.o SimplePoly.o ComplexPoly.o -llapacke -lblas -lcunit;
+	$(GCCO) testSolution testSolution.o Solution.o Vector.o CompanionMatrix.o ProdMatr.o SimplePoly.o ComplexPoly.o Routines.o -llapacke -lblas -lcunit;
 	
 testComplexPoly.o: ./test/testComplexPoly.c
 	$(GCCC) ./test/testComplexPoly.c

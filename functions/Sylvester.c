@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <lapacke.h>
 
+#include "../headers/Routines.h"
 #include "../headers/Vector.h"
 #include "../headers/Sylvester.h"
 #include "../headers/SimplePoly.h"
@@ -301,4 +303,50 @@ void Svmult(Sylvester * sylvester, Vector * vector, Vector ** fin){
 	destroysylvester(&temp);
 	deleteVector(vector);
 	deleteVector(*fin);
+}
+
+double SylvesterDeterminant(Sylvester * sylv, double value, int print){
+	int i=0,j=0;
+	int dim=sylv->dim;
+	double ** matrix=NULL;
+	double * matrix1d;
+	double det=1;
+	int * ipiv=NULL;
+	
+	matrix=malloc(sizeof(double*)*dim);
+	if(matrix==NULL){perror("Det matrix malloc 1D");exit(0);}
+	for(i=0;i<dim;i++){
+		matrix[i]=malloc(sizeof(double)*dim);
+		if(matrix[i]==NULL){perror("Det matrix malloc 2D");exit(0);}
+	}
+	ipiv=LAPACKE_malloc(sizeof(int) * (dim*(dim>=6) + 6*(dim<6)) );
+	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
+	
+	for(i=0;i<dim;i++){
+		for(j=0;j<dim;j++){
+			matrix[i][j]=get_polyonymvalue(&(sylv->matrix[i][j]), value);
+		}
+	}
+	
+	if(print==1){
+		for(i=0;i<dim;i++){
+			for(j=0;j<dim;j++){
+				printf("%.5f|\t",matrix[i][j]);
+			}
+			printf("\n");
+		}
+
+	}
+//	printf("here1\n");
+	from2Dto1D_double(matrix, &matrix1d, dim, dim);
+//	printf("here2\n");
+	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, dim, dim, matrix1d, dim, ipiv);
+	for(i=0;i<dim;i++){
+			det=det*( (ipiv[i]==(i+1)) + (-1)*(ipiv[i]!=(i+1)) ) *(matrix1d[i*dim+i]);
+	}
+	free(matrix1d);
+	LAPACKE_free(ipiv);
+	for(i=0;i<dim;i++){free(matrix[i]);}
+	free(matrix);
+	return det;
 }

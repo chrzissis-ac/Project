@@ -10,3 +10,5 @@ void printsylvester (Sylvester * sylvester);
 void destroysylvester (Sylvester ** sylvester);
 
 void Svmult(Sylvester * sylvester, Vector * vector, Vector ** fin);
+
+double SylvesterDeterminant(Sylvester * sylv, double value, int print);

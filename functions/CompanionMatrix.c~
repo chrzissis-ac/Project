@@ -69,7 +69,25 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 	}
 	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
 	from2Dto1D_double(startProdMatr->matrix[startProdMatr->degree], &modifiedMatrix, startProdMatr->dim, startProdMatr->dim);
+	printf("1st\n");
+	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
+			printf("%f|\t",modifiedMatrix[i]);
+			if((i+1)%(startProdMatr->dim)==0){printf("\n");}
+	}
+	printf("\n");
 	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, startProdMatr->dim, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
+	printf("2nd\n");
+	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
+			printf("%f|\t",modifiedMatrix[i]);
+			if((i+1)%(startProdMatr->dim)==0){printf("\n");}
+	}
+	printf("\n");
+	printf("ipiv\n");
+	for (i=0 ; i<(startProdMatr->dim) ; i++) {
+			printf("piv[%d]=%d|\t",i,ipiv[i]);
+			if((i+1)%(startProdMatr->dim)==0){printf("\n");}
+	}
+	printf("\n");
 	LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
 	LAPACKE_free(ipiv);
 	modifiedMatrixB=LAPACKE_malloc(sizeof(double)*(startProdMatr->dim)*(startProdMatr->dim));
@@ -183,7 +201,6 @@ void deleteCompanionMatrix(CompanionMatrix ** compMatr) {
 
 void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	int dim, subDim, compDim, i, j, k, l;
-//	printf("Creating companion matrix!\n");
 	(*compMatr)=NULL;
 	(*compMatr)=malloc(sizeof(struct CMatrix));
 	if ((*compMatr)==NULL) {perror("CMatrix struct malloc!");exit(0);}

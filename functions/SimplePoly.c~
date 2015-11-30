@@ -55,6 +55,21 @@ void create1polyonym(Polyonym2 * polyonym2, Polyonym * polyonym, char v, int poi
 	}
 }
 
+void create1polyonym_imag(Polyonym ** polyonym, double real, double imag){
+	Polyonym * temp=(*polyonym);
+	*polyonym=NULL;
+	temp=malloc(sizeof(Polyonym));
+	if(temp==NULL){perror("malloc temp poly one");exit(0);}
+	temp->matrix=NULL;
+	temp->matrix=malloc(sizeof(double)*2);
+	if(temp->matrix==NULL){perror("malloc temp poly matrix one");exit(0);}
+	temp->matrix[0]=real;
+	temp->matrix[1]=imag;
+	temp->d=1;
+	temp->var='y';
+	(*polyonym)=temp;
+}
+
 void create1polyonym_one(Polyonym ** polyonym,char v){
 	Polyonym * temp=(*polyonym);
 	*polyonym=NULL;

@@ -211,11 +211,11 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 				printf("Real:\t\t[%f , %f]\t\t\t",(GSol)->solution[i].value[0],(GSol)->solution[i].value[1]);
 				if(poly1!=NULL || poly2!=NULL){
 					if(poly1!=NULL){
-						printf("F(1) value: %f",polyonymtryvalue(poly1, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]));
+						printf("F1(x,y) value: %f",polyonymtryvalue(poly1, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]));
 					}
 					//if(poly1!=NULL && poly2!=NULL){printf(" and ");}
 					if(poly2!=NULL){
-						printf("\t\t\tF(2) value is %f",polyonymtryvalue(poly2, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]));
+						printf("\t\t\tF2(x,y) value is %f",polyonymtryvalue(poly2, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]));
 					}
 				}
 				printf("\n");
@@ -230,12 +230,12 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 				if(poly1!=NULL || poly2!=NULL){
 					if(poly1!=NULL){
 						polyonymtry_imag_value(poly1, (GSol)->solution[i].value[0], (GSol)->solution[i].value_imaginary[0], (GSol)->solution[i].value[1], (GSol)->solution[i].value_imaginary[1], &r1, &I1);
-						printf("\tF(1) value: %f +i*%f",r1,I1);
+						printf("\tF1(x,y) value: %f +i*%f",r1,I1);
 }
 					//if(poly1!=NULL && poly2!=NULL){printf(" and ");}
 					if(poly2!=NULL){
 						polyonymtry_imag_value(poly2, (GSol)->solution[i].value[0], (GSol)->solution[i].value_imaginary[0], (GSol)->solution[i].value[1], (GSol)->solution[i].value_imaginary[1], &r2, &I2);
-						printf("\tF(2) value: %f +i*%f",r2,I2);
+						printf("\tF2(x,y) value: %f +i*%f",r2,I2);
 					}
 				}
 				printf("\n");

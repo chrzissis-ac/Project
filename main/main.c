@@ -23,10 +23,10 @@ void main(int argc,char ** argv){
 	int d1=-1, dx1=0, dy1=0;
 	char * function2=NULL;
 	int d2=-1, dx2=0, dy2=0;
-	double k=0;
+	double k=0,D=0;
 	int V=7,i=0,t=0;
 	int read=-1;
-	int cv=0,pdr=0,dc=0;
+	int cv=0,pdr=0,dc=0,det=0;
 	int taf[4];
 	Polyonym2 * polyonym1=NULL;
 	Polyonym2 * polyonym2=NULL;
@@ -68,6 +68,9 @@ void main(int argc,char ** argv){
 		else if(strcmp(argv[i],"-dc")==0){
 			dc=1;
 		}
+		else if(strcmp(argv[i],"-det")==0){
+			det=1;
+		}
 		else if(strcmp(argv[i],"-d1")==0 && i!=argc-1){
 			d1=atoi(argv[i+1]);
 		}
@@ -97,9 +100,17 @@ void main(int argc,char ** argv){
 	createpolyonym2(function1,&polyonym1,d1);
 	createpolyonym2(function2,&polyonym2,d2);
 	printf("---------------------------------------------\n");
-	createsylvester(&sylvester, polyonym2, polyonym1);	
+	createsylvester(&sylvester, polyonym2, polyonym1);
 
 	if(createProdMatr(sylvester, &prodMatr)==-1){
+		if(det==1){
+			printf("---------------------------------------------\n");
+			D=rand()%30;
+			printf("Sylvester Matrix for %.1f is: \n",D);
+			D=SylvesterDeterminant(sylvester, D, 1);
+			printf("with Determinant = %f\n",D);
+			printf("---------------------------------------------\n");
+		}
 		printsylvester(sylvester);
 		deletepoly2(polyonym1);
 		deletepoly2(polyonym2);
@@ -119,7 +130,14 @@ void main(int argc,char ** argv){
 	changevarback(&GSol, taf);
 	
 	if(dc==1){double_check(GSol,polyonym1,polyonym2);}
-	
+	if(det==1){
+		printf("---------------------------------------------\n");
+		D=rand()%30;
+		printf("Sylvester Matrix for %.1f is: \n",D);
+		D=SylvesterDeterminant(sylvester, D, 1);
+		printf("with Determinant = %f\n",D);
+		printf("---------------------------------------------\n");
+	}
 	point=prodMatr;
 	//printf("Value is %f\n",polyonymtryvalue(polyonym2, 0.019728, -148651.84)-polyonymtryvalue(polyonym1, 0.019728, -148651.84));
 	do{
