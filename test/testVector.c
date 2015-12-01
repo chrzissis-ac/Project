@@ -1,5 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+#include <stdlib.h>
 #include "../headers/Vector.h"
 #include "../headers/SimplePoly.h"
 #include "../headers/ComplexPoly.h"
@@ -117,10 +118,11 @@ void testcreateZeroVector(void)
 void testcreateStableVector(void)
 {
 	Vector * s = NULL;
-	double input[2];
+	double * input = NULL;
+	input=malloc(sizeof(double)*2);
 	input[0] = 1.0;
 	input[1] = 2.0;
-	int dim = 2;
+	int dim = 0;
 	char c = 'y';
 	
 	createStableVector(s, input, dim, c);
@@ -129,8 +131,10 @@ void testcreateStableVector(void)
 void testprintVector(void)
 {
 	Polyonym poly;
-	poly.matrix[1];
-	poly.matrix[0] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*1);
+	matrix[0] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 1;
 	Vector vector;
@@ -138,13 +142,17 @@ void testprintVector(void)
 	vector.dim = 1;
 
 	printVector(&vector);
+
+	free(matrix);
 }
 
 void testgetVectordim(void)
 {
 	Polyonym poly;
-	poly.matrix[1];
-	poly.matrix[0] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*1);
+	matrix[0] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 1;
 	Vector vector;
@@ -152,4 +160,6 @@ void testgetVectordim(void)
 	vector.dim = 1;
 	
 	CU_ASSERT(getVectordim(&vector)>=0);
+
+	free(matrix);
 }

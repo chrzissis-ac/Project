@@ -11,7 +11,7 @@ all: cl final1
 	$(RMVF) $(OBJS1)
 
 clean: cl
-	$(RMVF) $(OBJS1) $(EXEC1) $(testEXEC)
+	$(RMVF) $(OBJS1) $(testOBJS) $(EXEC1) $(testEXEC)
 
 cl:
 	clear;clear;
@@ -55,13 +55,13 @@ test: cl test_final
 	$(RMVF) $(OBJS1) $(testOBJS) 
 
 test_final: $(testOBJS) $(OBJS1)
-	$(GCCO) testComplexPoly testComplexPoly.o ComplexPoly.o SimplePoly.o -lcunit;
-	$(GCCO) testSimplePoly testSimplePoly.o ComplexPoly.o SimplePoly.o -lcunit;
-	$(GCCO) testSylvester testSylvester.o Sylvester.o ComplexPoly.o SimplePoly.o Vector.o -lcunit;
-	$(GCCO) testProdMatr testProdMatr.o ProdMatr.o SimplePoly.o ComplexPoly.o Routines.o -llapacke -lblas -lcunit;
-	$(GCCO) testVector testVector.o Vector.o SimplePoly.o ComplexPoly.o -lcunit;
-	$(GCCO) testCompanionMatrix testCompanionMatrix.o CompanionMatrix.o Routines.o ProdMatr.o SimplePoly.o ComplexPoly.o -llapacke -lblas -lcunit;
-	$(GCCO) testSolution testSolution.o Solution.o Vector.o CompanionMatrix.o ProdMatr.o SimplePoly.o ComplexPoly.o Routines.o -llapacke -lblas -lcunit;
+	$(GCCO) testComplexPoly testComplexPoly.o $(OBJS1) -llapacke -lblas -lcunit;
+	$(GCCO) testSimplePoly testSimplePoly.o $(OBJS1) -llapacke -lblas -lcunit;
+	$(GCCO) testSylvester testSylvester.o $(OBJS1) -llapacke -lblas -lcunit;
+	$(GCCO) testProdMatr testProdMatr.o $(OBJS1) -llapacke -lblas -lcunit;
+	$(GCCO) testVector testVector.o $(OBJS1) -llapacke -lblas -lcunit;
+	$(GCCO) testCompanionMatrix testCompanionMatrix.o $(OBJS1) -llapacke -lblas -lcunit;
+	$(GCCO) testSolution testSolution.o $(OBJS1) -llapacke -lblas -lcunit;
 	
 testComplexPoly.o: ./test/testComplexPoly.c
 	$(GCCC) ./test/testComplexPoly.c

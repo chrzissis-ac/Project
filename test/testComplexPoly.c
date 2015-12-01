@@ -1,6 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include "../headers/ComplexPoly.h"
 #include "../headers/SimplePoly.h"
 
@@ -97,25 +97,25 @@ int main()
 void testpolyonymtryvalue(void)
 {
 	Polyonym2 poly;
-	printf("here1\n");
-	int matrix[2][2] = { {0,1} , {2,3} };
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
 	poly.matrix = matrix;
-//	poly.matrix[2][2] = { {0,1} , {2,3} };
-	printf("here2\n");
-//	poly.matrix[0][0] = 0;
-//	poly.matrix[0][1] = 1;
-//	poly.matrix[1][0] = 2;
-//	poly.matrix[1][1] = 3;
-	printf("here3\n");
 	poly.dy = 1;
 	poly.dx = 1;
 	double dx = 2.0;
 	double dy = 2.0;
-	printf("here4\n");
-	//printf("%d %d %d %d\n",poly.matrix[0][0], poly.matrix[0][1], poly.matrix[1][0],poly.matrix[1][1]);
 
 	CU_ASSERT(polyonymtryvalue(&poly, dx, dy)>0.0);
-	printf("here5\n");
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testcreatepolyonym2anddeletepoly2(void)
@@ -131,94 +131,142 @@ void testcreatepolyonym2anddeletepoly2(void)
 void testprintpolymatrix(void)
 {
 	Polyonym2 poly;
-	poly.matrix[2][2];
-	poly.matrix[0][0] = 0;
-	poly.matrix[0][1] = 1;
-	poly.matrix[1][0] = 2;
-	poly.matrix[1][1] = 3;
-	poly.dy = 2;
-	poly.dx = 2;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly.matrix = matrix;
+	poly.dy = 1;
+	poly.dx = 1;
 
 	printpolymatrix(&poly);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testprintpoly(void)
 {
 	Polyonym2 poly;
-	poly.matrix[2][2];
-	poly.matrix[0][0] = 0;
-	poly.matrix[0][1] = 1;
-	poly.matrix[1][0] = 2;
-	poly.matrix[1][1] = 3;
-	poly.dy = 2;
-	poly.dx = 2;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly.matrix = matrix;
+	poly.dy = 1;
+	poly.dx = 1;
 
 	printpoly(&poly);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testprintpoly_byvar(void)
 {
 	Polyonym2 poly;
-	poly.matrix[2][2];
-	poly.matrix[0][0] = 0;
-	poly.matrix[0][1] = 1;
-	poly.matrix[1][0] = 2;
-	poly.matrix[1][1] = 3;
-	poly.dy = 2;
-	poly.dx = 2;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly.matrix = matrix;
+	poly.dy = 1;
+	poly.dx = 1;
 	char v = 'y';
 
 	printpoly_byvar(&poly, v);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testgetDegree2(void)
 {
 	Polyonym2 poly;
-	poly.matrix[2][2];
-	poly.matrix[0][0] = 0;
-	poly.matrix[0][1] = 1;
-	poly.matrix[1][0] = 2;
-	poly.matrix[1][1] = 3;
-	poly.dy = 2;
-	poly.dx = 2;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly.matrix = matrix;
+	poly.dy = 1;
+	poly.dx = 1;
 	char v = 'x';
 	
 	CU_ASSERT(getDegree2(&poly, v)>0);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 
 void testget_polymatrix2(void)
 {
 	Polyonym2 poly;
-	poly.matrix[2][2];
-	poly.matrix[0][0] = 0;
-	poly.matrix[0][1] = 1;
-	poly.matrix[1][0] = 2;
-	poly.matrix[1][1] = 3;
-	poly.dy = 2;
-	poly.dx = 2;
-	int i = 2;
-	int j = 2;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly.matrix = matrix;
+	poly.dy = 1;
+	poly.dx = 1;
+	int i = 1;
+	int j = 1;
 	
 	CU_ASSERT(get_polymatrix2(&poly, i, j)>0);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testpolyonymtry_imag_value(void)
 {
 	Polyonym2 poly;
-	poly.matrix[2][2];
-	poly.matrix[0][0] = 0;
-	poly.matrix[0][1] = 1;
-	poly.matrix[1][0] = 2;
-	poly.matrix[1][1] = 3;
-	poly.dy = 2;
-	poly.dx = 2;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int *) * 2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly.matrix = matrix;
+	poly.dy = 1;
+	poly.dx = 1;
 	double realx = 2.0;
 	double imagx = 2.0;
 	double realy = 2.0;
 	double imagy = 2.0;
-	double * R = NULL;
-	double * im = NULL;
+	double R;
+	double im;
 	
-	polyonymtry_imag_value(&poly, realx, imagx, realy, imagy, R, im);
+	polyonymtry_imag_value(&poly, realx, imagx, realy, imagy, &R, &im);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }

@@ -4,6 +4,7 @@ RMVF= rm -f
 
 EXEC1= prog
 OBJS1= Sylvester.o SimplePoly.o ComplexPoly.o Routines.o Vector.o ProdMatr.o CompanionMatrix.o Solution.o main.o
+OBJS2= Sylvester.o SimplePoly.o ComplexPoly.o Routines.o Vector.o ProdMatr.o CompanionMatrix.o Solution.o
 testOBJS= testCompanionMatrix.o testComplexPoly.o testProdMatr.o testSimplePoly.o testSolution.o testSylvester.o testVector.o
 testEXEC= testComplexPoly testSimplePoly testSylvester testProdMatr testVector testCompanionMatrix testSolution
 
@@ -54,14 +55,14 @@ main.o: ./main/main.c
 test: cl test_final
 	$(RMVF) $(OBJS1) $(testOBJS) 
 
-test_final: $(testOBJS) $(OBJS1)
-	$(GCCO) testComplexPoly testComplexPoly.o ComplexPoly.o SimplePoly.o -lcunit;
-	$(GCCO) testSimplePoly testSimplePoly.o ComplexPoly.o SimplePoly.o -lcunit;
-	$(GCCO) testSylvester testSylvester.o Sylvester.o ComplexPoly.o SimplePoly.o Vector.o -lcunit;
-	$(GCCO) testProdMatr testProdMatr.o ProdMatr.o SimplePoly.o ComplexPoly.o Routines.o -llapacke -lblas -lcunit;
-	$(GCCO) testVector testVector.o Vector.o SimplePoly.o ComplexPoly.o -lcunit;
-	$(GCCO) testCompanionMatrix testCompanionMatrix.o CompanionMatrix.o Routines.o ProdMatr.o SimplePoly.o ComplexPoly.o -llapacke -lblas -lcunit;
-	$(GCCO) testSolution testSolution.o Solution.o Vector.o CompanionMatrix.o ProdMatr.o SimplePoly.o ComplexPoly.o Routines.o -llapacke -lblas -lcunit;
+test_final: $(testOBJS) $(OBJS2)
+	$(GCCO) testComplexPoly testComplexPoly.o $(OBJS2) -llapacke -lblas -lcunit;
+	$(GCCO) testSimplePoly testSimplePoly.o $(OBJS2) -llapacke -lblas -lcunit;
+	$(GCCO) testSylvester testSylvester.o $(OBJS2) -llapacke -lblas -lcunit;
+	$(GCCO) testProdMatr testProdMatr.o $(OBJS2) -llapacke -lblas -lcunit;
+	$(GCCO) testVector testVector.o $(OBJS2) -llapacke -lblas -lcunit;
+	$(GCCO) testCompanionMatrix testCompanionMatrix.o $(OBJS2) -llapacke -lblas -lcunit;
+	$(GCCO) testSolution testSolution.o $(OBJS2) -llapacke -lblas -lcunit;
 	
 testComplexPoly.o: ./test/testComplexPoly.c
 	$(GCCC) ./test/testComplexPoly.c

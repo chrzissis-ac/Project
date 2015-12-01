@@ -1,5 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+#include <stdlib.h>
 #include "../headers/SimplePoly.h"
 
 typedef int ** Poly2;
@@ -132,19 +133,28 @@ int main()
 void testcreate1polyonymanddelete1polyonym(void)
 {
 	Polyonym2 poly2;
-	poly2.matrix[2][2];
-	poly2.matrix[0][0] = 0;
-	poly2.matrix[0][1] = 1;
-	poly2.matrix[1][0] = 2;
-	poly2.matrix[1][1] = 3;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int*)*2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly2.matrix = matrix;
 	poly2.dy = 2;
 	poly2.dx = 2;
-	Polyonym * poly;
+	Polyonym * poly=malloc(sizeof(struct Polyonym));
 	char v = 'x';
 	int point = 1;
 
 	create1polyonym(&poly2, poly, v, point);
+
 	delete1polyonym(poly);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testcreate1polyonym_oneanddelete1polyonym(void)
@@ -169,158 +179,212 @@ void testcreate1polyonym_imaganddelete1polyonym(void)
 void testcreate1polyonymanddelete1matrix(void)
 {
 	Polyonym2 poly2;
-	poly2.matrix[2][2];
-	poly2.matrix[0][0] = 0;
-	poly2.matrix[0][1] = 1;
-	poly2.matrix[1][0] = 2;
-	poly2.matrix[1][1] = 3;
+	int ** matrix = NULL;
+	matrix=malloc(sizeof(int*)*2);
+	matrix[0]=malloc(sizeof(int)*2);
+	matrix[1]=malloc(sizeof(int)*2);
+	matrix[0][0] = 0;
+	matrix[0][1] = 1;
+	matrix[1][0] = 2;
+	matrix[1][1] = 3;
+	poly2.matrix = matrix;
 	poly2.dy = 2;
 	poly2.dx = 2;
-	Polyonym * poly;
+	Polyonym * poly=malloc(sizeof(struct Polyonym));
 	char v = 'x';
 	int point = 1;
 
 	create1polyonym(&poly2, poly, v, point);
 	delete1matrix(poly);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testcopy1polyonym(void)
 {
 	Polyonym source;
-	source.matrix[2];
-	source.matrix[0] = 0.0;
-	source.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	source.matrix=matrix;
 	source.var = 'y';
 	source.d = 2;
-	Polyonym * target;
+	Polyonym * target=malloc(sizeof(struct Polyonym));
 
 	copy1polyonym(target, &source);
+
+	free(matrix);
 }
 
 void testadd1polyonyms(void)
 {
 	Polyonym poly1;
-	poly1.matrix[2];
-	poly1.matrix[0] = 0.0;
-	poly1.matrix[1] = 0.0;
+	double * matrix1 = NULL;
+	matrix1=malloc(sizeof(double)*2);
+	matrix1[0] = 0.0;
+	matrix1[1] = 0.0;
+	poly1.matrix=matrix1;
 	poly1.var = 'y';
 	poly1.d = 2;
 	Polyonym poly2;
-	poly2.matrix[2];
-	poly2.matrix[0] = 0.0;
-	poly2.matrix[1] = 0.0;
+	double * matrix2 = NULL;
+	matrix2=malloc(sizeof(double)*2);
+	matrix2[0] = 0.0;
+	matrix2[1] = 0.0;
+	poly2.matrix=matrix2;
 	poly2.var = 'y';
 	poly2.d = 2;
-	Polyonym * target;
+	Polyonym * target=malloc(sizeof(struct Polyonym));
 
 	add1polyonyms(target, &poly1, &poly2);
+
+	free(matrix1);
+	free(matrix2);
 }
 
 void testmultiply1polyonym(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
-	Polyonym * target;
+	Polyonym * target=malloc(sizeof(struct Polyonym));
 	int m = 3;
 
 	multiply1polyonym(target, &poly, m);
+
+	free(matrix);
 }
 
 void testmult_polyonym1polyonym(void)
 {
 	Polyonym poly1;
-	poly1.matrix[2];
-	poly1.matrix[0] = 0.0;
-	poly1.matrix[1] = 0.0;
+	double * matrix1 = NULL;
+	matrix1=malloc(sizeof(double)*2);
+	matrix1[0] = 0.0;
+	matrix1[1] = 0.0;
+	poly1.matrix=matrix1;
 	poly1.var = 'y';
 	poly1.d = 2;
 	Polyonym poly2;
-	poly2.matrix[2];
-	poly2.matrix[0] = 0.0;
-	poly2.matrix[1] = 0.0;
+	double * matrix2 = NULL;
+	matrix2=malloc(sizeof(double)*2);
+	matrix2[0] = 0.0;
+	matrix2[1] = 0.0;
+	poly2.matrix=matrix2;
 	poly2.var = 'y';
 	poly2.d = 2;
-	Polyonym * target;
+	Polyonym * target=malloc(sizeof(struct Polyonym));
 	int m = 3;
 
 	mult_polyonym1polyonym(&target, &poly1, &poly2);
+
+	free(matrix1);
+	free(matrix2);
 }
 
 void testprint1polyonym(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
 
 	print1polyonym(&poly);
+
+	free(matrix);
 }
 
 void testprint1polyonym_double(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
 
 	print1polyonym_double(&poly);
+
+	free(matrix);
 }
 
 void testget1Degree(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
 	
 	CU_ASSERT(get1Degree(&poly)>0);
+
+	free(matrix);
 }
 
 void testget1NumByDegree(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
 	int targetDeg = 1;
 	
 	CU_ASSERT(get1NumByDegree(&poly, targetDeg)>0);
+
+	free(matrix);
 }
 
 void testget1var(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
 	
 	CU_ASSERT(get1var(&poly)=='y');
+
+	free(matrix);
 }
 
 void testchange1polyonym(void)
 {
 	Polyonym poly;
-	poly.matrix[2];
-	poly.matrix[0] = 0.0;
-	poly.matrix[1] = 0.0;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
 	poly.var = 'y';
 	poly.d = 2;
 	int grade = 2;
 	double in = 2.0;
 	
 	change1polyonym(&poly, grade, in);
+
+	free(matrix);
 }

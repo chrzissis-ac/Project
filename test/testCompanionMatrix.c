@@ -1,5 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+#include <stdlib.h>
 #include "../headers/ProdMatr.h"
 #include "../headers/CompanionMatrix.h"
 #include "../headers/Solution.h"
@@ -114,154 +115,270 @@ int main()
 void testcreateCompanionMatrixanddeleteCompanionMatrix(void)
 {
 	ProductMatrices prodMat;
-	prodMat.matrix[2][2][2];
-	prodMat.matrix[0][0][0] = 2.0;
-	prodMat.matrix[0][0][1] = 2.0;
-	prodMat.matrix[0][1][0] = 2.0;
-	prodMat.matrix[0][1][1] = 2.0;
-	prodMat.matrix[1][0][0] = 2.0;
-	prodMat.matrix[1][0][1] = 2.0;
-	prodMat.matrix[1][1][0] = 2.0;
-	prodMat.matrix[1][1][1] = 2.0;
+	double *** matrix = NULL;
+	matrix=malloc(sizeof(double**)*2);
+	matrix[0]=malloc(sizeof(double*)*2);
+	matrix[0][0]=malloc(sizeof(double)*2);
+	matrix[0][1]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double*)*2);
+	matrix[1][0]=malloc(sizeof(double)*2);
+	matrix[1][1]=malloc(sizeof(double)*2);
+	matrix[2][2][2];
+	matrix[0][0][0] = 2.0;
+	matrix[0][0][1] = 2.0;
+	matrix[0][1][0] = 2.0;
+	matrix[0][1][1] = 2.0;
+	matrix[1][0][0] = 2.0;
+	matrix[1][0][1] = 2.0;
+	matrix[1][1][0] = 2.0;
+	matrix[1][1][1] = 2.0;
+	prodMat.matrix = matrix;
 	prodMat.dim = 2;
 	prodMat.hidden = 'y';
-	prodMat.degree = 2;
+	prodMat.degree = 1;
 	prodMat.k = 1.0;
 	CompanionMatrix * compMatr = NULL;
 	
 	createCompanionMatrix(&prodMat, &compMatr);
 	deleteCompanionMatrix(&compMatr);
+
+	free(matrix[1][1]);
+	free(matrix[1][0]);
+	free(matrix[1]);
+	free(matrix[0][1]);
+	free(matrix[0][0]);
+	free(matrix[0]);
+	free(matrix);
 }
 
 void testprintCompanionMatrix(void)
 {
 	CompanionMatrix compMatr;
-	compMatr.matrix[2][2];
-	compMatr.matrix[0][0] = 1.0;
-	compMatr.matrix[0][1] = 2.0;
-	compMatr.matrix[1][0] = 3.0;
-	compMatr.matrix[1][1] = 4.0;	
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[2][2];
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
+	compMatr.matrix=matrix;
 	compMatr.dim = 2;
 
 	printCompanionMatrix(&compMatr);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testcreateCMatrixanddeleteCMatrix(void)
 {
 	ProductMatrices prodMat;
-	prodMat.matrix[2][2][2];
-	prodMat.matrix[0][0][0] = 2.0;
-	prodMat.matrix[0][0][1] = 2.0;
-	prodMat.matrix[0][1][0] = 2.0;
-	prodMat.matrix[0][1][1] = 2.0;
-	prodMat.matrix[1][0][0] = 2.0;
-	prodMat.matrix[1][0][1] = 2.0;
-	prodMat.matrix[1][1][0] = 2.0;
-	prodMat.matrix[1][1][1] = 2.0;
+	double *** matrix = NULL;
+	matrix=malloc(sizeof(double**)*2);
+	matrix[0]=malloc(sizeof(double*)*2);
+	matrix[0][0]=malloc(sizeof(double)*2);
+	matrix[0][1]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double*)*2);
+	matrix[1][0]=malloc(sizeof(double)*2);
+	matrix[1][1]=malloc(sizeof(double)*2);
+	matrix[0][0][0] = 2.0;
+	matrix[0][0][1] = 2.0;
+	matrix[0][1][0] = 2.0;
+	matrix[0][1][1] = 2.0;
+	matrix[1][0][0] = 2.0;
+	matrix[1][0][1] = 2.0;
+	matrix[1][1][0] = 2.0;
+	matrix[1][1][1] = 2.0;
+	prodMat.matrix = matrix;
 	prodMat.dim = 2;
 	prodMat.hidden = 'y';
-	prodMat.degree = 2;
+	prodMat.degree = 1;
 	prodMat.k = 1.0;
 	CMatrix * cMatr = NULL;
 	
 	createCMatrix(&prodMat, &cMatr);
 	deleteCMatrix(&cMatr);
+
+	free(matrix[1][1]);
+	free(matrix[1][0]);
+	free(matrix[1]);
+	free(matrix[0][1]);
+	free(matrix[0][0]);
+	free(matrix[0]);
+	free(matrix);
 }
 
 void testprintCMatrix(void)
 {
 	CMatrix cMatr;
-	cMatr.matrixY[2][2];
-	cMatr.matrixY[0][0] = 1.0;
-	cMatr.matrixY[0][1] = 2.0;
-	cMatr.matrixY[1][0] = 3.0;
-	cMatr.matrixY[1][1] = 4.0;
-	cMatr.matrix[2][2];
-	cMatr.matrix[0][0] = 5.0;
-	cMatr.matrix[0][1] = 6.0;
-	cMatr.matrix[1][0] = 7.0;
-	cMatr.matrix[1][1] = 8.0;	
+	double ** matrixY = NULL;
+	matrixY=malloc(sizeof(double*)*2);
+	matrixY[0]=malloc(sizeof(double)*2);
+	matrixY[1]=malloc(sizeof(double)*2);
+	matrixY[0][0] = 1.0;
+	matrixY[0][1] = 2.0;
+	matrixY[1][0] = 3.0;
+	matrixY[1][1] = 4.0;	
+	cMatr.matrixY=matrixY;
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
+	cMatr.matrix=matrix;	
 	cMatr.dim = 2;
 
 	printCMatrix(&cMatr);
+
+	free(matrix[1]);
+	free(matrix[0]);
+	free(matrix);
+	free(matrixY[1]);
+	free(matrixY[0]);
+	free(matrixY);
 }
 
 void testget_Companiondim(void)
 {
 	CompanionMatrix compMatr;
-	compMatr.matrix[2][2];
-	compMatr.matrix[0][0] = 1.0;
-	compMatr.matrix[0][1] = 2.0;
-	compMatr.matrix[1][0] = 3.0;
-	compMatr.matrix[1][1] = 4.0;	
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
 	compMatr.dim = 2;
 	
 	CU_ASSERT(get_Companiondim(&compMatr)>0);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testget_Companionmatrix(void)
 {
 	CompanionMatrix compMatr;
-	compMatr.matrix[2][2];
-	compMatr.matrix[0][0] = 1.0;
-	compMatr.matrix[0][1] = 2.0;
-	compMatr.matrix[1][0] = 3.0;
-	compMatr.matrix[1][1] = 4.0;	
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
 	compMatr.dim = 2;
 	
 	CU_ASSERT(get_Companionmatrix(&compMatr)!=NULL);
+
+	free(matrix[0]);
+	free(matrix[1]);
+	free(matrix);
 }
 
 void testget_Cdim(void)
 {
 	CMatrix cMatr;
-	cMatr.matrixY[2][2];
-	cMatr.matrixY[0][0] = 1.0;
-	cMatr.matrixY[0][1] = 2.0;
-	cMatr.matrixY[1][0] = 3.0;
-	cMatr.matrixY[1][1] = 4.0;
-	cMatr.matrix[2][2];
-	cMatr.matrix[0][0] = 5.0;
-	cMatr.matrix[0][1] = 6.0;
-	cMatr.matrix[1][0] = 7.0;
-	cMatr.matrix[1][1] = 8.0;	
+	double ** matrixY = NULL;
+	matrixY=malloc(sizeof(double*)*2);
+	matrixY[0]=malloc(sizeof(double)*2);
+	matrixY[1]=malloc(sizeof(double)*2);
+	matrixY[0][0] = 1.0;
+	matrixY[0][1] = 2.0;
+	matrixY[1][0] = 3.0;
+	matrixY[1][1] = 4.0;	
+	cMatr.matrixY=matrixY;
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
+	cMatr.matrix=matrix;	
 	cMatr.dim = 2;
 	
 	CU_ASSERT(get_Cdim(&cMatr)>0);
+
+	free(matrix[1]);
+	free(matrix[0]);
+	free(matrix);
+	free(matrixY[1]);
+	free(matrixY[0]);
+	free(matrixY);
 }
 
 void testget_CmatrixY(void)
 {
 	CMatrix cMatr;
-	cMatr.matrixY[2][2];
-	cMatr.matrixY[0][0] = 1.0;
-	cMatr.matrixY[0][1] = 2.0;
-	cMatr.matrixY[1][0] = 3.0;
-	cMatr.matrixY[1][1] = 4.0;
-	cMatr.matrix[2][2];
-	cMatr.matrix[0][0] = 5.0;
-	cMatr.matrix[0][1] = 6.0;
-	cMatr.matrix[1][0] = 7.0;
-	cMatr.matrix[1][1] = 8.0;	
+	double ** matrixY = NULL;
+	matrixY=malloc(sizeof(double*)*2);
+	matrixY[0]=malloc(sizeof(double)*2);
+	matrixY[1]=malloc(sizeof(double)*2);
+	matrixY[0][0] = 1.0;
+	matrixY[0][1] = 2.0;
+	matrixY[1][0] = 3.0;
+	matrixY[1][1] = 4.0;	
+	cMatr.matrixY=matrixY;
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
+	cMatr.matrix=matrix;	
 	cMatr.dim = 2;
 	
 	CU_ASSERT(get_CmatrixY(&cMatr)!=NULL);
+
+	free(matrix[1]);
+	free(matrix[0]);
+	free(matrix);
+	free(matrixY[1]);
+	free(matrixY[0]);
+	free(matrixY);
 }
 
 void testget_Cmatrix(void)
 {
 	CMatrix cMatr;
-	cMatr.matrixY[2][2];
-	cMatr.matrixY[0][0] = 1.0;
-	cMatr.matrixY[0][1] = 2.0;
-	cMatr.matrixY[1][0] = 3.0;
-	cMatr.matrixY[1][1] = 4.0;
-	cMatr.matrix[2][2];
-	cMatr.matrix[0][0] = 5.0;
-	cMatr.matrix[0][1] = 6.0;
-	cMatr.matrix[1][0] = 7.0;
-	cMatr.matrix[1][1] = 8.0;	
+	double ** matrixY = NULL;
+	matrixY=malloc(sizeof(double*)*2);
+	matrixY[0]=malloc(sizeof(double)*2);
+	matrixY[1]=malloc(sizeof(double)*2);
+	matrixY[0][0] = 1.0;
+	matrixY[0][1] = 2.0;
+	matrixY[1][0] = 3.0;
+	matrixY[1][1] = 4.0;	
+	cMatr.matrixY=matrixY;
+	double ** matrix = NULL;
+	matrix=malloc(sizeof(double*)*2);
+	matrix[0]=malloc(sizeof(double)*2);
+	matrix[1]=malloc(sizeof(double)*2);
+	matrix[0][0] = 1.0;
+	matrix[0][1] = 2.0;
+	matrix[1][0] = 3.0;
+	matrix[1][1] = 4.0;	
+	cMatr.matrix=matrix;	
 	cMatr.dim = 2;
 	
 	CU_ASSERT(get_Cmatrix(&cMatr)!=NULL);
+
+	free(matrix[1]);
+	free(matrix[0]);
+	free(matrix);
+	free(matrixY[1]);
+	free(matrixY[0]);
+	free(matrixY);
 }
