@@ -27,7 +27,7 @@ struct CMatrix{
 
 
 
-void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr) {
+void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** compMatr) {//Creates Companion Matrix
 	int dim, subDim, compDim, i, j, k, l, m;
 	ProductMatrices * prodMatr=NULL;
 	double * modifiedMatrix=NULL;
@@ -69,25 +69,7 @@ void createCompanionMatrix(ProductMatrices * startProdMatr, CompanionMatrix ** c
 	}
 	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
 	from2Dto1D_double(startProdMatr->matrix[startProdMatr->degree], &modifiedMatrix, startProdMatr->dim, startProdMatr->dim);
-	printf("1st\n");
-	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
-			printf("%f|\t",modifiedMatrix[i]);
-			if((i+1)%(startProdMatr->dim)==0){printf("\n");}
-	}
-	printf("\n");
 	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, startProdMatr->dim, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
-	printf("2nd\n");
-	for (i=0 ; i<(startProdMatr->dim)*(startProdMatr->dim) ; i++) {
-			printf("%f|\t",modifiedMatrix[i]);
-			if((i+1)%(startProdMatr->dim)==0){printf("\n");}
-	}
-	printf("\n");
-	printf("ipiv\n");
-	for (i=0 ; i<(startProdMatr->dim) ; i++) {
-			printf("piv[%d]=%d|\t",i,ipiv[i]);
-			if((i+1)%(startProdMatr->dim)==0){printf("\n");}
-	}
-	printf("\n");
 	LAPACKE_dgetri(LAPACK_ROW_MAJOR, startProdMatr->dim, modifiedMatrix, startProdMatr->dim, ipiv);
 	LAPACKE_free(ipiv);
 	modifiedMatrixB=LAPACKE_malloc(sizeof(double)*(startProdMatr->dim)*(startProdMatr->dim));
@@ -157,19 +139,18 @@ LAPACKE_free(modifiedMatrixB);
 			}
 		}
 	}
-//	printCompanionMatrix(*compMatr);
 	destroyProdMatr(prodMatr);
 }
 
-int get_Companiondim(CompanionMatrix * comp){
+int get_Companiondim(CompanionMatrix * comp){	//Gives Companion dimension
 	return comp->dim;
 }
 
-double ** get_Companionmatrix(CompanionMatrix * comp){
+double ** get_Companionmatrix(CompanionMatrix * comp){	//Returns a pointer to the companion matrix
 	return comp->matrix;
 }
 
-void printCompanionMatrix(CompanionMatrix * compMatr) {
+void printCompanionMatrix(CompanionMatrix * compMatr) {	//Prints Companion matrix
 	int i, j, dim;
 	printf("---------------------------------------------\n");
 	dim=compMatr->dim;
@@ -188,7 +169,7 @@ void printCompanionMatrix(CompanionMatrix * compMatr) {
 
 
 
-void deleteCompanionMatrix(CompanionMatrix ** compMatr) {
+void deleteCompanionMatrix(CompanionMatrix ** compMatr) {	//Destructor
 	int i, j, dim;
 	dim=(*compMatr)->dim;
 	for (i=0 ; i<dim ; i++) {
@@ -199,7 +180,7 @@ void deleteCompanionMatrix(CompanionMatrix ** compMatr) {
 	return;
 }
 
-void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
+void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {	//Creates Generalized Problem Matrices
 	int dim, subDim, compDim, i, j, k, l;
 	(*compMatr)=NULL;
 	(*compMatr)=malloc(sizeof(struct CMatrix));
@@ -287,19 +268,19 @@ void createCMatrix(ProductMatrices * prodMatr, CMatrix ** compMatr) {
 	return;
 }
 
-int get_Cdim(CMatrix * c){
+int get_Cdim(CMatrix * c){ //Returns Dimension of Generalized Problem Matrices
 	return c->dim;
 }
 
-double ** get_CmatrixY(CMatrix * c){
+double ** get_CmatrixY(CMatrix * c){	//Returns pointer to 1st matrix
 	return c->matrixY;
 }
 
-double ** get_Cmatrix(CMatrix * c){
+double ** get_Cmatrix(CMatrix * c){	//Returns pointer to 2nd matrix
 	return c->matrix;
 }
 
-void printCMatrix(CMatrix * compMatr) {
+void printCMatrix(CMatrix * compMatr) {	//Prints Generalized Problem Matrices
 	int i, j, dim;
 	printf("---------------------------------------------\n");
 	dim=compMatr->dim;
@@ -324,9 +305,8 @@ void printCMatrix(CMatrix * compMatr) {
 	return;
 }
 
-void deleteCMatrix(CMatrix ** compMatr) {
+void deleteCMatrix(CMatrix ** compMatr) { //Destructor
 	int i, j, dim;
-//	printf("Deleting companion matrix!\n");
 	dim=(*compMatr)->dim;
 	for (i=0 ; i<dim ; i++) {
 		free((*compMatr)->matrixY[i]);

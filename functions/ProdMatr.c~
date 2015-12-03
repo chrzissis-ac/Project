@@ -32,9 +32,8 @@ struct ProductMatrices{
 
 
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
-
+//Calculates K
 static int calculate_K(ProductMatrices * prodMat){
-//	printf("Calculating K!\n");
 	double * matrix=NULL;
 	double * sva=NULL;
 	double * stat=NULL;
@@ -120,7 +119,6 @@ int createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 	}
 	(*prodMat)->k=-1;
 	calculate_K(*prodMat);
-//	printf("Created Product Matrices!\n");
 	return 0;
 }
 
@@ -194,7 +192,7 @@ void destroyProdMatr (ProductMatrices * prodMat){
 }
 
 
-
+//Multiplies a Product of matrices to a polyonym, to create new product Matrices
 static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
 	int i=0,j=0,m=0,k;
 	(*target)=NULL;
@@ -223,12 +221,11 @@ static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatr
 		for (i=0 ; i<(*target)->dim ; i++) {
 			for (j=0 ; j<(*target)->dim ; j++) {
 				(*target)->matrix[m][i][j]=(prodMat->matrix[g][i][j])*get1NumByDegree(poly, m);
-				//printf("pollaplasiasmos: %d= %d*%d // m=%d,i=%d,j=%d\n",(*target)->matrix[m][i][j],prodMat->matrix[g][i][j],get1NumByDegree(poly,m),m,i,j);
 			}
 		}
 	}
 }
-
+//Adds 2 different Product Matrices to 1
 static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2){
 	int i=0,j=0,m=0,k;
 	(*target)=NULL;
@@ -261,7 +258,7 @@ static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, Pr
 		}
 	}
 }
-
+//Creates new product of Matrices, based on the change of variable
 static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, int t[4]){
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
@@ -349,7 +346,7 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, i
 	t[2]=t3;
 	t[3]=t4;
 }
-
+//Changes the variable on product Matrices
 int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, int t[4]){
 	int i=0;
 	t[0]=1;
@@ -386,16 +383,16 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, i
 }
 
 
-int get_Productdim(ProductMatrices * prod){
+int get_Productdim(ProductMatrices * prod){	//Returns dimension
 	return prod->dim;
 }
 
-double get_Productk(ProductMatrices * prod){
+double get_Productk(ProductMatrices * prod){	//Returns k
 	return prod->k;
 }
-char get_Producthidden(ProductMatrices * prod){
+char get_Producthidden(ProductMatrices * prod){	//Returns hidden variable
 	return prod->hidden;
 }
-int get_Productdegree(ProductMatrices * prod){
+int get_Productdegree(ProductMatrices * prod){	//Returns Grade
 	return prod->degree;
 }

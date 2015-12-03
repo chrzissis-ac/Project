@@ -49,28 +49,26 @@ struct sol{
 	int multiplicity;
 	int inf;
 };
-// !((t[2]*real+t[2]*imag+t[3])<=0.00001 && (t[2]*real+t[2]*imag+t[3])>=-0.00001) || 
 
-void changevarback(Gen_sol ** GSol, int t[4]){
+void changevarback(Gen_sol ** GSol, int t[4]){	//Changes variable back to normal according to t[i],(t1,t2,t3,t4)
 	int i=0;
-	double real, imag;
+	double real=0, imag=0;
 	for (i=0 ; i < (*GSol)->dim ; i++) {
 		real=(*GSol)->solution[i].value[(*GSol)->p];
 		imag=(*GSol)->solution[i].value_imaginary[(*GSol)->p];
-		//printf("Changing %i from %f + i* %f (with inf=%d) to ",i,real,imag,(*GSol)->solution[i].inf);
 		if( (((t[2]*real+t[3])>0.00001 || (t[2]*real+t[3])<-0.00001) || (t[2]*imag>0.00001 || t[2]*imag<-0.00001) && ((t[2]*real+t[2]*imag+t[3])>0.00001 || (t[2]*real+t[2]*imag+t[3])<-0.00001)) ){
 			(*GSol)->solution[i].value[(*GSol)->p]= t[0]*t[2]*real*real + t[0]*t[3]*real +(-1)*t[0]*t[2]*imag*imag + t[1]*t[2]*real + t[1]*t[3];
 			(*GSol)->solution[i].value[(*GSol)->p]=(*GSol)->solution[i].value[(*GSol)->p]/(t[2]*t[2]*real*real + 2*t[2]*t[3]*real+t[3]*t[3] - t[2]*t[2]*imag*imag);
 			(*GSol)->solution[i].value_imaginary[(*GSol)->p]= 2*t[0]*t[2]*imag*real + t[0]*t[3]*imag + t[1]*t[2]*imag;
-			(*GSol)->solution[i].value_imaginary[(*GSol)->p]=(*GSol)->solution[i].value_imaginary[(*GSol)->p]/(t[2]*t[2]*real*real + 2*t[2]*t[3]*real+t[3]*t[3] - t[2]*t[2]*imag*imag);		//printf(" %f \n ",(*GSol)->solution[i].value[(*GSol)->p]);
+			(*GSol)->solution[i].value_imaginary[(*GSol)->p]=(*GSol)->solution[i].value_imaginary[(*GSol)->p]/(t[2]*t[2]*real*real + 2*t[2]*t[3]*real+t[3]*t[3] - t[2]*t[2]*imag*imag);
 		}
 		else{
 			(*GSol)->solution[i].inf=1;
 		}
 	}
 }
-// && ((*GSol)->solution[i].value_imaginary[a]==(*GSol)->solution[i+1].value_imaginary[a]*(-1))
-static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
+
+static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){	//Creates Gen sol struct, by Gen_eigensol
 	int i, j=0,k,flag=0,a=0;
 	double temp1[eigensol->dim];
 	double temp2[eigensol->dim];
@@ -123,8 +121,9 @@ static void createGen_sol(Gen_eigensol * eigensol,Gen_sol ** GSol){
 }
 
 static void createSolution(Gen_eigensol ** solution, int dim, int grade, double * realSolution, double * imaginarySolution,double * betaSolution, double * eigenVector,char c) {
-	int i,j,k;
-	double a,b;
+//Creates Gen_eigensol struct which saves the eigenvectors and eigenvalues
+	int i=0,j=0,k=0;
+	double a=0,b=0;
 	(*solution)=malloc(sizeof(struct Gen_eigensol));
 	if((*solution)==NULL){perror("malloc GeneralSolution");exit(0);}
 	(*solution)->solution=malloc(sizeof(struct eigensol)*dim);
@@ -199,10 +198,10 @@ static void createSolution(Gen_eigensol ** solution, int dim, int grade, double 
 }
 
 
-void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_flag){
-	double a=0,b=0,c;
-	double r1,I1,r2,I2;
-	int i;
+void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_flag){	//Prints the general solution and also its values, on polyonym1 and 2
+	double a=0,b=0,c=0;
+	double r1=0,I1=0,r2=0,I2=0;
+	int i=0;
 	printf("---------------------------------------------\n");
 	printf("Roots:\n");
 	for(i=0;i < GSol->dim; i++){
@@ -213,7 +212,6 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 					if(poly1!=NULL){
 						printf("F1(x,y) value: %f",polyonymtryvalue(poly1, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]));
 					}
-					//if(poly1!=NULL && poly2!=NULL){printf(" and ");}
 					if(poly2!=NULL){
 						printf("\t\t\tF2(x,y) value is %f",polyonymtryvalue(poly2, (GSol)->solution[i].value[0], (GSol)->solution[i].value[1]));
 					}
@@ -232,7 +230,6 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 						polyonymtry_imag_value(poly1, (GSol)->solution[i].value[0], (GSol)->solution[i].value_imaginary[0], (GSol)->solution[i].value[1], (GSol)->solution[i].value_imaginary[1], &r1, &I1);
 						printf("\tF1(x,y) value: %f +i*%f",r1,I1);
 }
-					//if(poly1!=NULL && poly2!=NULL){printf(" and ");}
 					if(poly2!=NULL){
 						polyonymtry_imag_value(poly2, (GSol)->solution[i].value[0], (GSol)->solution[i].value_imaginary[0], (GSol)->solution[i].value[1], (GSol)->solution[i].value_imaginary[1], &r2, &I2);
 						printf("\tF2(x,y) value: %f +i*%f",r2,I2);
@@ -254,7 +251,7 @@ void printGen_sol(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2, int imag_f
 	printf("---------------------------------------------\n");
 }
 
-void double_check(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
+void double_check(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){	//Double checks the solution on poly1 and 2. If the output value is not close to zero, it defines the solution as invalid.
 	int i=0;
 	double v1=0, vr1=0, vi1=0;
 	double v2=0, vr2=0, vi2=0;
@@ -279,14 +276,13 @@ void double_check(Gen_sol * GSol,Polyonym2 * poly1,Polyonym2 * poly2){
 
 }
 
-void deleteGen_sol(Gen_sol ** GSol){
-	int i;
+void deleteGen_sol(Gen_sol ** GSol){	//Destructor
 	free((*GSol)->solution);
 	free((*GSol));
 
 }
 
-void createEigenstruct(Eigenstruct ** eigenstruct){
+void createEigenstruct(Eigenstruct ** eigenstruct){	//Creates an eigenstruct
 	(*eigenstruct)=NULL;
 	(*eigenstruct)=malloc(sizeof(Eigenstruct));
 	if(*eigenstruct==NULL){perror("malloc Eigenstruct");exit(0);}
@@ -294,7 +290,7 @@ void createEigenstruct(Eigenstruct ** eigenstruct){
 	(*eigenstruct)->C=NULL;
 }
 
-void deleteEigenstruct(Eigenstruct ** eigenstruct){
+void deleteEigenstruct(Eigenstruct ** eigenstruct){	//eigenstrct destructor
 	if((*eigenstruct)->problemisGen==0){
 		deleteCompanionMatrix(&((*eigenstruct)->Comp));
 	}
@@ -304,18 +300,18 @@ void deleteEigenstruct(Eigenstruct ** eigenstruct){
 	free(*eigenstruct);
 }
 
-void printEigenstruct(Eigenstruct * eigenstruct){
+void printEigenstruct(Eigenstruct * eigenstruct){	//Prints the eigenstruct matrices
 	if(eigenstruct->problemisGen==1){printCMatrix(eigenstruct->C);}
 	else{printCompanionMatrix(eigenstruct->Comp);}
 
 }
 
-int chooseMatrix(ProductMatrices * prodMat, Eigenstruct ** eigenstruct, int V) {
+int chooseMatrix(ProductMatrices * prodMat, Eigenstruct ** eigenstruct, int V) {	//Decides if the problem is Generalized or standard
 	createEigenstruct(eigenstruct);
 	CompanionMatrix ** compMatr=&((*eigenstruct)->Comp);
 	CMatrix ** cMatr=&((*eigenstruct)->C);
-	int K, i;
-	double limit;
+	int K=0, i=0;
+	double limit=0;
 	limit=1.0;
 	if(get_Productdegree(prodMat)==0){return -1;}
 	if(V>=0){
@@ -351,8 +347,8 @@ int chooseMatrix(ProductMatrices * prodMat, Eigenstruct ** eigenstruct, int V) {
 	return (*eigenstruct)->problemisGen;
 }
 
-void solver(Eigenstruct * eigen, Gen_eigensol ** solution, Gen_sol ** GSol) {
-	int i,j;
+void solver(Eigenstruct * eigen, Gen_eigensol ** solution, Gen_sol ** GSol) {	//Solves the problem. Creates structs and calls LAPACKE routines.
+	int i=0,j=0;
 	double * insertMatrix = NULL;
 	double * insertMatrixB = NULL;
 	double * realSolution = NULL;
@@ -421,8 +417,8 @@ void solver(Eigenstruct * eigen, Gen_eigensol ** solution, Gen_sol ** GSol) {
 
 
 
-void destroyGen_eigensol(Gen_eigensol ** solution){
-	int i;
+void destroyGen_eigensol(Gen_eigensol ** solution){	//Destructor
+	int i=0;
 	for(i=0;i<(*solution)->dim;i++){
 		deleteVector_static(&((*solution)->solution[i].eigenvector));
 	}
@@ -430,8 +426,8 @@ void destroyGen_eigensol(Gen_eigensol ** solution){
 	free(*solution);
 }
 
-void printGen_eigensol(Gen_eigensol * solution){
-	int i;
+void printGen_eigensol(Gen_eigensol * solution){	//Print Gen_eigensol's eigenvectors and eigenvalues
+	int i=0;
 	for (i=0 ; i < solution->dim ; i++) {
 		if(solution->solution[i].inf==0 && solution->solution[i].eigenvalue_imaginary==0.0){
 			printf("=====Vector-%d=====\n",i+1);

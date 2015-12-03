@@ -31,6 +31,7 @@ void testget1Degree(void);
 void testget1NumByDegree(void);
 void testget1var(void);
 void testchange1polyonym(void);
+void testget_polyonymvalue(void);
 
 static FILE* temp_file = NULL;
 
@@ -123,7 +124,11 @@ int main()
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
-	
+	if (CU_add_test(pSuite, "test of get_polyonymvalue()", testget_polyonymvalue) == NULL) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	CU_basic_run_tests();
 	CU_cleanup_registry();
@@ -385,6 +390,23 @@ void testchange1polyonym(void)
 	double in = 2.0;
 	
 	change1polyonym(&poly, grade, in);
+
+	free(matrix);
+}
+
+void testget_polyonymvalue(void)
+{
+	Polyonym poly;
+	double * matrix = NULL;
+	matrix=malloc(sizeof(double)*2);
+	matrix[0] = 0.0;
+	matrix[1] = 0.0;
+	poly.matrix=matrix;
+	poly.var = 'y';
+	poly.d = 2;
+	double v = 1.0;
+	
+	CU_ASSERT(get_polyonymvalue(&poly, v)>=0.0);
 
 	free(matrix);
 }

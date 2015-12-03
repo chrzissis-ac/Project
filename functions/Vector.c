@@ -164,7 +164,7 @@ void deleteVector(Vector * vector){
 	free(vector->matrix);
 	free(vector);
 }
-
+//Deletes a static element of vector. Does not free itself.
 void deleteVector_static(Vector * vector){
 	if(vector==NULL){return;}
 	int i=0;

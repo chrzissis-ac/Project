@@ -13,7 +13,7 @@ struct Polyonym2{
 };
 
 //----------------------------------------------------------Polyonyma of 2 variables management-----------------------------------------------
-static void gradeparser(char * func, int d, int * maxdx, int * maxdy){
+static void gradeparser(char * func, int d, int * maxdx, int * maxdy){	//Finds and checks the function grade
 	*maxdx=0;
 	*maxdy=0;
 	int i=0,a=0,s=0;
@@ -52,7 +52,7 @@ static void gradeparser(char * func, int d, int * maxdx, int * maxdy){
 	if((*maxdx)+(*maxdy)!=d){printf("The right Function Grade is %d\n",(*maxdx)+(*maxdy));}
 }
 
-// parser() chooses the variable with the lowest degree that derives from 'func', along with its polyonimial grades dx, dy for x and y respectively, and stores the function and its degree in 'polyonym'
+//Parser converts the function from string form to Polyonym2 form
 static void parser(char * func , Polyonym2 * polyonym){
 	if(func[strlen(func)]=='\n'){
 		func[strlen(func)]='\0';	//Delete change of line
@@ -147,9 +147,9 @@ static void createpolyonym(char * function, Polyonym2 ** poly, int dx, int dy){
 	parser(function , polyonym);
 	(*poly)=polyonym;
 }
-
+//Given a value for x and y, returns the value of the polyonym.
 double polyonymtryvalue(Polyonym2 * poly, double vx, double vy){
-	int i,j;
+	int i=0,j=0;
 	double value=0.0;
 	double tempx,tempy;
 	tempx=1.0;
@@ -163,7 +163,7 @@ double polyonymtryvalue(Polyonym2 * poly, double vx, double vy){
 	}
 	return value;
 }
-
+//Given Complex values, returns the value of the polyonym
 void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double realy, double imagy, double *R, double * im){
 	Polyonym * p1=NULL;
 	Polyonym * p2=NULL;
@@ -171,7 +171,7 @@ void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double
 	Polyonym * p2t=NULL;
 	Polyonym * px=NULL;
 	Polyonym * py=NULL;
-	int i,j,k,m;
+	int i=0,j=0,k=0,m=0;
 	double rxt=0,ixt=0,ryt=0,iyt=0;
 	double real=0,imag=0;
 	create1polyonym_imag(&p1, realx, imagx);
@@ -223,7 +223,6 @@ void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double
 			}
 			real=real + poly->matrix[k][m]*(rxt*ryt - ixt*iyt);
 			imag=imag + poly->matrix[k][m]*(rxt*iyt + ixt*ryt);
-			//printf("\n-->real=%f, addedr =%f\n-->imag=%f, addedi=%f\n-->value=%d, rxt=%f ixt=%f, ryt=%f iyt=%f\n",real, poly->matrix[k][m]*(rxt*ryt - ixt*iyt),imag,poly->matrix[k][m]*(rxt*iyt + ixt*ryt), poly->matrix[k][m],rxt,ixt,ryt,iyt);
 			delete1polyonym(px);
 			delete1polyonym(py);
 		}
@@ -232,10 +231,9 @@ void polyonymtry_imag_value(Polyonym2 * poly, double realx, double imagx, double
 	delete1polyonym(p2);
 	*R=real;
 	*im=imag;
-//	printf("the imaginary function value is: %f + i*(%f) <<\n");
 }
 
-
+//Creates Polyonym2, given a string function and a grade
 void createpolyonym2(char * function, Polyonym2 ** poly, int d){
 	int dx=0, dy=0;
 	gradeparser(function, d, &dx, &dy);

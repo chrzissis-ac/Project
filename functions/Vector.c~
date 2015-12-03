@@ -23,7 +23,7 @@ struct Vector{
 
 
 // createZeroVector() creates a zero-vector 'vector' with dimension 'dim' and variable 'v'
-static void createZeroVector(Vector ** vector, int dim, char v){
+void createZeroVector(Vector ** vector, int dim, char v){
 	if(dim<=0){printf("Dimension must be greater than 0!\n");return;}
 	int i=0;
 	Polyonym2 * ZeroPoly=NULL;

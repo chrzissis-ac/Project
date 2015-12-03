@@ -4,7 +4,7 @@
 
 // choosevar_bydeg() returns the variable with the highest degree
 char choosevar_bydeg(int dx1, int dy1,int dx2, int dy2){
-	int dx,dy;
+	int dx=0,dy=0;
 	dx=(dx1>=dx2)*dx1+(dx1<dx2)*dx2;
 	dy=(dy1>=dy2)*dy1+(dy1<dy2)*dy2;
 	if(dx>=dy){return 'x';}
@@ -13,7 +13,7 @@ char choosevar_bydeg(int dx1, int dy1,int dx2, int dy2){
 
 // choosehidden_bydeg() returns the variable with the lowest degree
 char choosehidden_bydeg(int dx1, int dy1,int dx2, int dy2){
-	int dx,dy;
+	int dx=0,dy=0;
 	dx=(dx1>=dx2)*dx1+(dx1<dx2)*dx2;
 	dy=(dy1>=dy2)*dy1+(dy1<dy2)*dy2;
 	if(dx>=dy){return 'y';}
@@ -22,7 +22,7 @@ char choosehidden_bydeg(int dx1, int dy1,int dx2, int dy2){
 
 // generatefunctions() creates random functions according to the following format c0 +- c1 y +- c2 x +- c3 y x +- ... +- ck y^a1 x^a2 (no spaces in output) and stores them in 'file'
 void generatefunctions(int d1,int d2, FILE * file){
-	int dx,dy,d;
+	int dx=0,dy=0,d=0;
 	d=d1*(d1>=d2)+d2*(d2>d1);
 	dx=rand()%(d1+1);
 	dy=d1-dx;
@@ -155,7 +155,7 @@ void menushow(int * input){
 	else{*input=atoi(temp);}
 }
 
-
+//Converts a 2d double array to 1d. Row major.
 void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
 	int i=0,j=0;
 	(*target)=NULL;
@@ -173,7 +173,7 @@ void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
 }
 
 
-
+//Converts a 1d double array to 2d. Row major.
 void from1Dto2D_double(double * source, double *** target, int dimx, int dimy){
 	int i=0,j=0;
 	(*target)=NULL;

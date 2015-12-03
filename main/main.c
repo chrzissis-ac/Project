@@ -13,7 +13,7 @@ void main(int argc,char ** argv){
 	system("clear");
 	printf("---------------------------------------------\n");
 	srand(time(NULL));
-	char v;
+	char v=0;
 	int in=0;
 	int changevar=0;
 	int problemisGen=0;

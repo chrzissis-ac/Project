@@ -155,7 +155,7 @@ void menushow(int * input){
 	else{*input=atoi(temp);}
 }
 
-
+//Converts a 2d double array to 1d. Row major.
 void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
 	int i=0,j=0;
 	(*target)=NULL;
@@ -173,7 +173,7 @@ void from2Dto1D_double(double ** source, double ** target, int dimx, int dimy){
 }
 
 
-
+//Converts a 1d double array to 2d. Row major.
 void from1Dto2D_double(double * source, double *** target, int dimx, int dimy){
 	int i=0,j=0;
 	(*target)=NULL;

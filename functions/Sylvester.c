@@ -27,7 +27,7 @@ struct Sylvester{
 
 // createsylvester() creates a Sylvester struct  ('sylvester') and its matrix is filled with single-variable Polyonym structs that derive from 'p1' and 'p2' or from a zero-value Polyonym2 struct
 void createsylvester (Sylvester ** sylvester, Polyonym2 * p1, Polyonym2 * p2) {
-int degP1x, degP2x, degP1y, degP2y, dim, maxX, maxY, counter1, counter2, i, j, m, n;
+int degP1x=0, degP2x=0, degP1y=0, degP2y=0, dim=0, maxX=0, maxY=0, counter1=0, counter2=0, i=0, j=0, m=0, n=0;
 	char hidden;
 	Polyonym2 * ZeroPoly=NULL;
 	createpolyonym2("0", &ZeroPoly, 0);
@@ -236,7 +236,7 @@ static void copysylvester(Sylvester ** target, Sylvester * source){
 
 // printsylvester() prints the matrix of 'sylvester'
 void printsylvester (Sylvester * sylvester) {
-	int dim, i, j;
+	int dim=0, i=0, j=0;
 	dim=sylvester->dim;
 	printf("---------------------------------------------\n");
 	printf("The Sylvester Matrix is:\n\n");
@@ -253,10 +253,54 @@ void printsylvester (Sylvester * sylvester) {
 	printf("---------------------------------------------\n");
 	return;
 }
+//Given a value, calculates the sylvester's determinant with the use of LAPACKE_dgetrf
+double SylvesterDeterminant(Sylvester * sylv, double value, int print){
+	int i=0,j=0;
+	int dim=sylv->dim;
+	double ** matrix=NULL;
+	double * matrix1d;
+	double det=1;
+	int * ipiv=NULL;
+	
+	matrix=malloc(sizeof(double*)*dim);
+	if(matrix==NULL){perror("Det matrix malloc 1D");exit(0);}
+	for(i=0;i<dim;i++){
+		matrix[i]=malloc(sizeof(double)*dim);
+		if(matrix[i]==NULL){perror("Det matrix malloc 2D");exit(0);}
+	}
+	ipiv=LAPACKE_malloc(sizeof(int) * (dim*(dim>=6) + 6*(dim<6)) );
+	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
+	
+	for(i=0;i<dim;i++){
+		for(j=0;j<dim;j++){
+			matrix[i][j]=get_polyonymvalue(&(sylv->matrix[i][j]), value);
+		}
+	}
+	
+	if(print==1){
+		for(i=0;i<dim;i++){
 
+			for(j=0;j<dim;j++){
+				printf("%.5f|\t",matrix[i][j]);
+			}
+			printf("\n");
+		}
+
+	}
+	from2Dto1D_double(matrix, &matrix1d, dim, dim);
+	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, dim, dim, matrix1d, dim, ipiv);
+	for(i=0;i<dim;i++){
+			det=det*( (ipiv[i]==(i+1)) + (-1)*(ipiv[i]!=(i+1)) ) *(matrix1d[i*dim+i]);
+	}
+	free(matrix1d);
+	LAPACKE_free(ipiv);
+	for(i=0;i<dim;i++){free(matrix[i]);}
+	free(matrix);
+	return det;
+}
 // destroysylvester() frees the memory that was allocated for 'sylvester'
 void destroysylvester (Sylvester ** sylvester) {
-	int dim, i, j;
+	int dim=0, i=0, j=0;
 	dim=(*sylvester)->dim;
 	for (i=0 ; i<dim ; i++) {
 		for (j=0 ; j<dim ; j++) {
@@ -305,48 +349,4 @@ void Svmult(Sylvester * sylvester, Vector * vector, Vector ** fin){
 	deleteVector(*fin);
 }
 
-double SylvesterDeterminant(Sylvester * sylv, double value, int print){
-	int i=0,j=0;
-	int dim=sylv->dim;
-	double ** matrix=NULL;
-	double * matrix1d;
-	double det=1;
-	int * ipiv=NULL;
-	
-	matrix=malloc(sizeof(double*)*dim);
-	if(matrix==NULL){perror("Det matrix malloc 1D");exit(0);}
-	for(i=0;i<dim;i++){
-		matrix[i]=malloc(sizeof(double)*dim);
-		if(matrix[i]==NULL){perror("Det matrix malloc 2D");exit(0);}
-	}
-	ipiv=LAPACKE_malloc(sizeof(int) * (dim*(dim>=6) + 6*(dim<6)) );
-	if(ipiv==NULL){perror("ipiv malloc comp matrx creation");exit(0);}
-	
-	for(i=0;i<dim;i++){
-		for(j=0;j<dim;j++){
-			matrix[i][j]=get_polyonymvalue(&(sylv->matrix[i][j]), value);
-		}
-	}
-	
-	if(print==1){
-		for(i=0;i<dim;i++){
-			for(j=0;j<dim;j++){
-				printf("%.5f|\t",matrix[i][j]);
-			}
-			printf("\n");
-		}
 
-	}
-//	printf("here1\n");
-	from2Dto1D_double(matrix, &matrix1d, dim, dim);
-//	printf("here2\n");
-	LAPACKE_dgetrf(LAPACK_ROW_MAJOR, dim, dim, matrix1d, dim, ipiv);
-	for(i=0;i<dim;i++){
-			det=det*( (ipiv[i]==(i+1)) + (-1)*(ipiv[i]!=(i+1)) ) *(matrix1d[i*dim+i]);
-	}
-	free(matrix1d);
-	LAPACKE_free(ipiv);
-	for(i=0;i<dim;i++){free(matrix[i]);}
-	free(matrix);
-	return det;
-}

@@ -32,9 +32,8 @@ struct ProductMatrices{
 
 
 //---------------------------------------------------------Product matrices of Sylvester management--------------------------------------------------
-
+//Calculates K
 static int calculate_K(ProductMatrices * prodMat){
-//	printf("Calculating K!\n");
 	double * matrix=NULL;
 	double * sva=NULL;
 	double * stat=NULL;
@@ -89,7 +88,7 @@ static int calculate_K(ProductMatrices * prodMat){
 int createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 //	printf("Creating Product Matrices!\n");
 	if(sylvester->degree==0){return -1;}
-	int degree, dim, i, j, m;
+	int degree=0, dim=0, i=0, j=0, m=0;
 	(*prodMat)=NULL;
 	(*prodMat)=malloc(sizeof(ProductMatrices));
 	if ((*prodMat)==NULL) {perror("Product Matrix malloc!");exit(0);}
@@ -120,7 +119,6 @@ int createProdMatr (Sylvester * sylvester, ProductMatrices ** prodMat){
 	}
 	(*prodMat)->k=-1;
 	calculate_K(*prodMat);
-//	printf("Created Product Matrices!\n");
 	return 0;
 }
 
@@ -133,7 +131,7 @@ void printProdMatr(ProductMatrices * prodMat, int in) {
 		return;
 	}
 	printf("Product matrix of grade %d is:\n\n",in);
-	int degree, dim, i, j, k;
+	int degree=0, dim=0, i=0, j=0, k=0;
 	i=in;
 	degree=prodMat->degree;
 	dim=prodMat->dim;
@@ -158,7 +156,7 @@ static void printProdMatr_int (ProductMatrices * prodMat, int in) {
 		return;
 	}
 	printf("Product matrix of grade %d is:\n\n",in);
-	int degree, dim, i, j, k;
+	int degree=0, dim=0, i=0, j=0, k=0;
 	i=in;
 	degree=prodMat->degree;
 	dim=prodMat->dim;
@@ -178,7 +176,7 @@ static void printProdMatr_int (ProductMatrices * prodMat, int in) {
 // destroyProdMatr() frees the memory that was allocated for 'prodMat'
 void destroyProdMatr (ProductMatrices * prodMat){
 	if(prodMat==NULL){return;}
-	int degree, dim, i, j, k;
+	int degree=0, dim=0, i=0, j=0, k=0;
 	degree=prodMat->degree;
 	dim=prodMat->dim;
 	for (i=0 ; i<=degree ; i++) {
@@ -194,9 +192,9 @@ void destroyProdMatr (ProductMatrices * prodMat){
 }
 
 
-
+//Multiplies a Product of matrices to a polyonym, to create new product Matrices
 static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatrices * prodMat, int g){
-	int i=0,j=0,m=0,k;
+	int i=0,j=0,m=0,k=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
 	if((*target)==NULL){perror("prod matrices multiplication malloc");exit(0);}
@@ -227,9 +225,9 @@ static void multProdMatr(ProductMatrices ** target, Polyonym * poly, ProductMatr
 		}
 	}
 }
-
+//Adds 2 different Product Matrices to 1
 static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, ProductMatrices * matrix2){
-	int i=0,j=0,m=0,k;
+	int i=0,j=0,m=0,k=0;
 	(*target)=NULL;
 	(*target)=malloc(sizeof(ProductMatrices));
 	if((*target)==NULL){perror("prod matrices add malloc");exit(0);}
@@ -260,7 +258,7 @@ static void addProdMatr(ProductMatrices ** target, ProductMatrices * matrix1, Pr
 		}
 	}
 }
-
+//Creates new product of Matrices, based on the change of variable
 static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, int t[4]){
 	if(prodMat->degree==0){
 		printf("The grade of Mi is zero (0)\n");
@@ -271,7 +269,7 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, i
 	int t3=rand()%30 +1;
 	int t4=rand()%30 +1;	
 	printf("For %d*z+(%d) / %d*z+(%d)\n",t1,t2,t3,t4);
-	int i=0, a=0,b=0,j=0,k;
+	int i=0, a=0,b=0,j=0,k=0;
 	ProductMatrices * target[prodMat->degree+1];
 	ProductMatrices * tempprod=NULL;
 	Polyonym * temp=NULL;
@@ -348,7 +346,7 @@ static void create_newProd(ProductMatrices ** finl, ProductMatrices * prodMat, i
 	t[2]=t3;
 	t[3]=t4;
 }
-
+//Changes the variable on product Matrices
 int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, int t[4]){
 	int i=0;
 	t[0]=1;
@@ -385,16 +383,16 @@ int changeofvar3(ProductMatrices ** finl, ProductMatrices * prodMat,int allow, i
 }
 
 
-int get_Productdim(ProductMatrices * prod){
+int get_Productdim(ProductMatrices * prod){	//Returns dimension
 	return prod->dim;
 }
 
-double get_Productk(ProductMatrices * prod){
+double get_Productk(ProductMatrices * prod){	//Returns k
 	return prod->k;
 }
-char get_Producthidden(ProductMatrices * prod){
+char get_Producthidden(ProductMatrices * prod){	//Returns hidden variable
 	return prod->hidden;
 }
-int get_Productdegree(ProductMatrices * prod){
+int get_Productdegree(ProductMatrices * prod){	//Returns Grade
 	return prod->degree;
 }

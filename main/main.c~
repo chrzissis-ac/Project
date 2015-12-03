@@ -87,7 +87,6 @@ void main(int argc,char ** argv){
 	}
 	if((d1<0 || d2 <0) && file!=stdin ){
 		printf("Wrong arguments!\n");
-		//printf("Could not create input file!\n");
 		exit(0);
 	}
 	if(read==0){generatefunctions(d1,d2,file);}

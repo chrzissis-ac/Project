@@ -295,31 +295,13 @@ void testsolver(void)
 	Eigenstruct * Eigen=malloc(sizeof(Eigenstruct));
 	Eigen->Comp = compMatr;
 	Eigen->C = cMatr;
-	Eigen->eigenvar = 'x';
-	Eigen->grade = 2;
+	Eigen->eigenvar = 'y';
+	Eigen->grade = 1;
 	Eigen->problemisGen = 0;
-
-	Polyonym * poly=malloc(sizeof(struct Polyonym));
-	double * matrix = NULL;
-	matrix=malloc(sizeof(double)*1);
-	matrix[0] = 0.0;
-	poly->matrix = matrix;
-	poly->var = 'x';
-	poly->d = 1;
-	Vector vector;
-	vector.matrix = poly;
-	vector.dim = 1;
-	eigensol * eigen=malloc(sizeof(struct eigensol));
-	eigen->eigenvector = vector;
-	eigen->eigenvalue = 1.0;
-	eigen->inf = 0;
-	Gen_eigensol * solution=malloc(sizeof(struct Gen_eigensol));
-	solution->solution = eigen;
-	solution->dim = 1;
-
+	Gen_eigensol * solution = NULL;
 	Gen_sol * GSol = NULL;
 
-	//solver(Eigen, &solution, &GSol);
+	solver(Eigen, &solution, &GSol);
 
 	free(matrix2[0]);
 	free(matrix2[1]);

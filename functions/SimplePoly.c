@@ -118,7 +118,7 @@ void print1polyonym(Polyonym * poly){
 	}
 	if(set==0){printf("0");}
 }
-
+// print1polyonym() prints the single-variable polyonym 'poly'
 void print1polyonym_double(Polyonym * poly){
 	int i=0,set=0;
 	while(i<=poly->d){
@@ -239,7 +239,7 @@ void multiply1polyonym(Polyonym * trgt, Polyonym * polyonym1,int m){
 	return;
 }
 
-
+//Multiplies 2 polyonyms to create their product polyonym
 void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * polyonym2){
 	int i=0,j=0;
 	Polyonym temp;
@@ -273,7 +273,7 @@ void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * po
 	}
 	free(temp.matrix);
 }
-
+//Given a value v, returns the value of the polyonym
 double get_polyonymvalue(Polyonym * poly, double v){
 	double value=0;
 	int a=1,i=0;

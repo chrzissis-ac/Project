@@ -272,10 +272,15 @@ void mult_polyonym1polyonym(Polyonym ** trgt, Polyonym * polyonym1,Polyonym * po
 		i++;
 	}
 	free(temp.matrix);
-//	printf("epimeristiki: \n");
-//	print1polyonym((*trgt));
-//	printf("\n");
-
 }
 
+double get_polyonymvalue(Polyonym * poly, double v){
+	double value=0;
+	int a=1,i=0;
+	for(i=0;i <= poly->d; i++){
+		value = value + poly->matrix[i]*a;
+		a=a*v;
+	}
+	return value;
+}
 

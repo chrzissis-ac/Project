@@ -1,6 +1,8 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 #include <stdlib.h>
+#include <lapacke.h>
+#include "../headers/Routines.h"
 #include "../headers/Vector.h"
 #include "../headers/Sylvester.h"
 #include "../headers/SimplePoly.h"
@@ -34,6 +36,7 @@ struct Sylvester{
 void testcreatesylvesteranddestroysylvester(void);
 void testprintsylvester(void);
 void testSvmult(void);
+void testSylvesterDeterminant(void);
 
 static FILE* temp_file = NULL;
 
@@ -79,6 +82,10 @@ int main()
 		return CU_get_error();
 	}
 	if (CU_add_test(pSuite, "test of Svmult()", testSvmult) == NULL) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	if (CU_add_test(pSuite, "test of SylvesterDeterminant()", testSylvesterDeterminant) == NULL) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
@@ -203,5 +210,40 @@ void testSvmult(void)
 	free(matrix1);
 	free(matrix2);
 	free(matrix);
+	free(sylvester.matrix);
+}
+
+void testSylvesterDeterminant(void)
+{
+	Polyonym source1;
+	double * matrix1 = NULL;
+	matrix1=malloc(sizeof(double)*2);
+	matrix1[0] = 0.0;
+	matrix1[1] = 0.0;
+	source1.matrix=matrix1;
+	source1.var = 'y';
+	source1.d = 2;
+	Polyonym source2;
+	double * matrix2 = NULL;
+	matrix2=malloc(sizeof(double)*2);
+	matrix2[0] = 0.0;
+	matrix2[1] = 0.0;
+	source2.matrix=matrix2;
+	source2.var = 'y';
+	source2.d = 2;
+	Sylvester sylvester;
+	sylvester.matrix=malloc(sizeof(struct Polyonym)*2);
+	sylvester.matrix[0] = &source1;
+	sylvester.matrix[1] = &source2;
+	sylvester.dim = 2;
+	sylvester.hidden = 'y';
+	sylvester.degree = 1;
+	double value = 1.0;
+	int print = 1;
+	
+	CU_ASSERT(SylvesterDeterminant(&sylvester, value, print)>0.0);
+
+	free(matrix1);
+	free(matrix2);
 	free(sylvester.matrix);
 }
